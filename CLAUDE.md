@@ -118,6 +118,23 @@ After EVERY task completion, you MUST:
 These updates should happen IMMEDIATELY after completing each task, not batched.
 Use `/sync-dev-docs task-complete` if manual updates were missed.
 
+#### Test Documentation Updates (MANDATORY)
+During testing phase, you MUST update BOTH files concurrently:
+
+**test-plan.md**:
+- Check off each test item AS YOU COMPLETE IT
+- Add brief notes inline for any issues found
+
+**test-results.md**: 
+- Create at START of testing
+- Document detailed results AS YOU TEST
+- Include fixes applied, errors encountered, etc.
+
+This dual-tracking ensures:
+- Checkboxes in test-plan.md show quick progress status
+- test-results.md captures detailed findings in real-time
+- If interrupted, both files show exactly where you left off
+
 ### Workflow Visualization
 
 ```mermaid

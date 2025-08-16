@@ -22,7 +22,7 @@ Create manual QA test plan and execute testing for a completed feature (no unit/
 3. If not all complete, error: "Complete all tasks before testing"
 ```
 
-### 2. Generate test-plan.md
+### 2. Generate test-plan.md (with checkboxes)
 ```markdown
 # [Feature Name] Test Plan
 
@@ -34,15 +34,12 @@ Create manual QA test plan and execute testing for a completed feature (no unit/
 ## Functional Tests
 
 ### Test 1: [Primary User Flow]
-**Steps:**
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
+- [ ] Step 1 completed
+- [ ] Step 2 completed
+- [ ] Step 3 completed
+- [ ] Expected outcome verified
 
-**Expected Result:**
-- [Expected outcome]
-
-**Status:** [ ] Pass [ ] Fail
+**Notes:** (Add any issues or observations here)
 
 ---
 
@@ -136,16 +133,23 @@ Create manual QA test plan and execute testing for a completed feature (no unit/
 ### 4. Guide Testing Process
 ```
 1. Output: "Starting test phase for [feature]"
-2. Display first test from test-plan.md
-3. Prompt: "Execute test and report result (pass/fail/blocked)"
-4. Update test-results.md with result
-5. Continue through all tests
-6. Generate summary
-7. Update workflow state:
+2. Create test-results.md with initial template
+3. For each test:
+   a. Execute the test
+   b. IMMEDIATELY check it off in test-plan.md
+   c. SIMULTANEOUSLY add detailed results to test-results.md
+   d. If issues found, note briefly in test-plan.md AND detail in test-results.md
+4. Continue through all tests with concurrent updates
+5. Generate final summary in test-results.md
+6. Update workflow state:
    - Set phase to "testing"
    - Update workflow_position based on test results
-8. If all pass → suggest /complete-feature
-9. If failures → list fixes needed
+7. If all pass → suggest /complete-feature
+8. If failures → list fixes needed
+
+CRITICAL: Update BOTH files in real-time during testing:
+- test-plan.md = quick checkboxes & brief notes
+- test-results.md = detailed findings & fixes
 ```
 
 ### 5. Update Workflow State
