@@ -15,9 +15,7 @@
     }
   }
 
-  * {
-    @apply border-border;
-  }
+  /* Global border color - removed invalid utility */
 
   body {
     @apply bg-background text-foreground font-body;
