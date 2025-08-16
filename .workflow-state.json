@@ -1,0 +1,22 @@
+{
+  "current_sprint": 0,
+  "current_feature": null,
+  "phase": "not_started",
+  "tasks_completed": 0,
+  "tasks_total": 0,
+  "workflow_position": {
+    "last_command": null,
+    "last_command_at": null,
+    "next_suggested": "/project-init",
+    "initialized": false
+  },
+  "features_completed": [],
+  "last_sync_at": null,
+  "last_commit_at": null,
+  "environment": {
+    "nextjs": false,
+    "dependencies": false,
+    "supabase": false,
+    "env_file": false
+  }
+}

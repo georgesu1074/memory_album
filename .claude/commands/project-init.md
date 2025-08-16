@@ -41,6 +41,71 @@ Initialize Memory Album project context for new Claude session.
 2. Set current sprint context
 3. Note any blockers
 4. Load recent decisions from docs
+5. Initialize or update workflow state
+```
+
+### 5. Update Workflow State
+```javascript
+// Read or create workflow state
+let state;
+if (fs.existsSync('.workflow-state.json')) {
+  state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+} else {
+  // Create initial state
+  state = {
+    current_sprint: 0,
+    current_feature: null,
+    phase: "not_started",
+    tasks_completed: 0,
+    tasks_total: 0,
+    workflow_position: {
+      last_command: null,
+      last_command_at: null,
+      next_suggested: "/project-init",
+      initialized: false
+    },
+    features_completed: [],
+    last_sync_at: null,
+    last_commit_at: null,
+    environment: {
+      nextjs: false,
+      dependencies: false,
+      supabase: false,
+      env_file: false
+    }
+  };
+}
+
+// Update from environment scan
+state.environment.nextjs = fs.existsSync('package.json');
+state.environment.dependencies = fs.existsSync('node_modules');
+state.environment.env_file = fs.existsSync('.env.local');
+state.environment.supabase = state.environment.env_file && 
+  fs.readFileSync('.env.local', 'utf-8').includes('SUPABASE');
+
+// Update workflow position
+state.workflow_position = {
+  last_command: "/project-init",
+  last_command_at: new Date().toISOString(),
+  next_suggested: state.environment.nextjs ? "/warmup" : "/dev-setup",
+  initialized: true
+};
+
+// Detect current feature from development-docs
+const activeFeature = scanActiveFeatures();
+if (activeFeature) {
+  state.current_feature = activeFeature;
+  state.phase = "development";
+  // Count tasks if feature exists
+  const tasksFile = `/development-docs/${activeFeature}/tasks.md`;
+  if (fs.existsSync(tasksFile)) {
+    const content = fs.readFileSync(tasksFile, 'utf-8');
+    state.tasks_completed = (content.match(/\[x\]/gi) || []).length;
+    state.tasks_total = (content.match(/\[[ x]\]/gi) || []).length;
+  }
+}
+
+fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));
 ```
 
 ## Output Format

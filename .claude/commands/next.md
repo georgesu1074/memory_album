@@ -9,50 +9,94 @@ Automatically determine and execute the next action in the development workflow.
 
 ## Implementation
 
+```javascript
+function executeNext() {
+  // Read workflow state
+  const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+  
+  // Not initialized
+  if (!state.workflow_position.initialized) {
+    return execute('/project-init');
+  }
+  
+  // Check staleness (> 2 hours)
+  const lastCommand = new Date(state.workflow_position.last_command_at);
+  const hoursSince = (Date.now() - lastCommand) / (1000 * 60 * 60);
+  if (hoursSince > 2) {
+    return execute('/warmup');
+  }
+  
+  // Use state to determine next action
+  switch(state.phase) {
+    case 'not_started':
+      if (!state.environment.nextjs) {
+        return execute('/dev-setup');
+      }
+      return suggestNextFeature(state);
+      
+    case 'between_features':
+      return suggestNextFeature(state);
+      
+    case 'development':
+      if (state.tasks_completed === state.tasks_total) {
+        return execute('/test-feature', state.current_feature);
+      }
+      if (needsSync(state)) {
+        return execute('/sync-dev-docs');
+      }
+      return continueCurrentTask(state);
+      
+    case 'testing':
+      if (hasPassingTests(state.current_feature)) {
+        return execute('/complete-feature', state.current_feature);
+      }
+      return "Fix failing tests, then run /complete-feature";
+      
+    default:
+      return execute('/workflow-state recover');
+  }
+}
+
+function suggestNextFeature(state) {
+  const nextFeature = getNextFeatureFromPlan(state.features_completed);
+  if (nextFeature) {
+    return execute('/start-feature', nextFeature);
+  }
+  return "🎉 All features complete! Run /deploy-check";
+}
+
+function needsSync(state) {
+  // Sync every 3 tasks or if > 30 min since last sync
+  const tasksSinceSync = state.tasks_completed % 3 === 0;
+  const timeSinceSync = Date.now() - new Date(state.last_sync_at) > 30 * 60 * 1000;
+  return tasksSinceSync || timeSinceSync;
+}
+```
+
+### State-Driven Flow
 ```
 START
   ↓
-[Read development-plan.md]
+[Read .workflow-state.json]
   ↓
-[Check /development-docs/ for active features]
-  ↓
-Any feature folders exist with incomplete tasks?
-  ├─ NO → [Find next uncompleted epic in development-plan.md]
-  │        ↓
-  │        Found epic? 
-  │        ├─ YES → Execute: /start-feature [name]
-  │        └─ NO → "🎉 All features complete! Run /deploy-check"
-  │
-  └─ YES → [Read [feature]/tasks.md]
+Initialized?
+  ├─ NO → Execute: /project-init
+  └─ YES → Check staleness
            ↓
-           More than 3 tasks completed since last sync?
-           ├─ YES → Execute: /sync-dev-docs
-           └─ NO → Continue
+           Stale (>2hrs)?
+           ├─ YES → Execute: /warmup
+           └─ NO → Check phase
                    ↓
-           All tasks have [x]?
-           ├─ NO → [Find next unchecked task]
-           │        ↓
-           │        [Start working on task]
-           │        ↓
-           │        [Update TodoWrite]
-           │        ↓
-           │        Output: "Working on: [task description]"
-           │
-           └─ YES → [Check for test-plan.md]
-                    ↓
-                    test-plan.md exists?
-                    ├─ NO → Execute: /test-feature [current-feature]
-                    └─ YES → [Check test-results.md]
-                             ↓
-                             All tests passed?
-                             ├─ NO → Output: "Fix failing tests in test-results.md"
-                             └─ YES → [Check for pr-summary.md]
-                                      ↓
-                                      pr-summary.md exists?
-                                      ├─ NO → Execute: /complete-feature [current-feature]
-                                      └─ YES → [Move to next feature]
-                                               ↓
-                                               Execute: /next (recursive)
+                   [Switch on phase]
+                   ├─ not_started → /dev-setup or first feature
+                   ├─ between_features → /start-feature [next]
+                   ├─ development → Check tasks
+                   │                ├─ All done → /test-feature
+                   │                ├─ Need sync → /sync-dev-docs
+                   │                └─ Continue → Work on next task
+                   └─ testing → Check test results
+                               ├─ Passing → /complete-feature
+                               └─ Failing → Fix tests
 ```
 
 ## Output Examples

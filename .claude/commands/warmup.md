@@ -10,10 +10,12 @@ Quick refresh of current project state and recent progress.
 ## Implementation
 
 1. **Read CLAUDE.md** for project overview
-2. **Check development-plan.md** for current sprint
-3. **Scan /development-docs/** for active features
-4. **Check git status** for recent changes
-5. **Review TodoWrite** for current tasks
+2. **Read .workflow-state.json** for current position
+3. **Check development-plan.md** for sprint details
+4. **Scan /development-docs/** if feature active
+5. **Check git status** for uncommitted changes
+6. **Review TodoWrite** for current tasks
+7. **Display workflow position** from state
 
 ## Output Format
 
@@ -52,8 +54,16 @@ Quick refresh of current project state and recent progress.
 
 ## Environment Status
 - Next.js: [installed/not installed]
+- Dependencies: [installed/not installed]
 - Supabase: [configured/not configured]
+- Env File: [exists/missing]
 - Git: [clean/X uncommitted changes]
+
+## Workflow Position
+- Last Command: [command] ([time ago])
+- Next Suggested: [action]
+- Last Sync: [time ago]
+- Last Commit: [time ago]
 ```
 
 ## Example Output

@@ -141,8 +141,24 @@ Create test plan and execute testing for a completed feature.
 4. Update test-results.md with result
 5. Continue through all tests
 6. Generate summary
-7. If all pass → suggest /complete-feature
-8. If failures → list fixes needed
+7. Update workflow state:
+   - Set phase to "testing"
+   - Update workflow_position based on test results
+8. If all pass → suggest /complete-feature
+9. If failures → list fixes needed
+```
+
+### 5. Update Workflow State
+```javascript
+const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+state.phase = "testing";
+state.workflow_position = {
+  last_command: "/test-feature",
+  last_command_at: new Date().toISOString(),
+  next_suggested: allTestsPass ? "/complete-feature" : "fix failing tests",
+  initialized: true
+};
+fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));
 ```
 
 ## Output Example

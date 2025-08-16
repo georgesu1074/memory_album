@@ -41,8 +41,25 @@ Initialize development on a new feature/epic from the development plan.
    ```
 6. **Cross out tasks** in development-plan.md using ~~strikethrough~~
 7. **Set up TodoWrite** with the feature's tasks
-8. **Run `/sync-dev-docs feature-start`** to ensure consistency
-9. **Output** confirmation with next steps
+8. **Update workflow state** automatically:
+   ```javascript
+   const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+   state.current_feature = feature_name;
+   state.phase = "development";
+   state.tasks_total = extracted_tasks.length;
+   state.tasks_completed = 0;
+   state.workflow_position = {
+     last_command: "/start-feature",
+     last_command_at: new Date().toISOString(),
+     next_suggested: "continue development",
+     initialized: true
+   };
+   // Detect current sprint from feature mapping
+   state.current_sprint = getSprintForFeature(feature_name);
+   fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));
+   ```
+9. **Run `/sync-dev-docs feature-start`** to ensure consistency
+10. **Output** confirmation with next steps
 
 ## Feature Mapping
 - `project-setup` → Sprint 0: Initial Setup

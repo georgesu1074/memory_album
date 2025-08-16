@@ -96,6 +96,29 @@ Finalize a feature after development and testing.
 2. Update .sync-status with completion time
 3. Optional: Create feature-complete git commit
 4. Clear TodoWrite for this feature
+5. Update workflow state:
+   - Set current_feature to null
+   - Set phase to "between_features"
+   - Add feature to features_completed
+   - Update workflow_position with next suggested feature
+```
+
+### 6. Update Workflow State
+```javascript
+const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+state.features_completed.push(feature_name);
+state.current_feature = null;
+state.phase = "between_features";
+state.tasks_completed = 0;
+state.tasks_total = 0;
+const nextFeature = getNextFeatureFromPlan(state.features_completed);
+state.workflow_position = {
+  last_command: "/complete-feature",
+  last_command_at: new Date().toISOString(),
+  next_suggested: nextFeature ? `/start-feature ${nextFeature}` : "All features complete!",
+  initialized: true
+};
+fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));
 ```
 
 ## Output Format

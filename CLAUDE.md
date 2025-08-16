@@ -107,6 +107,67 @@ JWT_SECRET=
 ### Sprint-Based Development
 We follow a sprint-based approach with the master plan in `/development-docs/development-plan.md`. Each sprint contains epics, which contain tasks.
 
+### Workflow Visualization
+
+```mermaid
+graph TD
+    Start([New Session]) --> Init[project-init]
+    Init --> Warmup[warmup]
+    Warmup --> Next[next]
+    
+    Next --> CheckState{Check State}
+    
+    CheckState -->|No Active Feature| StartFeature[start-feature]
+    StartFeature --> SyncStart[sync-dev-docs feature-start]
+    SyncStart --> CreatePlan[Create plan.md]
+    CreatePlan --> CreateTasks[Create tasks.md]
+    CreateTasks --> Development
+    
+    CheckState -->|Feature In Progress| Development[Development Phase]
+    Development --> WorkOnTask[Work on Next Task]
+    WorkOnTask --> QuickTest[quick-test]
+    QuickTest --> Commit[commit]
+    Commit --> SyncProgress[sync-dev-docs]
+    SyncProgress --> CheckTasks{All Tasks Done?}
+    CheckTasks -->|No| WorkOnTask
+    CheckTasks -->|Yes| TestFeature[test-feature]
+    
+    TestFeature --> RunTests[Execute Tests]
+    RunTests --> SyncTest[sync-dev-docs test-results]
+    SyncTest --> TestsPassed{Tests Pass?}
+    TestsPassed -->|No| Debug[debug]
+    Debug --> FixIssues[Fix Issues]
+    FixIssues --> RunTests
+    TestsPassed -->|Yes| CompleteFeature[complete-feature]
+    
+    CompleteFeature --> SyncComplete[sync-dev-docs]
+    SyncComplete --> GeneratePR[Generate pr-summary.md]
+    GeneratePR --> NextFeature{More Features?}
+    NextFeature -->|Yes| Next
+    NextFeature -->|No| DeployCheck[deploy-check]
+    DeployCheck --> End([MVP Complete])
+    
+    style Start fill:#2e7d32,color:#fff
+    style End fill:#2e7d32,color:#fff
+    style Development fill:#f57c00,color:#fff
+    style TestFeature fill:#1976d2,color:#fff
+    style CompleteFeature fill:#7b1fa2,color:#fff
+    style WorkOnTask fill:#fafafa,color:#000
+    style CreatePlan fill:#fafafa,color:#000
+    style CreateTasks fill:#fafafa,color:#000
+    style RunTests fill:#fafafa,color:#000
+    style FixIssues fill:#fafafa,color:#000
+    style GeneratePR fill:#fafafa,color:#000
+```
+
+**Legend:**
+- 🟢 **Green (Start/End)**: Session boundaries
+- 🟠 **Orange (Development)**: Active coding phase
+- 🔵 **Blue (Testing)**: Quality assurance phase
+- 🟣 **Purple (Completion)**: Feature finalization
+- ⬜ **White**: Regular workflow steps
+- 🔶 **Diamond**: Decision points
+
 ### Complete Workflow Sequence
 
 #### 1. Session Start
@@ -134,12 +195,15 @@ a. **Feature Start** (`/start-feature [feature-name]`)
      - Extract tasks from development-plan.md
      - Create tasks.md and plan.md
      - Cross out tasks in development-plan.md
+   - **Auto-updates state**: Sets current_feature, phase="planning"
    - Sets up TodoWrite tracking
    - Next: Begin coding tasks
 
 b. **Active Development**
    - Work through tasks.md checklist
    - Use `/sync-dev-docs` after every 2-3 completed tasks
+     - **Auto-updates state**: tasks_completed count
+   - Run `/workflow-state validate` after every 5 tasks (safety check)
    - Use `/debug [context]` when issues arise
    - Use `/quick-test` for rapid validation
    - Request `/manual-help [service]` for external setup
@@ -149,16 +213,20 @@ b. **Active Development**
 
 c. **Testing Phase** (`/test-feature [feature-name]`)
    - Triggers when: All development tasks complete
+   - **Auto-updates state**: phase="testing"
    - Runs `/sync-dev-docs` to generate test-plan.md
    - Guides through manual testing
    - Documents results with `/sync-dev-docs test-results`
+   - Run `/workflow-state validate` before completion
    - Next: Fix issues or complete feature
 
 d. **Feature Completion** (`/complete-feature [feature-name]`)
    - Triggers when: Testing passed
    - Runs `/sync-dev-docs` to generate pr-summary.md
+   - **Auto-updates state**: Clears current_feature, increments sprint
    - Updates development-plan.md with completion
    - Archives feature as done
+   - Run `/workflow-state show` to confirm state
    - Next: `/next` to start new feature
 
 #### 3. Progress Monitoring
@@ -233,14 +301,31 @@ Some situations require manual work instead of commands:
 - **User testing**: Get real feedback on actual devices
 - **Complex debugging**: Sometimes need deep investigation
 
+### Workflow State Tracking
+
+The system maintains state in `.workflow-state.json` to track:
+- Current sprint and progress
+- Active feature and phase
+- Workflow position and next steps
+- Environment setup status
+- Command history
+
+**State Management:**
+- `/workflow-state` - Show current state
+- `/workflow-state reset` - Rebuild from project analysis
+- `/workflow-state recover` - Fix inconsistencies
+- `/workflow-state validate` - Check for issues
+
 ### Recovery Procedures
 
 **If workflow gets confused:**
-1. Run `/warmup` to check current state
-2. Run `/sprint-status` to see progress
-3. Check `/development-docs/` for active features
-4. Use `/next` to auto-correct
-5. Worst case: `/project-init` to reset
+1. Run `/workflow-state validate` to check for issues
+2. Run `/workflow-state recover` if inconsistencies found
+3. Run `/warmup` to check current state
+4. Run `/sprint-status` to see progress
+5. Check `/development-docs/` for active features
+6. Use `/next` to auto-correct
+7. Worst case: `/workflow-state reset` to rebuild
 
 ### Directory Structure
 ```
@@ -325,6 +410,9 @@ Analyzes workflow and conservatively suggests improvements (if any).
 
 #### `/sync-dev-docs [context]`
 Synchronizes development documentation with current progress (auto-called by other commands).
+
+#### `/workflow-state [action]`
+Manage and inspect workflow state tracking (show/reset/recover/validate).
 
 ### Development Principles
 - **Mobile-first**: Every feature must work perfectly on phones

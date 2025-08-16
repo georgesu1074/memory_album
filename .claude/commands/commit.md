@@ -70,6 +70,17 @@ git commit -m "generated message"
 git log -1 --oneline
 ```
 
+### 5. Update Workflow State
+```javascript
+// Update last commit timestamp
+const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+state.last_commit_at = new Date().toISOString();
+state.workflow_position.last_command = "/commit";
+state.workflow_position.last_command_at = new Date().toISOString();
+// Don't change next_suggested - let workflow continue
+fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));
+```
+
 ## Smart Detection Rules
 
 ### Feature Detection

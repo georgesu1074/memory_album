@@ -101,6 +101,12 @@
       "description": "Synchronize development documentation",
       "args": ["context?"],
       "implementation": "Update tasks, create docs, sync progress between files"
+    },
+    {
+      "name": "workflow-state",
+      "description": "Manage workflow state tracking",
+      "args": ["action?"],
+      "implementation": "Show, reset, recover, or validate workflow state"
     }
   ],
   "feature_mapping": {

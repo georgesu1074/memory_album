@@ -48,7 +48,26 @@ Synchronize development documentation based on current progress.
    - last_sync: timestamp
    - tasks_completed: count
    - tasks_remaining: count
-5. If all tasks complete, suggest /test-feature
+5. Update workflow state:
+   - Set tasks_completed from count
+   - Set last_sync_at to current time
+   - Update next_suggested based on progress
+6. If all tasks complete, suggest /test-feature
+```
+
+```javascript
+// Update workflow state
+const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
+state.tasks_completed = completedCount;
+state.last_sync_at = new Date().toISOString();
+if (completedCount === state.tasks_total) {
+  state.workflow_position.next_suggested = "/test-feature";
+} else {
+  state.workflow_position.next_suggested = `continue task ${completedCount + 1}`;
+}
+state.workflow_position.last_command = "/sync-dev-docs";
+state.workflow_position.last_command_at = new Date().toISOString();
+fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));
 ```
 
 ### 4. Test Results (`test-results`)
