@@ -2,6 +2,7 @@
 
 -- Enable RLS on all tables
 ALTER TABLE weddings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE wedding_guests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE memories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE memory_photos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE memory_groups ENABLE ROW LEVEL SECURITY;
@@ -15,6 +16,23 @@ CREATE POLICY "Public can view active weddings" ON weddings
 
 -- Only service role can insert/update/delete weddings
 CREATE POLICY "Service role manages weddings" ON weddings
+  FOR ALL
+  USING (auth.jwt() ->> 'role' = 'service_role');
+
+-- Wedding guests table policies
+-- Public can view guest list for active weddings
+CREATE POLICY "Public can view wedding guests" ON wedding_guests
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM weddings
+      WHERE weddings.id = wedding_guests.wedding_id
+      AND weddings.is_active = true
+    )
+  );
+
+-- Only service role can manage guests
+CREATE POLICY "Service role manages guests" ON wedding_guests
   FOR ALL
   USING (auth.jwt() ->> 'role' = 'service_role');
 

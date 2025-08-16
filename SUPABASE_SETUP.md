@@ -4,9 +4,10 @@
 1. ✅ Created Supabase project
 2. ✅ Updated .env.local with credentials
 3. ✅ Created database schema files (`lib/database.sql` and `lib/database-rls.sql`)
-4. ✅ Created Supabase client wrappers
-5. ✅ Created TypeScript types for database
-6. ✅ Created connection test endpoint
+4. ✅ Added `wedding_guests` table for guest list management
+5. ✅ Created Supabase client wrappers
+6. ✅ Created TypeScript types for database
+7. ✅ Created connection test endpoint
 
 ## 📋 Manual Setup Required
 

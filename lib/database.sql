@@ -19,11 +19,28 @@ CREATE TABLE weddings (
 -- Create index on slug for fast lookups
 CREATE INDEX idx_weddings_slug ON weddings(slug);
 
+-- Wedding guests table
+CREATE TABLE wedding_guests (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  wedding_id UUID NOT NULL REFERENCES weddings(id) ON DELETE CASCADE,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  full_name VARCHAR(200) GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED,
+  email VARCHAR(255), -- Optional, for future auth
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
+-- Create indexes for guest lookups
+CREATE INDEX idx_wedding_guests_wedding_id ON wedding_guests(wedding_id);
+CREATE INDEX idx_wedding_guests_full_name ON wedding_guests(full_name);
+
 -- Memories table
 CREATE TABLE memories (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   wedding_id UUID NOT NULL REFERENCES weddings(id) ON DELETE CASCADE,
-  guest_name VARCHAR(100) NOT NULL,
+  guest_id UUID REFERENCES wedding_guests(id),
+  guest_name VARCHAR(100), -- Optional fallback for non-listed guests
   memory_text TEXT NOT NULL,
   memory_type VARCHAR(20) CHECK (memory_type IN ('bride', 'groom', 'both')) DEFAULT 'both',
   group_id UUID,
@@ -37,6 +54,7 @@ CREATE TABLE memories (
 
 -- Create indexes for queries
 CREATE INDEX idx_memories_wedding_id ON memories(wedding_id);
+CREATE INDEX idx_memories_guest_id ON memories(guest_id);
 CREATE INDEX idx_memories_group_id ON memories(group_id);
 CREATE INDEX idx_memories_created_at ON memories(created_at DESC);
 
@@ -101,4 +119,7 @@ CREATE TRIGGER update_memories_updated_at BEFORE UPDATE ON memories
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_memory_groups_updated_at BEFORE UPDATE ON memory_groups
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_wedding_guests_updated_at BEFORE UPDATE ON wedding_guests
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

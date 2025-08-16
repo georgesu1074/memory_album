@@ -141,6 +141,16 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - [ ] Add wedding activation toggle
 - [ ] Create setup confirmation page
 
+### Epic: Guest List Management
+
+- [ ] Create guest list upload endpoint
+- [ ] Build CSV parser for Zola format
+- [ ] Add guest list management UI
+- [ ] Implement bulk guest import
+- [ ] Create guest search API endpoint
+- [ ] Add manual guest entry form
+- [ ] Build guest list export functionality
+
 ### Epic: Landing Pages
 
 - [ ] Create wedding-specific landing page

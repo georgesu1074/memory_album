@@ -36,11 +36,42 @@ export type Database = {
           metadata?: Record<string, any>
         }
       }
+      wedding_guests: {
+        Row: {
+          id: string
+          wedding_id: string
+          first_name: string
+          last_name: string
+          full_name: string
+          email: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          wedding_id: string
+          first_name: string
+          last_name: string
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          wedding_id?: string
+          first_name?: string
+          last_name?: string
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
       memories: {
         Row: {
           id: string
           wedding_id: string
-          guest_name: string
+          guest_id: string | null
+          guest_name: string | null
           memory_text: string
           memory_type: 'bride' | 'groom' | 'both'
           group_id: string | null
@@ -54,7 +85,8 @@ export type Database = {
         Insert: {
           id?: string
           wedding_id: string
-          guest_name: string
+          guest_id?: string | null
+          guest_name?: string | null
           memory_text: string
           memory_type?: 'bride' | 'groom' | 'both'
           group_id?: string | null
@@ -68,7 +100,8 @@ export type Database = {
         Update: {
           id?: string
           wedding_id?: string
-          guest_name?: string
+          guest_id?: string | null
+          guest_name?: string | null
           memory_text?: string
           memory_type?: 'bride' | 'groom' | 'both'
           group_id?: string | null

@@ -1,0 +1,10 @@
+{
+  "feature": "supabase-setup",
+  "last_sync": "2025-08-16T23:15:00Z",
+  "tasks_total": 8,
+  "tasks_completed": 6,
+  "tasks_moved": 8,
+  "phase": "development",
+  "test_status": null,
+  "notes": "Schema files created, awaiting manual migration in Supabase dashboard"
+}

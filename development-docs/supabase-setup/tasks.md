@@ -4,16 +4,16 @@
 **Goal**: Connect to Supabase for database and storage
 
 ### Tasks
-- [ ] Create Supabase project (manual)
-- [ ] Run database migrations from schema
-- [ ] Set up Row Level Security policies
+- [x] Create Supabase project (manual)
+- [x] Run database migrations from schema (files created, awaiting manual execution)
+- [x] Set up Row Level Security policies (files created, awaiting manual execution)
 - [ ] Configure storage buckets for photos
-- [ ] Create database types from schema
-- [ ] Set up Supabase client singleton
-- [ ] Test database connection
+- [x] Create database types from schema
+- [x] Set up Supabase client singleton
+- [x] Test database connection (endpoint created, awaiting schema setup)
 - [ ] Create seed data for development
 
 ## Progress
-- **Completed**: 0/8 tasks (0%)
-- **Status**: In Progress
-- **Next Task**: Create Supabase project (manual)
+- **Completed**: 6/8 tasks (75%)
+- **Status**: In Progress - Awaiting manual schema setup
+- **Next Task**: Apply migrations in Supabase dashboard, then configure storage buckets
