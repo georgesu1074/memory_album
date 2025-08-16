@@ -195,7 +195,7 @@ Phase: development
 Tasks: 6/10
 
 Position: development
-Last Command: /commit
+Last Command: /commit-smart
 Next: Continue with task 7
 
 Environment:

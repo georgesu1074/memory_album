@@ -20,7 +20,7 @@ The `.workflow-state.json` file tracks the current position in the development w
   },
   "features_completed": [],               // List of completed feature names
   "last_sync_at": null,                  // When /sync-dev-docs last ran
-  "last_commit_at": null,                // When /commit last ran
+  "last_commit_at": null,                // When /commit-smart last ran
   "environment": {
     "nextjs": false,                      // Is Next.js initialized?
     "dependencies": false,                 // Are node_modules installed?
@@ -42,7 +42,7 @@ These commands actively update the workflow state:
 | `/test-feature` | Sets phase="testing" | After development complete |
 | `/complete-feature` | Clears current_feature, adds to features_completed | After testing passes |
 | `/sync-dev-docs` | Updates tasks_completed, last_sync_at | During development |
-| `/commit` | Updates last_commit_at | When committing code |
+| `/commit-smart` | Updates last_commit_at | When committing code |
 | `/next` | Updates next_suggested | After any major action |
 
 ### 2. State-Reading Commands

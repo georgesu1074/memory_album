@@ -1,18 +1,18 @@
-# /commit
+# /commit-smart
 
-Create a git commit with smart detection of changes.
+Create a git commit with smart detection of changes and workflow state updates.
 
 ## Usage
 ```
-/commit "[message]"
-/commit  # Auto-generates message
+/commit-smart "[message]"
+/commit-smart  # Auto-generates message
 ```
 
 ## Examples
 ```
-/commit "Add photo upload validation"
-/commit "Fix mobile responsive issues"
-/commit  # Generates: "feat: Add memory submission form with validation"
+/commit-smart "Add photo upload validation"
+/commit-smart "Fix mobile responsive issues"
+/commit-smart  # Generates: "feat: Add memory submission form with validation"
 ```
 
 ## Implementation
@@ -75,7 +75,7 @@ git log -1 --oneline
 // Update last commit timestamp
 const state = JSON.parse(fs.readFileSync('.workflow-state.json'));
 state.last_commit_at = new Date().toISOString();
-state.workflow_position.last_command = "/commit";
+state.workflow_position.last_command = "/commit-smart";
 state.workflow_position.last_command_at = new Date().toISOString();
 // Don't change next_suggested - let workflow continue
 fs.writeFileSync('.workflow-state.json', JSON.stringify(state, null, 2));

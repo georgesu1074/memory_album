@@ -14,7 +14,7 @@ Create a complete development workflow system with these components:
 - /next: Intelligently determine next action
 - /warmup: Quick status refresh
 - /sprint-status: Show progress
-- /commit: Smart git commits
+- /commit-smart: Smart git commits
 - /workflow-state: Manage state
 - /debug: Troubleshooting
 

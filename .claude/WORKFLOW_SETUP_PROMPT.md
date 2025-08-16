@@ -32,7 +32,7 @@ Create these slash commands in `.claude/commands/`:
 - `/sprint-status` - Show current sprint progress
 
 **Utility Commands:**
-- `/commit [message]` - Smart git commits
+- `/commit-smart [message]` - Smart git commits
 - `/debug [context]` - Debug issues
 - `/workflow-state [action]` - Manage workflow state
 - `/optimize-workflow` - Analyze and improve workflow
@@ -76,7 +76,7 @@ Each command should automatically update the workflow state:
 - `/test-feature`: Set phase="testing"
 - `/complete-feature`: Clear feature, add to completed, phase="between_features"
 - `/sync-dev-docs`: Update task counts
-- `/commit`: Update last_commit_at
+- `/commit-smart`: Update last_commit_at
 - `/next`: Read state and suggest appropriate action based on phase
 
 ### 5. Feature Development Flow

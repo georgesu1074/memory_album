@@ -207,7 +207,7 @@ b. **Active Development**
    - Use `/debug [context]` when issues arise
    - Use `/quick-test` for rapid validation
    - Request `/manual-help [service]` for external setup
-   - Use `/commit` frequently (every 2-3 tasks)
+   - Use `/commit-smart` frequently (every 2-3 tasks)
    - Run `/sync-dev-docs task-complete` to update progress
    - Next: Continue until all tasks checked
 
@@ -243,9 +243,9 @@ d. **Feature Completion** (`/complete-feature [feature-name]`)
 **When:** Saving progress
 
 ```
-/commit → /commit-feature [name] "[message]"
+/commit-smart → /commit-feature [name] "[message]"
 ```
-- `/commit`: Quick commits during development
+- `/commit-smart`: Quick commits during development
 - `/commit-feature`: Formal feature completion commits
 
 #### 5. Deployment Preparation
@@ -390,7 +390,7 @@ Shows current sprint progress and remaining tasks.
 #### `/next-task`
 Identifies and starts the next task from development-plan.md.
 
-#### `/commit [message]`
+#### `/commit-smart [message]`
 Creates a git commit with optional message (auto-generates if not provided).
 
 #### `/debug [context]`

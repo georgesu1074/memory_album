@@ -23,7 +23,7 @@ A comprehensive workflow state tracking system that automatically maintains proj
 3. **`/test-feature`**: Sets phase="testing", updates next_suggested
 4. **`/complete-feature`**: Clears feature, adds to completed, suggests next
 5. **`/sync-dev-docs`**: Updates task counts, last_sync_at timestamp
-6. **`/commit`**: Updates last_commit_at timestamp
+6. **`/commit-smart`**: Updates last_commit_at timestamp
 7. **`/next`**: Reads state to intelligently determine next action
 
 #### State-Reading Commands (3 commands):
@@ -119,7 +119,7 @@ Each command now:
 3. `/test-feature.md` - Sets testing phase
 4. `/sync-dev-docs.md` - Updates task counts
 5. `/project-init.md` - Full state initialization
-6. `/commit.md` - Tracks commit timestamps
+6. `/commit-smart.md` - Tracks commit timestamps
 7. `/next.md` - State-driven logic
 8. `/warmup.md` - Reads and displays state
 9. `/workflow-state.md` - State management functions

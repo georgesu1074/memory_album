@@ -139,14 +139,14 @@ This command will:
 4. Tag with feature name
 5. Push to feature branch (if desired)
 
-## /commit
-Create a git commit with smart detection of changes.
+## /commit-smart
+Create a git commit with smart detection of changes and workflow state updates.
 
-Usage: `/commit "[message]"` or just `/commit` for auto-generated message
+Usage: `/commit-smart "[message]"` or just `/commit-smart` for auto-generated message
 
 Examples:
-- `/commit "Add photo upload validation"`
-- `/commit` (generates message from staged changes)
+- `/commit-smart "Add photo upload validation"`
+- `/commit-smart` (generates message from staged changes)
 
 This command will:
 1. Run git status to see changes

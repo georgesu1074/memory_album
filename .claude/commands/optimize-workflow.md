@@ -43,7 +43,7 @@ Only suggest new commands if they:
 
 ### Command Usage (Last 7 Days)
 1. `/next` - 47 times (most used) ✅
-2. `/commit` - 23 times ✅
+2. `/commit-smart` - 23 times ✅
 3. `/sync-dev-docs` - 19 times ✅
 4. `/debug` - 5 times
 5. `/warmup` - 3 times
