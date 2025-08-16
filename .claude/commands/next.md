@@ -49,6 +49,8 @@ function executeNext() {
       if (needsSync(state)) {
         return execute('/sync-dev-docs');
       }
+      // Update task documentation after each task completion
+      updateTaskDocumentation(state);
       return continueCurrentTask(state);
       
     case 'testing':
@@ -105,6 +107,14 @@ Based on the Atomic Development Principle, assess if recent work represents
 a complete logical unit. If yes, run /commit-smart with appropriate message.
 If not, continue with next task.
   `;
+}
+
+function updateTaskDocumentation(state) {
+  // Ensures task progress is reflected in both:
+  // 1. /development-docs/[feature]/tasks.md - checkbox updates
+  // 2. /development-docs/development-plan.md - strikethrough for moved tasks
+  // This should be called after each task completion to keep docs in sync
+  return `Update both tasks.md and development-plan.md to reflect current progress`;
 }
 ```
 

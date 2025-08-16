@@ -107,6 +107,17 @@ JWT_SECRET=
 ### Sprint-Based Development
 We follow a sprint-based approach with the master plan in `/development-docs/development-plan.md`. Each sprint contains epics, which contain tasks.
 
+### Critical Workflow Rules
+
+#### Task Documentation Updates (MANDATORY)
+After EVERY task completion, you MUST:
+1. **Update tasks.md**: Check the completed task checkbox
+2. **Update development-plan.md**: Ensure strikethrough remains for moved tasks
+3. **Update workflow state**: Increment tasks_completed counter
+
+These updates should happen IMMEDIATELY after completing each task, not batched.
+Use `/sync-dev-docs task-complete` if manual updates were missed.
+
 ### Workflow Visualization
 
 ```mermaid
