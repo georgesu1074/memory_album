@@ -71,3 +71,5 @@ temp/
 
 # Development docs (keep in repo)
 # /development-docs/
+
+.workflow-state.json
