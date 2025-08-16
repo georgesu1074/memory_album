@@ -41,6 +41,11 @@ function executeNext() {
       if (state.tasks_completed === state.tasks_total) {
         return execute('/test-feature', state.current_feature);
       }
+      // Check if we should commit based on Atomic Development Principle
+      // The LLM will assess if current work represents a logical unit
+      if (assessCommitNeeded(state)) {
+        return suggestCommit(state);
+      }
       if (needsSync(state)) {
         return execute('/sync-dev-docs');
       }
@@ -70,6 +75,36 @@ function needsSync(state) {
   const tasksSinceSync = state.tasks_completed % 3 === 0;
   const timeSinceSync = Date.now() - new Date(state.last_sync_at) > 30 * 60 * 1000;
   return tasksSinceSync || timeSinceSync;
+}
+
+function assessCommitNeeded(state) {
+  // The LLM should evaluate based on Atomic Development Principle:
+  // - Has a logical unit of work been completed?
+  // - Would the changes make sense as a single commit?
+  // - Is there a scope shift coming (different domain/component)?
+  // - Has significant time passed since last commit (>15 min)?
+  
+  // This function returns true to trigger the LLM to assess
+  // whether a commit is appropriate based on current context
+  const timeSinceLastCommit = Date.now() - new Date(state.last_commit_at);
+  const hasWorkedFor15Min = timeSinceLastCommit > 15 * 60 * 1000;
+  
+  // Always assess after completing tasks or after 15 min of work
+  return state.tasks_completed > 0 && (hasWorkedFor15Min || state.tasks_completed % 2 === 0);
+}
+
+function suggestCommit(state) {
+  // Prompt the LLM to evaluate if this is a good commit point
+  return `
+📍 Commit Point Assessment:
+- Tasks completed: ${state.tasks_completed}/${state.tasks_total}
+- Time since last commit: ${Math.round((Date.now() - new Date(state.last_commit_at)) / 60000)} minutes
+- Current feature: ${state.current_feature}
+
+Based on the Atomic Development Principle, assess if recent work represents
+a complete logical unit. If yes, run /commit-smart with appropriate message.
+If not, continue with next task.
+  `;
 }
 ```
 

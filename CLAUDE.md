@@ -421,6 +421,24 @@ Manage and inspect workflow state tracking (show/reset/recover/validate).
 - **Fast iteration**: Test frequently, deploy early
 - **Clear communication**: Ask for help with manual steps
 
+### Commit Decision Guidelines
+The /next command should intelligently assess commit points based on:
+
+#### Logical Work Unit Recognition
+- **Coherent functionality**: Can the changes stand alone as working code?
+- **Single purpose**: Do the changes serve one clear purpose?
+- **Scope boundaries**: Is the next task in a different area/component?
+- **Milestone completion**: Has a significant feature/setup been completed?
+
+#### Examples of Natural Commit Points
+- After framework initialization is verified working
+- When a feature becomes usable (even if not polished)
+- After creating/configuring major infrastructure
+- Before switching to different domain/component
+- Every ~15 minutes to prevent work loss
+
+The LLM should assess these dynamically, not follow rigid rules.
+
 ---
 
 Note: This project was renamed from `wedding_site` to `memory_album` to better reflect its purpose as a platform for multiple weddings, not just a single site.
