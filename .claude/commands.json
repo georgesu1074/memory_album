@@ -61,10 +61,10 @@
       "implementation": "Stage files and create descriptive commit"
     },
     {
-      "name": "commit",
-      "description": "Smart git commit with auto-generated message",
+      "name": "commit-smart",
+      "description": "Smart git commit with auto-generated message and workflow state updates",
       "args": ["message?"],
-      "implementation": "Analyze changes and create conventional commit"
+      "implementation": "Analyze changes, create conventional commit, update workflow state"
     },
     {
       "name": "debug",

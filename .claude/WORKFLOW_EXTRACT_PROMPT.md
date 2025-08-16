@@ -24,7 +24,7 @@ claude-workflow-template/
 │   │   ├── next.md
 │   │   ├── warmup.md
 │   │   ├── sprint-status.md
-│   │   ├── commit.md
+│   │   ├── commit-smart.md
 │   │   ├── debug.md
 │   │   ├── workflow-state.md
 │   │   └── optimize-workflow.md
