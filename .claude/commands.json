@@ -1,0 +1,124 @@
+{
+  "commands": [
+    {
+      "name": "start-feature",
+      "description": "Start development on a new feature/epic",
+      "args": ["feature-name"],
+      "implementation": "Create feature folder, extract tasks, set up development docs"
+    },
+    {
+      "name": "test-feature",
+      "description": "Create test plan and execute testing",
+      "args": ["feature-name"],
+      "implementation": "Generate test scenarios, guide testing, document results"
+    },
+    {
+      "name": "complete-feature",
+      "description": "Finalize feature with PR summary",
+      "args": ["feature-name"],
+      "implementation": "Generate PR summary, mark complete, prepare for next"
+    },
+    {
+      "name": "sprint-status",
+      "description": "Show current sprint progress",
+      "args": [],
+      "implementation": "Display sprint metrics and remaining work"
+    },
+    {
+      "name": "next-task",
+      "description": "Start the next task automatically",
+      "args": [],
+      "implementation": "Find and begin next uncompleted task"
+    },
+    {
+      "name": "dev-setup",
+      "description": "Initialize development environment",
+      "args": [],
+      "implementation": "Install dependencies, set up environment"
+    },
+    {
+      "name": "manual-help",
+      "description": "Get help with manual setup tasks",
+      "args": ["service"],
+      "implementation": "Provide setup instructions for external services"
+    },
+    {
+      "name": "deploy-check",
+      "description": "Verify production readiness",
+      "args": [],
+      "implementation": "Run deployment checklist and validations"
+    },
+    {
+      "name": "quick-test",
+      "description": "Run quick smoke tests",
+      "args": ["feature"],
+      "implementation": "Test core functionality quickly"
+    },
+    {
+      "name": "commit-feature",
+      "description": "Create git commit for feature",
+      "args": ["feature-name", "message"],
+      "implementation": "Stage files and create descriptive commit"
+    },
+    {
+      "name": "commit",
+      "description": "Smart git commit with auto-generated message",
+      "args": ["message?"],
+      "implementation": "Analyze changes and create conventional commit"
+    },
+    {
+      "name": "debug",
+      "description": "Debug issues with detailed analysis",
+      "args": ["context"],
+      "implementation": "Analyze error, check logs, suggest fixes"
+    },
+    {
+      "name": "project-init",
+      "description": "Initialize Memory Album project context",
+      "args": [],
+      "implementation": "Load project context, check progress, set up workflow"
+    },
+    {
+      "name": "warmup",
+      "description": "Quick refresh of project state",
+      "args": [],
+      "implementation": "Show current sprint, active features, recent work"
+    },
+    {
+      "name": "next",
+      "description": "Automatically determine next workflow action",
+      "args": [],
+      "implementation": "Check state, determine next step, execute or suggest"
+    },
+    {
+      "name": "optimize-workflow",
+      "description": "Analyze and suggest workflow improvements",
+      "args": [],
+      "implementation": "Review patterns, identify friction, suggest only if valuable"
+    },
+    {
+      "name": "sync-dev-docs",
+      "description": "Synchronize development documentation",
+      "args": ["context?"],
+      "implementation": "Update tasks, create docs, sync progress between files"
+    }
+  ],
+  "feature_mapping": {
+    "project-setup": "Sprint 0: Initial Setup",
+    "supabase-setup": "Sprint 1: Supabase Setup",
+    "external-services": "Sprint 1: External Services Integration",
+    "memory-submission-ui": "Sprint 2: Memory Submission UI",
+    "memory-submission-api": "Sprint 2: Memory Submission API",
+    "ai-categorization": "Sprint 3: AI Categorization",
+    "embedding-storage": "Sprint 3: Embedding Storage",
+    "memory-album-ui": "Sprint 4: Memory Album UI",
+    "memory-detail": "Sprint 4: Memory Detail View",
+    "wedding-setup": "Sprint 5: Wedding Setup Flow",
+    "landing-pages": "Sprint 5: Landing Pages",
+    "background-processing": "Sprint 6: Background Processing",
+    "data-export": "Sprint 6: Data Export",
+    "performance": "Sprint 7: Performance Optimization",
+    "production-setup": "Sprint 7: Production Setup",
+    "final-testing": "Sprint 7: Final Testing & Launch"
+  }
+}
