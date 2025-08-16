@@ -122,9 +122,14 @@ A digital memory collection platform that replaces traditional wedding guest boo
 ### Memory Submission Form
 - **Fields**:
   - Memory type selector (Bride / Groom / Both)
-  - Guest name (required, text input)
+  - Guest name (required, searchable dropdown from guest list or manual entry)
   - Memory content (required, textarea, 10-1000 chars)
   - Photo upload (optional, max 5 photos, 10MB each)
+- **Guest Selection**:
+  - Search dropdown populated from wedding guest list
+  - Auto-complete as user types (min 2 chars)
+  - Option to manually enter name if not found
+  - Maintains data quality through standardized names
 - **Validation**:
   - Client-side validation for immediate feedback
   - Server-side validation for security
@@ -248,6 +253,29 @@ A digital memory collection platform that replaces traditional wedding guest boo
 - **CAC**: Cost to acquire wedding couple
 - **LTV**: Revenue per wedding
 - **NPS**: Couple satisfaction score
+
+## Sprint 5 Features - Guest List Management
+
+### CSV Upload (Post-MVP)
+- **Import Sources**:
+  - Zola wedding website exports
+  - The Knot guest list CSV
+  - Generic CSV with first_name, last_name, email columns
+- **Processing**:
+  - Parse and validate CSV format
+  - Handle duplicates intelligently
+  - Preview before import
+  - Bulk operations (add/update/delete)
+- **Management UI**:
+  - View all guests in table format
+  - Search and filter capabilities
+  - Manual add/edit/delete
+  - Export back to CSV
+
+### Guest Analytics
+- Track which guests have submitted memories
+- Identify missing contributions from key guests
+- Table assignment analytics (if included in import)
 
 ## Future Feature Ideas (Phase 2+)
 

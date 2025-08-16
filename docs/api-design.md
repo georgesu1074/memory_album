@@ -34,6 +34,34 @@ Response 200:
 }
 ```
 
+### Search Wedding Guests
+```
+GET /api/weddings/[wedding_slug]/guests/search?q={query}
+
+Query Params:
+- q: string (min 2 chars) - Search by first or last name
+
+Response 200:
+{
+  "guests": [
+    {
+      "id": "uuid",
+      "full_name": "John Smith",
+      "first_name": "John",
+      "last_name": "Smith"
+    },
+    {
+      "id": "uuid", 
+      "full_name": "Jane Doe",
+      "first_name": "Jane",
+      "last_name": "Doe"
+    }
+  ]
+}
+
+Note: Returns up to 20 matches, ordered alphabetically
+```
+
 ### Submit Memory
 ```
 POST /api/weddings/[wedding_slug]/memories
@@ -41,7 +69,8 @@ POST /api/weddings/[wedding_slug]/memories
 Request (multipart/form-data):
 {
   "type": "both" | "bride" | "groom",
-  "guest_name": "John Smith",
+  "guest_id": "uuid", // If selected from guest list
+  "guest_name": "John Smith", // Fallback if not in list
   "content": "I remember when George tried to serenade Sarah...",
   "photos": [File, File, ...] // max 5 photos, 10MB each
 }
