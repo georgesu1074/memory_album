@@ -3,10 +3,10 @@
 ## Overview
 This is the master development plan for Memory Album MVP. Each epic represents a sprint, and we'll work through them sequentially. Check off tasks as completed and cross out when moved to feature-specific docs.
 
-## Sprint 0: Project Setup & Boilerplate
+## Sprint 0: Project Setup & Boilerplate ✅ COMPLETE
 **Goal**: Get the basic Next.js app running with all dependencies
 
-### Epic: Initial Setup (IN PROGRESS - see /development-docs/project-setup/)
+### Epic: Initial Setup (COMPLETE - see /development-docs/project-setup/)
 - [x] ~~Initialize Next.js 14 with TypeScript, Tailwind, App Router~~
 - [x] ~~Set up Git repository and .gitignore~~
 - [x] ~~Create .env.local with placeholder variables~~
