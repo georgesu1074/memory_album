@@ -16,16 +16,16 @@ This command will:
 6. Set up TodoWrite tracking for the feature
 
 ## /test-feature
-Prepare and execute testing for a completed feature.
+Prepare and execute manual QA testing for a completed feature (no unit/integration tests).
 
 Usage: `/test-feature [feature-name]`
 
 Example: `/test-feature memory-submission`
 
 This command will:
-1. Generate test-plan.md with comprehensive test scenarios
+1. Generate test-plan.md with manual QA test scenarios
 2. Create test-results.md template
-3. Guide through manual testing steps
+3. Guide through manual testing steps (terminal commands, API calls, UI checks)
 4. Document any bugs found
 5. Verify all acceptance criteria
 

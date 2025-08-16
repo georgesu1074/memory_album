@@ -24,7 +24,7 @@ Create these slash commands in `.claude/commands/`:
 **Workflow Commands:**
 - `/project-init` - Initialize project context and scan environment
 - `/start-feature [name]` - Start work on a new feature
-- `/test-feature [name]` - Create test plan and run tests
+- `/test-feature [name]` - Create manual QA test plan (no unit tests)
 - `/complete-feature [name]` - Finalize feature and archive
 - `/sync-dev-docs [context]` - Synchronize documentation
 - `/next` - Intelligently determine next action

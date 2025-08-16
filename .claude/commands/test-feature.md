@@ -1,6 +1,6 @@
 # /test-feature
 
-Create test plan and execute testing for a completed feature.
+Create manual QA test plan and execute testing for a completed feature (no unit/integration tests).
 
 ## Usage
 ```
@@ -240,6 +240,10 @@ Or if non-critical, run /complete-feature with notes.
 - Orientation changes handled
 
 ## Notes
+- This creates a MANUAL test plan, not automated tests
+- No unit tests or integration tests are written (keeps development fast)
+- Tests include terminal commands, API calls, DB checks, UI interactions
+- Claude executes what it can, prompts user for what it can't
 - Always test on real devices when possible
 - Document with screenshots for failures
 - Consider network conditions

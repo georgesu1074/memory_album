@@ -8,7 +8,7 @@ Create a complete development workflow system with these components:
 1. Create `.claude/commands/` directory with these slash commands:
 - /project-init: Initialize project context
 - /start-feature: Begin new feature with plan.md and tasks.md
-- /test-feature: Create test plan and run tests
+- /test-feature: Create manual QA test plan (no unit tests)
 - /complete-feature: Finalize and archive feature
 - /sync-dev-docs: Sync documentation between files
 - /next: Intelligently determine next action
