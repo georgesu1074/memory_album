@@ -83,9 +83,25 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 ### Epic: AI Categorization
 
 - [ ] Implement Gemini function calling for categorization
+  - Set up API client
+  - Create categorization prompt
+  - Parse structured response
 - [ ] Create memory matching logic
+  - Find existing categories in database
+  - Use similarity scoring to match
+  - Handle race conditions with DB locks
 - [ ] Build memory grouping system
-- [ ] Generate dynamic titles for groups
+  - Assign memories to categories
+  - Update category counts
+  - Generate group titles
+- [ ] Add category consolidation logic (merge duplicates)
+  - Find similar categories periodically
+  - Merge memories from duplicate categories
+  - Update counts and summaries
+- [ ] Configure Vercel cron for processing
+  - Set up background job for categorization queue
+  - Add consolidation job (every 5 minutes)
+  - Configure retry intervals
 - [ ] Create summary generation for grouped memories
 - [ ] Add retry logic for AI failures
 - [ ] Implement fallback categorization
