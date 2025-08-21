@@ -3,6 +3,7 @@ import { getGeminiClient, GEMINI_CONFIG } from './gemini'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CategoryInfo, MemoryExample, CategorizationMetadata } from '@/types/categorization'
 import { processMemoryEmbedding, EmbeddingMetadata } from './embedding-generator'
+import { findOrCreateCategory, updateCategorySummary } from '@/lib/db/categories'
 
 // Tool function declarations for Gemini
 const tools = [{
@@ -38,40 +39,46 @@ async function getExistingCategories(weddingId: string): Promise<CategoryInfo[]>
   const supabase = createAdminClient()
   
   const { data, error } = await supabase
-    .from('memories')
-    .select('category')
+    .from('categories')
+    .select('name, memory_count')
     .eq('wedding_id', weddingId)
-    .not('category', 'is', null)
+    .order('memory_count', { ascending: false })
   
   if (error) {
     console.error('Error fetching categories:', error)
     return []
   }
   
-  // Count occurrences of each category
-  const categoryCounts = data.reduce((acc, memory) => {
-    acc[memory.category] = (acc[memory.category] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-  
-  return Object.entries(categoryCounts).map(([category, count]) => ({
-    category,
-    count
+  return data.map(cat => ({
+    category: cat.name,
+    count: cat.memory_count
   }))
 }
 
 async function getMemoriesInCategory(
   weddingId: string, 
-  category: string, 
+  categoryName: string, 
   limit: number = 3
 ): Promise<MemoryExample[]> {
   const supabase = createAdminClient()
+  
+  // First get the category ID
+  const { data: category } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('wedding_id', weddingId)
+    .eq('name', categoryName)
+    .single()
+  
+  if (!category) {
+    return []
+  }
   
   const { data, error } = await supabase
     .from('memories')
     .select('id, memory_text, guest_name')
     .eq('wedding_id', weddingId)
-    .eq('category', category)
+    .eq('category_id', category.id)
     .limit(limit)
   
   if (error) {
@@ -205,15 +212,26 @@ After analysis, respond with a JSON object:
     let matchedWith: string[] = []
     if (parsed.matches_existing && parsed.category) {
       const supabase = createAdminClient()
-      const { data } = await supabase
-        .from('memories')
+      
+      // First get the category ID
+      const { data: category } = await supabase
+        .from('categories')
         .select('id')
         .eq('wedding_id', weddingId)
-        .eq('category', parsed.category)
-        .neq('id', memoryId)
-        .limit(5)
+        .eq('name', parsed.category)
+        .single()
       
-      matchedWith = data?.map(m => m.id) || []
+      if (category) {
+        const { data } = await supabase
+          .from('memories')
+          .select('id')
+          .eq('wedding_id', weddingId)
+          .eq('category_id', category.id)
+          .neq('id', memoryId)
+          .limit(5)
+        
+        matchedWith = data?.map(m => m.id) || []
+      }
     }
     
     const processingTime = Date.now() - startTime
@@ -290,11 +308,21 @@ export async function processMemory(
     )
     console.log(`[PROCESS] Category assigned: "${result.category}" with confidence ${result.confidence}`)
     
-    // Update with results
+    // Find or create the category
+    const category = await findOrCreateCategory(
+      weddingId,
+      result.category,
+      result.metadata.keywords,
+      result.metadata.keywords?.[0] // Use first keyword as theme for now
+    )
+    console.log(`[PROCESS] Category record: ${category.id}`)
+    
+    // Update memory with category ID and results
     const { error: updateError } = await supabase
       .from('memories')
       .update({
-        category: result.category,
+        category: result.category, // Keep the name for backwards compatibility
+        category_id: category.id, // Add the new category reference
         category_confidence: result.confidence,
         categorization_metadata: {
           ...result.metadata,
@@ -308,6 +336,15 @@ export async function processMemory(
     
     if (updateError) {
       throw updateError
+    }
+    
+    // Update category summary after successful categorization
+    try {
+      await updateCategorySummary(category.id, weddingId, result.category)
+      console.log(`[PROCESS] Category summary updated for "${result.category}"`)
+    } catch (summaryError) {
+      console.error('Failed to update category summary:', summaryError)
+      // Don't fail the whole process if summary fails
     }
     
     // Generate and store embedding (don't fail if this fails)
