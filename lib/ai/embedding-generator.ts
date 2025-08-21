@@ -93,8 +93,12 @@ export async function processMemoryEmbedding(
   metadata: EmbeddingMetadata
 ): Promise<boolean> {
   try {
-    // Generate embedding
-    const embedding = await generateEmbedding(memoryText)
+    // Enrich the text with context before embedding
+    // This makes the embedding more semantically meaningful
+    const enrichedText = `Category: ${metadata.category}. Guest: ${metadata.guest_name}. Memory about ${metadata.memory_type}: ${memoryText}`
+    
+    // Generate embedding of the enriched text
+    const embedding = await generateEmbedding(enrichedText)
     
     // Store in Qdrant
     const stored = await storeEmbedding(memoryId, embedding, metadata)
