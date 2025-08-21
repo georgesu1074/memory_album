@@ -19,17 +19,17 @@
 ### Epic: Memory Submission API
 
 - [x] Create GET /api/weddings/[slug]/guests/search endpoint
-- [ ] Create POST /api/weddings/[slug]/memories endpoint
+- [x] Create POST /api/weddings/[slug]/memories endpoint
 - [ ] Implement multipart form data parsing
 - [ ] Add server-side validation
 - [ ] Upload photos to Supabase Storage
 - [ ] Implement photo resizing/optimization
-- [ ] Create memory record in database
+- [x] Create memory record in database
 - [ ] Add rate limiting (10/min per IP)
 - [ ] Implement error logging
 - [ ] Add success response with memory ID
 
 ## Progress
-- **Completed**: 11/20 tasks (55%)
-- **Status**: Guest search autocomplete working, need memory submission API
-- **Next Task**: Create POST /api/weddings/[slug]/memories endpoint
+- **Completed**: 13/20 tasks (65%)
+- **Status**: Memory submission API created, form now saves to database
+- **Next Task**: Build success confirmation screen

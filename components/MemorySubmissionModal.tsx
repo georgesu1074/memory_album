@@ -62,15 +62,23 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
-    
+
     try {
-      // TODO: Submit to API endpoint
-      // This will be implemented when we create the API routes
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Reset form and close modal
+      const response = await fetch(`/api/weddings/${weddingSlug}/memories`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save memory')
+      }
+
+      // Success! Reset form and close modal
       setFormData({
         memoryType: 'both',
         guestId: null,
@@ -78,10 +86,18 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
         memoryText: '',
         photos: []
       })
+      
+      // TODO: Show success message
+      console.log('Memory saved successfully:', data)
+      
       onClose()
+      
+      // Optionally refresh the page to show the new memory
+      window.location.reload()
+      
     } catch (err) {
-      setError('Something went wrong. Please try again.')
-      console.error(err)
+      console.error('Error submitting memory:', err)
+      setError(err instanceof Error ? err.message : 'Failed to save memory')
     } finally {
       setIsSubmitting(false)
     }

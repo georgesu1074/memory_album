@@ -53,3 +53,4 @@ Build the guest-facing memory submission interface with mobile-first design, gue
 - Consider offline support for poor connections
 - Implement optimistic UI updates
 - Add analytics tracking for submissions
+- Schema updated: `is_processed` → `status` field for better async job handling (migration pending)

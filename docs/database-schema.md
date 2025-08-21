@@ -54,9 +54,12 @@ CREATE TABLE memories (
   memory_text TEXT NOT NULL,
   memory_type VARCHAR(20) CHECK (memory_type IN ('bride', 'groom', 'both')) DEFAULT 'both',
   group_id UUID,
-  is_processed BOOLEAN DEFAULT false,
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
   ai_category VARCHAR(100),
   ai_summary TEXT,
+  processing_started_at TIMESTAMP WITH TIME ZONE,
+  processing_completed_at TIMESTAMP WITH TIME ZONE,
+  processing_error TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   metadata JSONB DEFAULT '{}'::jsonb
@@ -66,6 +69,7 @@ CREATE INDEX idx_memories_wedding_id ON memories(wedding_id);
 CREATE INDEX idx_memories_guest_id ON memories(guest_id);
 CREATE INDEX idx_memories_group_id ON memories(group_id);
 CREATE INDEX idx_memories_created_at ON memories(created_at DESC);
+CREATE INDEX idx_memories_status ON memories(status);
 ```
 
 ### memory_photos
