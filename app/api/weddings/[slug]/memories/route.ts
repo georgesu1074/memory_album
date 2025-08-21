@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase/client'
 import { uploadPhoto, STORAGE_BUCKETS } from '@/lib/supabase/storage'
+import { processMemory } from '@/lib/ai/event-categorizer'
 
 export async function POST(
   request: NextRequest,
@@ -53,8 +54,7 @@ export async function POST(
       memory_text: memoryText.trim(),
       memory_type: memoryType || 'both',
       guest_name: guestName.trim(),
-      is_processed: false // Will be processed by AI later
-      // TODO: Change to status: 'pending' after migration
+      status: 'pending' // Will be processed by AI async
     }
 
     // If we have a guest ID, link it
@@ -121,6 +121,12 @@ export async function POST(
         }
       }
     }
+
+    // Trigger async categorization (don't wait for it)
+    processMemory(memory.id, wedding.id).catch(error => {
+      console.error('Background categorization failed:', error)
+      // Don't fail the request - categorization will be retried by cron
+    })
 
     return NextResponse.json({
       success: true,

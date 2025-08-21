@@ -75,9 +75,16 @@ export type Database = {
           memory_text: string
           memory_type: 'bride' | 'groom' | 'both'
           group_id: string | null
-          is_processed: boolean
+          status: 'pending' | 'processing' | 'completed' | 'failed' | 'failed_permanent'
           ai_category: string | null
           ai_summary: string | null
+          category: string | null
+          category_confidence: number | null
+          categorization_metadata: Record<string, any> | null
+          retry_count: number
+          processing_started_at: string | null
+          processing_completed_at: string | null
+          processing_error: string | null
           created_at: string
           updated_at: string
           metadata: Record<string, any>
@@ -90,9 +97,16 @@ export type Database = {
           memory_text: string
           memory_type?: 'bride' | 'groom' | 'both'
           group_id?: string | null
-          is_processed?: boolean
+          status?: 'pending' | 'processing' | 'completed' | 'failed' | 'failed_permanent'
           ai_category?: string | null
           ai_summary?: string | null
+          category?: string | null
+          category_confidence?: number | null
+          categorization_metadata?: Record<string, any> | null
+          retry_count?: number
+          processing_started_at?: string | null
+          processing_completed_at?: string | null
+          processing_error?: string | null
           created_at?: string
           updated_at?: string
           metadata?: Record<string, any>
@@ -105,9 +119,16 @@ export type Database = {
           memory_text?: string
           memory_type?: 'bride' | 'groom' | 'both'
           group_id?: string | null
-          is_processed?: boolean
+          status?: 'pending' | 'processing' | 'completed' | 'failed' | 'failed_permanent'
           ai_category?: string | null
           ai_summary?: string | null
+          category?: string | null
+          category_confidence?: number | null
+          categorization_metadata?: Record<string, any> | null
+          retry_count?: number
+          processing_started_at?: string | null
+          processing_completed_at?: string | null
+          processing_error?: string | null
           created_at?: string
           updated_at?: string
           metadata?: Record<string, any>
