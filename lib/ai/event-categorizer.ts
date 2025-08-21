@@ -186,7 +186,9 @@ After analysis, respond with a JSON object:
         toolResponses.push({
           functionResponse: {
             name: call.name,
-            response
+            response: {
+              result: response
+            }
           }
         })
       }
