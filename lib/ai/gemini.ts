@@ -144,9 +144,9 @@ export async function generateGroupSummary(
     }
 
     const prompt = `
-Write a ${sentenceGuidance} story summary of "${category}" for ${coupleNames}'s wedding album.
+Write a ${sentenceGuidance} heartwarming story summary of "${category}" for ${coupleNames}'s wedding album.
 ${focusGuidance}
-If the memories don't actually match the expected focus, adjust based on the actual content.
+Weave these perspectives into a treasured anecdote. If the memories don't match the expected focus, adjust based on content.
 
 ${memories.length === 1 ? 'Guest memory' : 'Guest memories'}:
 ${memories.map((m, i) => `${memories.length > 1 ? `${i + 1}. ` : ''}${m}`).join('\n')}
