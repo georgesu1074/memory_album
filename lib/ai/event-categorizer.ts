@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, FunctionDeclarationSchemaType } from '@google/generative-ai'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getGeminiClient, GEMINI_CONFIG } from './gemini'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CategoryInfo, MemoryExample, CategorizationMetadata } from '@/types/categorization'
@@ -11,7 +11,7 @@ const tools = [{
       name: 'get_existing_categories',
       description: 'Get all existing memory categories and their counts',
       parameters: {
-        type: FunctionDeclarationSchemaType.OBJECT,
+        type: 'object',
         properties: {},
         required: []
       }
@@ -20,10 +20,10 @@ const tools = [{
       name: 'get_memories_in_category',
       description: 'Get example memories from a specific category to understand context',
       parameters: {
-        type: FunctionDeclarationSchemaType.OBJECT,
+        type: 'object',
         properties: {
           category: {
-            type: FunctionDeclarationSchemaType.STRING,
+            type: 'string',
             description: 'The category name to get examples from'
           }
         },
@@ -255,6 +255,7 @@ export async function processMemory(
   memoryId: string,
   weddingId: string
 ): Promise<boolean> {
+  console.log(`[PROCESS] Starting processing for memory ${memoryId}`)
   const supabase = createAdminClient()
   
   try {
@@ -279,6 +280,7 @@ export async function processMemory(
     }
     
     // Categorize the memory
+    console.log(`[PROCESS] Categorizing: "${memory.memory_text.substring(0, 50)}..."`)
     const result = await categorizeMemory(
       memoryId,
       weddingId,
@@ -286,6 +288,7 @@ export async function processMemory(
       memory.memory_type as 'bride' | 'groom' | 'both',
       memory.guest_name
     )
+    console.log(`[PROCESS] Category assigned: "${result.category}" with confidence ${result.confidence}`)
     
     // Update with results
     const { error: updateError } = await supabase

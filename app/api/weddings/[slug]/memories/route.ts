@@ -123,10 +123,15 @@ export async function POST(
     }
 
     // Trigger async categorization (don't wait for it)
-    processMemory(memory.id, wedding.id).catch(error => {
-      console.error('Background categorization failed:', error)
-      // Don't fail the request - categorization will be retried by cron
-    })
+    console.log(`[CATEGORIZATION] Starting async categorization for memory ${memory.id}`)
+    processMemory(memory.id, wedding.id)
+      .then(success => {
+        console.log(`[CATEGORIZATION] Memory ${memory.id} categorization ${success ? 'succeeded' : 'failed'}`)
+      })
+      .catch(error => {
+        console.error('[CATEGORIZATION] Background categorization failed:', error)
+        // Don't fail the request - categorization will be retried by cron
+      })
 
     return NextResponse.json({
       success: true,
