@@ -38,14 +38,14 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - [ ] ~~Test database connection~~
 - [ ] ~~Create seed data for development~~
 
-### Epic: External Services Integration
+### Epic: External Services Integration ✅ COMPLETE
 
-- [ ] Set up Qdrant Cloud account (manual)
-- [ ] Create Qdrant client wrapper
-- [ ] Set up Google Cloud account for Gemini (manual)
-- [ ] Create Gemini client wrapper with error handling
-- [ ] Add environment variable validation
-- [ ] Create service health check endpoint
+- ~~[x] Set up Qdrant Cloud account (manual)~~ → external-services
+- ~~[x] Create Qdrant client wrapper~~ → external-services
+- ~~[x] Set up Google Cloud account for Gemini (manual)~~ → external-services
+- ~~[x] Create Gemini client wrapper with error handling~~ → external-services
+- ~~[x] Add environment variable validation~~ → external-services
+- ~~[x] Create service health check endpoint~~ → external-services
 
 ## Sprint 2: Core Memory Submission Flow
 
