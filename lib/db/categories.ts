@@ -69,6 +69,15 @@ export async function updateCategorySummary(
   // First increment the count
   await incrementCategoryCount(categoryId)
   
+  // Get the couple's names from the wedding
+  const { data: wedding } = await supabase
+    .from('weddings')
+    .select('couple_names')
+    .eq('id', weddingId)
+    .single()
+  
+  const coupleNames = wedding?.couple_names || 'the couple'
+  
   // Get all memories in this category
   const { data: memories, error: memoriesError } = await supabase
     .from('memories')
@@ -91,7 +100,8 @@ export async function updateCategorySummary(
     
     const summary = await generateGroupSummary(
       memoryTexts,
-      categoryName
+      categoryName,
+      coupleNames
     )
     
     // Update category with summary and count
