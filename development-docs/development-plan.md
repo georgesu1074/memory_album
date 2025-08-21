@@ -53,28 +53,29 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 
 ### Epic: Memory Submission UI
 
-- [ ] Create mobile-first submission form component
-- [ ] Add memory type selector (Bride/Groom/Both)
-- [ ] Create guest name input with validation
-- [ ] Build textarea with character counter
-- [ ] Implement photo upload component with preview
-- [ ] Add client-side form validation
-- [ ] Create submission loading states
-- [ ] Build success confirmation screen
-- [ ] Add "Share Another" flow
-- [ ] Implement error handling UI
+- ~~[ ] Create mobile-first submission form component~~ → memory-submission
+- ~~[ ] Add memory type selector (Bride/Groom/Both)~~ → memory-submission
+- ~~[ ] Create guest name input with validation~~ → memory-submission
+- ~~[ ] Build textarea with character counter~~ → memory-submission
+- ~~[ ] Implement photo upload component with preview~~ → memory-submission
+- ~~[ ] Add client-side form validation~~ → memory-submission
+- ~~[ ] Create submission loading states~~ → memory-submission
+- ~~[ ] Build success confirmation screen~~ → memory-submission
+- ~~[ ] Add "Share Another" flow~~ → memory-submission
+- ~~[ ] Implement error handling UI~~ → memory-submission
 
 ### Epic: Memory Submission API
 
-- [ ] Create POST /api/weddings/[slug]/memories endpoint
-- [ ] Implement multipart form data parsing
-- [ ] Add server-side validation
-- [ ] Upload photos to Supabase Storage
-- [ ] Implement photo resizing/optimization
-- [ ] Create memory record in database
-- [ ] Add rate limiting (10/min per IP)
-- [ ] Implement error logging
-- [ ] Add success response with memory ID
+- ~~[ ] Create GET /api/weddings/[slug]/guests/search endpoint~~ → memory-submission
+- ~~[ ] Create POST /api/weddings/[slug]/memories endpoint~~ → memory-submission
+- ~~[ ] Implement multipart form data parsing~~ → memory-submission
+- ~~[ ] Add server-side validation~~ → memory-submission
+- ~~[ ] Upload photos to Supabase Storage~~ → memory-submission
+- ~~[ ] Implement photo resizing/optimization~~ → memory-submission
+- ~~[ ] Create memory record in database~~ → memory-submission
+- ~~[ ] Add rate limiting (10/min per IP)~~ → memory-submission
+- ~~[ ] Implement error logging~~ → memory-submission
+- ~~[ ] Add success response with memory ID~~ → memory-submission
 
 ## Sprint 3: AI Categorization & Embeddings
 
