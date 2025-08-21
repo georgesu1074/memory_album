@@ -131,9 +131,9 @@ export async function generateGroupSummary(
 
     const prompt = `
 Write a ${sentenceGuidance} story summary of "${category}" for ${coupleNames}'s wedding album.
-Focus on ${coupleNames} as the main characters, weaving these perspectives into one heartwarming narrative.
+Combine these guest perspectives into a heartwarming narrative with ${coupleNames} as the main characters.
 
-${memories.length === 1 ? 'Memory' : 'Memories'}:
+${memories.length === 1 ? 'Guest memory' : 'Guest memories'}:
 ${memories.map((m, i) => `${memories.length > 1 ? `${i + 1}. ` : ''}${m}`).join('\n')}
 
 Summary:`
