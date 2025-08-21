@@ -113,7 +113,8 @@ Extract 3-5 relevant keywords from the memory.
 export async function generateGroupSummary(
   memories: string[],
   category: string,
-  coupleNames: string
+  coupleNames: string,
+  primaryType: 'bride' | 'groom' | 'both' = 'both'
 ): Promise<string> {
   try {
     const client = getGeminiClient()
@@ -129,9 +130,23 @@ export async function generateGroupSummary(
       ? "1-2 sentences" 
       : `2-${Math.min(memories.length + 1, 5)} sentences`
 
+    // Parse couple names to identify bride and groom
+    const [name1, name2] = coupleNames.split(' and ').map(n => n.trim())
+    
+    // Determine focus based on memory type
+    let focusGuidance: string
+    if (primaryType === 'bride') {
+      focusGuidance = `Focus on the bride (likely ${name1} or ${name2} - infer from context).`
+    } else if (primaryType === 'groom') {
+      focusGuidance = `Focus on the groom (likely ${name1} or ${name2} - infer from context).`
+    } else {
+      focusGuidance = `Focus on both ${name1} and ${name2}.`
+    }
+
     const prompt = `
 Write a ${sentenceGuidance} story summary of "${category}" for ${coupleNames}'s wedding album.
-Combine these guest perspectives into a heartwarming narrative with ${coupleNames} as the main characters.
+${focusGuidance}
+If the memories don't actually match the expected focus, adjust based on the actual content.
 
 ${memories.length === 1 ? 'Guest memory' : 'Guest memories'}:
 ${memories.map((m, i) => `${memories.length > 1 ? `${i + 1}. ` : ''}${m}`).join('\n')}

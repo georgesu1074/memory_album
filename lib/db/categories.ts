@@ -81,7 +81,7 @@ export async function updateCategorySummary(
   // Get all memories in this category
   const { data: memories, error: memoriesError } = await supabase
     .from('memories')
-    .select('memory_text, guest_name')
+    .select('memory_text, guest_name, memory_type')
     .eq('wedding_id', weddingId)
     .eq('category_id', categoryId)
     .eq('status', 'completed')
@@ -98,10 +98,25 @@ export async function updateCategorySummary(
       `${m.guest_name}: "${m.memory_text}"`
     )
     
+    // Determine the primary memory type (most common in this category)
+    const typeCounts = memories.reduce((acc, m) => {
+      acc[m.memory_type] = (acc[m.memory_type] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+    
+    let primaryType: 'bride' | 'groom' | 'both' = 'both'
+    if (typeCounts.bride && !typeCounts.groom) {
+      primaryType = 'bride'
+    } else if (typeCounts.groom && !typeCounts.bride) {
+      primaryType = 'groom'
+    }
+    // If mixed or all 'both', default to 'both'
+    
     const summary = await generateGroupSummary(
       memoryTexts,
       categoryName,
-      coupleNames
+      coupleNames,
+      primaryType
     )
     
     // Update category with summary and count
