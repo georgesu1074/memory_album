@@ -285,29 +285,31 @@ SELECT status, COUNT(*) FROM memories GROUP BY status;
 
 ## Test 6: Story-Like Summary Generation (PENDING)
 
+**Couple Names:** Alex and Jordan
+
 ### Test 6A: Multi-Perspective Vegas Story
 **Memories to Add:**
-- Tom Bradley: Cardboard shoe replacement story
-- Ryan Cooper: Security confusion story
+- Tom Bradley: Jordan as wingman during shoe incident
+- Ryan Cooper: Jordan's legendary security interaction
 
-**Expected Summary (3 memories):** 3-4 sentences weaving the shoe incident into a cohesive narrative
+**Expected Summary (3 memories):** 3-4 sentences weaving the shoe incident into a cohesive narrative focused on Jordan's role
 
 **Actual Summary:** [PENDING]
 
 ### Test 6B: Romantic Proposal Narrative  
 **Memories to Add:**
-- Jennifer Lee: Photographer's perspective
-- David Park: Hidden friends' perspective
+- Jennifer Lee: Photographer capturing Alex's joy when Jordan proposed
+- David Park: Hidden friends cheering when Alex said yes
 
-**Expected Summary (4 memories):** 3-5 sentences creating heartwarming proposal story
+**Expected Summary (4 memories):** 3-5 sentences creating heartwarming proposal story about Jordan proposing to Alex
 
 **Actual Summary:** [PENDING]
 
 ### Test 6C: Single Memory Story
 **Memory to Add:**
-- Lisa Martinez: Paris birthday surprise
+- Lisa Martinez: Alex's Paris birthday surprise orchestrated by Jordan
 
-**Expected Summary (1 memory):** 1-2 sentences capturing the moment's magic
+**Expected Summary (1 memory):** 1-2 sentences capturing Alex and Jordan's special moment
 
 **Actual Summary:** [PENDING]
 

@@ -30,7 +30,7 @@ Navigate to: `http://localhost:[PORT]/test-wedding-2024`
 - Click **"Share a Memory"** button
 - Guest name: **"John Smith"**
 - Memory type: **"Groom"**
-- Memory text: **"Remember that epic Vegas bachelor party in 2023? The casino incident where Jake lost his shoe was legendary!"**
+- Memory text: **"Remember that epic Vegas bachelor party in 2023? Jordan was cracking up when Jake lost his shoe at the casino - legendary night!"**
 - Click Submit
 
 **Expected Terminal Logs:**
@@ -66,12 +66,12 @@ LIMIT 1;
 **Memory 2:**
 - Guest: **"Sarah Jones"**
 - Type: **"Bride"**
-- Text: **"The proposal at Sunset Beach was so romantic! She had no idea it was coming!"**
+- Text: **"The proposal at Sunset Beach was so romantic! Alex had no idea Jordan was about to propose!"**
 
 **Memory 3:**
 - Guest: **"Mike Wilson"**
 - Type: **"Both"**
-- Text: **"I helped plan the Sunset Beach proposal. Hiding the photographer behind the rocks was tricky!"**
+- Text: **"I helped Jordan plan the Sunset Beach proposal. Hiding the photographer behind the rocks while keeping Alex distracted was tricky!"**
 
 **Database Verification:**
 ```sql
@@ -93,9 +93,9 @@ ORDER BY created_at DESC;
 ### 5. Test Dynamic Category Creation
 
 **Memory 4:**
-- Guest: **"Alex Chen"**
+- Guest: **"Chris Chen"**
 - Type: **"Groom"**
-- Text: **"Our weekly D&D sessions at Mike's house shaped our friendship. Remember when we fought that dragon for 6 hours straight?"**
+- Text: **"Our weekly D&D sessions at Mike's house shaped Jordan's and my friendship. Remember when Jordan rolled three nat 20s fighting that dragon?"**
 
 **Expected Result:**
 - Creates a NEW specific category like "Weekly D&D Sessions at Mike's House"
@@ -109,47 +109,48 @@ ORDER BY created_at DESC;
 ### 6. Test Category Summary Generation
 
 **Purpose:** Verify AI generates story-like summaries that scale with memory count
+**Couple Names:** Alex and Jordan (to be used in all summaries)
 
 #### Test 6A: Add More Vegas Memories (Test Multi-Perspective Summary)
 
 **Memory 5:**
 - Guest: **"Tom Bradley"**
 - Type: **"Groom"**
-- Text: **"That Vegas bachelor party was insane! Jake losing his shoe at the blackjack table became the weekend's running joke. We even made him a cardboard replacement!"**
+- Text: **"That Vegas bachelor party was insane! Jordan was the best wingman when Jake lost his shoe at the blackjack table. We even made him a cardboard replacement while Jordan distracted security!"**
 
 **Memory 6:**
 - Guest: **"Ryan Cooper"**
 - Type: **"Groom"**  
-- Text: **"The best part of Vegas 2023 was when security thought Jake's missing shoe was a prank. Watching him explain it seriously while hopping on one foot was priceless!"**
+- Text: **"The best part of Vegas 2023 was Jordan keeping his cool when security questioned Jake about the missing shoe. Jordan's straight-faced explanation while Jake hopped on one foot was legendary!"**
 
 **Expected Category Summary (3 memories → 3-4 sentences):**
-Should weave all three perspectives into a cohesive story about the legendary shoe incident.
+Should weave all three perspectives into a cohesive story about the legendary shoe incident, focusing on Jordan's role.
 
 #### Test 6B: Add More Sunset Beach Memories (Test Romantic Summary)
 
 **Memory 7:**
 - Guest: **"Jennifer Lee"**
 - Type: **"Bride"**
-- Text: **"I was the secret photographer at Sunset Beach! Watching her face transform from confusion to pure joy when he dropped to one knee - that's the shot that made it all worth it."**
+- Text: **"I was the secret photographer at Sunset Beach! Watching Alex's face transform from confusion to pure joy when Jordan dropped to one knee - that's the shot that made it all worth it."**
 
 **Memory 8:**
 - Guest: **"David Park"**
 - Type: **"Both"**
-- Text: **"We were all hiding behind various rocks at Sunset Beach, trying not to giggle. When she said yes, we couldn't help but cheer - totally blew our cover but made the moment even better!"**
+- Text: **"We were all hiding behind various rocks at Sunset Beach for Jordan's proposal to Alex. When Alex said yes, we couldn't help but cheer - totally blew our cover but made the moment even better!"**
 
 **Expected Category Summary (4 memories → 3-5 sentences):**
-Should create a heartwarming narrative combining all perspectives of the proposal.
+Should create a heartwarming narrative combining all perspectives of Jordan's proposal to Alex.
 
 #### Test 6C: Single Memory Summary (New Category)
 
 **Memory 9:**
 - Guest: **"Lisa Martinez"**
 - Type: **"Bride"**
-- Text: **"The bride's 30th birthday surprise in Paris was unforgettable. She thought we were just having dinner, but we'd secretly flown in her parents from Australia. Her tears of joy lit up the entire restaurant!"**
+- Text: **"Alex's 30th birthday surprise in Paris was unforgettable. Alex thought we were just having dinner, but Jordan had secretly flown in Alex's parents from Australia. Alex's tears of joy lit up the entire restaurant!"**
 
-**Expected Category:** "30th Birthday Surprise in Paris" or similar
+**Expected Category:** "Alex's 30th Birthday Surprise in Paris" or similar
 **Expected Summary (1 memory → 1-2 sentences):**
-Should create a concise, touching summary of this single memory.
+Should create a concise, touching summary focusing on Alex and Jordan's special moment.
 
 **Database Verification:**
 ```sql

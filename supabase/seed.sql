@@ -12,7 +12,7 @@ INSERT INTO weddings (
 ) VALUES (
   '16dd6f94-1cd7-4446-b748-367ca94a2c18',
   'test-wedding-2024',
-  'Test Couple',
+  'Alex and Jordan',
   '2024-12-31',
   '#rose-gold',
   true
