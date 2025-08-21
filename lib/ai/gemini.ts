@@ -120,7 +120,7 @@ export async function generateGroupSummary(
     const model = client.getGenerativeModel({ 
       model: GEMINI_CONFIG.model,
       generationConfig: {
-        temperature: 0.6,
+        temperature: 0.4,
         maxOutputTokens: 200,
       }
     })
@@ -130,17 +130,13 @@ export async function generateGroupSummary(
       : `2-${Math.min(memories.length + 1, 5)} sentences`
 
     const prompt = `
-Create a heartwarming, story-like summary of "${category}" from these wedding memory perspectives.
-This is for ${coupleNames}'s wedding memory album. Focus the narrative on ${coupleNames} - they are the stars of this story.
-Write it as a mini anecdote that captures the magic of this moment in ${sentenceGuidance}.
-Weave together any different perspectives into one cohesive narrative centered around ${coupleNames}'s experience.
-Make it feel like a treasured story about ${coupleNames} being retold at future gatherings.
-Even when the memory is about other people (like "Jake lost his shoe"), connect it back to how it relates to or involves ${coupleNames}.
+Write a ${sentenceGuidance} story summary of "${category}" for ${coupleNames}'s wedding album.
+Focus on ${coupleNames} as the main characters, weaving these perspectives into one heartwarming narrative.
 
 ${memories.length === 1 ? 'Memory' : 'Memories'}:
 ${memories.map((m, i) => `${memories.length > 1 ? `${i + 1}. ` : ''}${m}`).join('\n')}
 
-Story Summary:`
+Summary:`
 
     const result = await model.generateContent(prompt)
     const response = await result.response
