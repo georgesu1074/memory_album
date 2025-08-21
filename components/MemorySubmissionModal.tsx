@@ -77,12 +77,21 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
     setError(null)
 
     try {
+      // Create FormData to handle file uploads
+      const submitData = new FormData()
+      submitData.append('memoryType', formData.memoryType)
+      submitData.append('guestId', formData.guestId || '')
+      submitData.append('guestName', formData.guestName)
+      submitData.append('memoryText', formData.memoryText)
+      
+      // Add photos to FormData
+      formData.photos.forEach((photo, index) => {
+        submitData.append(`photo_${index}`, photo)
+      })
+
       const response = await fetch(`/api/weddings/${weddingSlug}/memories`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: submitData, // No Content-Type header needed for FormData
       })
 
       const data = await response.json()

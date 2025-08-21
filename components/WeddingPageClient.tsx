@@ -85,6 +85,18 @@ export default function WeddingPageClient({ wedding, guests, memories: initialMe
                 {memories.map((memory) => (
                   <div key={memory.id} className="border-l-4 border-purple-500 pl-4">
                     <p className="text-gray-800 mb-2">{memory.memory_text}</p>
+                    {memory.memory_photos && memory.memory_photos.length > 0 && (
+                      <div className="flex gap-2 mb-2">
+                        {memory.memory_photos.map((photo: any) => (
+                          <img 
+                            key={photo.id}
+                            src={photo.url} 
+                            alt="Memory photo"
+                            className="w-20 h-20 object-cover rounded"
+                          />
+                        ))}
+                      </div>
+                    )}
                     <p className="text-sm text-gray-500">
                       - {memory.wedding_guests?.full_name || memory.guest_name || 'Anonymous'}
                       {memory.ai_category && ` • ${memory.ai_category}`}

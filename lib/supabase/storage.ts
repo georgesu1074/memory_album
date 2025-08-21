@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/types/supabase'
+// import { Database } from '@/types/supabase' // Type file doesn't exist yet
 
 // Storage bucket names
 export const STORAGE_BUCKETS = {
@@ -109,13 +109,13 @@ export function getPhotoPublicUrl(
  * Upload a photo to Supabase storage
  */
 export async function uploadPhoto(
-  supabase: ReturnType<typeof createClient<Database>>,
+  supabase: ReturnType<typeof createClient>,
   file: File,
   weddingId: string,
   bucket: keyof typeof STORAGE_BUCKETS = 'MEMORY_PHOTOS'
 ): Promise<{ path: string; publicUrl: string } | { error: string }> {
   // Validate file
-  if (!STORAGE_CONFIG.allowedMimeTypes.includes(file.type)) {
+  if (!STORAGE_CONFIG.allowedMimeTypes.includes(file.type as any)) {
     return { error: 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.' }
   }
   
@@ -152,7 +152,7 @@ export async function uploadPhoto(
  * Delete a photo from storage
  */
 export async function deletePhoto(
-  supabase: ReturnType<typeof createClient<Database>>,
+  supabase: ReturnType<typeof createClient>,
   bucket: keyof typeof STORAGE_BUCKETS,
   filepath: string
 ): Promise<{ success: boolean; error?: string }> {

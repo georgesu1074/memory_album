@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase/client'
+import { uploadPhoto, STORAGE_BUCKETS } from '@/lib/supabase/storage'
 
 export async function POST(
   request: NextRequest,
@@ -8,15 +9,13 @@ export async function POST(
   try {
     const { slug } = await params
     
-    // Parse the JSON body
-    const body = await request.json()
-    const {
-      memoryType,
-      guestId,
-      guestName,
-      memoryText,
-      photos
-    } = body
+    // Parse FormData instead of JSON
+    const formData = await request.formData()
+    
+    const memoryType = formData.get('memoryType') as string
+    const guestId = formData.get('guestId') as string
+    const guestName = formData.get('guestName') as string
+    const memoryText = formData.get('memoryText') as string
 
     // Validate required fields
     if (!memoryText || memoryText.trim().length === 0) {
@@ -59,7 +58,7 @@ export async function POST(
     }
 
     // If we have a guest ID, link it
-    if (guestId) {
+    if (guestId && guestId !== '') {
       memoryData.guest_id = guestId
     }
 
@@ -77,17 +76,58 @@ export async function POST(
       )
     }
 
-    // TODO: Handle photo uploads to Supabase Storage
-    // For now, we'll just log that photos were provided
-    if (photos && photos.length > 0) {
-      console.log(`Memory ${memory.id} has ${photos.length} photos to upload`)
-      // In the next iteration, we'll upload these to Supabase Storage
+    // Handle photo uploads
+    const photoUrls: string[] = []
+    const photoErrors: string[] = []
+    
+    // Get all photos from FormData
+    const photos: File[] = []
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith('photo_') && value instanceof File) {
+        photos.push(value)
+      }
+    }
+
+    // Upload each photo
+    for (const photo of photos) {
+      const result = await uploadPhoto(
+        supabase,
+        photo,
+        wedding.id,
+        'MEMORY_PHOTOS'
+      )
+
+      if ('error' in result) {
+        console.error('Photo upload error:', result.error)
+        photoErrors.push(result.error)
+      } else {
+        // Save photo record in database
+        const { error: photoDbError } = await supabase
+          .from('memory_photos')
+          .insert({
+            memory_id: memory.id,
+            storage_path: result.path,
+            url: result.publicUrl,
+            size_bytes: photo.size,
+            mime_type: photo.type,
+            display_order: photoUrls.length
+          })
+
+        if (photoDbError) {
+          console.error('Error saving photo record:', photoDbError)
+          photoErrors.push('Failed to save photo record')
+        } else {
+          photoUrls.push(result.publicUrl)
+        }
+      }
     }
 
     return NextResponse.json({
       success: true,
       memoryId: memory.id,
-      message: 'Memory saved successfully!'
+      message: 'Memory saved successfully!',
+      photoUrls,
+      photoErrors: photoErrors.length > 0 ? photoErrors : undefined
     })
 
   } catch (error) {
@@ -121,7 +161,7 @@ export async function GET(
       )
     }
 
-    // Fetch memories with guest information
+    // Fetch memories with guest information and photos
     const { data: memories, error: memoriesError } = await supabase
       .from('memories')
       .select(`
@@ -131,6 +171,12 @@ export async function GET(
           first_name,
           last_name,
           full_name
+        ),
+        memory_photos (
+          id,
+          url,
+          thumbnail_url,
+          display_order
         )
       `)
       .eq('wedding_id', wedding.id)

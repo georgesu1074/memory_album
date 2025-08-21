@@ -20,16 +20,16 @@
 
 - [x] Create GET /api/weddings/[slug]/guests/search endpoint
 - [x] Create POST /api/weddings/[slug]/memories endpoint
-- [ ] Implement multipart form data parsing
+- [x] Implement multipart form data parsing
 - [x] Add server-side validation
-- [ ] Upload photos to Supabase Storage
+- [x] Upload photos to Supabase Storage
 - [ ] Implement photo resizing/optimization
 - [x] Create memory record in database
 - [ ] Add rate limiting (10/min per IP)
 - [ ] Implement error logging
-- [ ] Add success response with memory ID
+- [x] Add success response with memory ID
 
 ## Progress
-- **Completed**: 16/20 tasks (80%)
-- **Status**: Success screen implemented with "Share Another" flow
-- **Next Task**: Upload photos to Supabase Storage (remaining tasks are photo-related)
+- **Completed**: 18/20 tasks (90%)
+- **Status**: Photo upload to Supabase Storage implemented!
+- **Remaining**: Rate limiting and error logging (nice-to-have features)
