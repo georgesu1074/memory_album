@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { X, Camera, Image, CheckCircle } from 'lucide-react'
+import imageCompression from 'browser-image-compression'
 import GuestDropdown from './GuestDropdown'
 
 interface FormData {
@@ -40,6 +41,7 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [isCompressing, setIsCompressing] = useState(false)
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -66,9 +68,40 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
     onClose()
   }
   
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || [])
-    setFormData({ ...formData, photos: files.slice(0, 5) })
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []).slice(0, 5)
+    
+    setIsCompressing(true)
+    
+    // Compress images before storing
+    const compressedFiles: File[] = []
+    for (const file of files) {
+      try {
+        const options = {
+          maxSizeMB: 1, // Max 1MB per image
+          maxWidthOrHeight: 1920, // Max 1920px dimension
+          useWebWorker: true,
+          fileType: file.type as 'image/jpeg' | 'image/png' | 'image/webp'
+        }
+        
+        const compressedFile = await imageCompression(file, options)
+        console.log(`Compressed ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`)
+        
+        // Keep original filename
+        const renamedFile = new File([compressedFile], file.name, {
+          type: compressedFile.type,
+          lastModified: Date.now()
+        })
+        compressedFiles.push(renamedFile)
+      } catch (error) {
+        console.error('Error compressing image:', error)
+        // If compression fails, use original file
+        compressedFiles.push(file)
+      }
+    }
+    
+    setFormData({ ...formData, photos: compressedFiles })
+    setIsCompressing(false)
   }
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -423,8 +456,23 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
               </div>
             </label>
             
+            {/* Show compression indicator */}
+            {isCompressing && (
+              <div style={{
+                marginTop: '8px',
+                padding: '8px',
+                backgroundColor: '#fef3c7',
+                borderRadius: '8px',
+                fontSize: '14px',
+                color: '#92400e',
+                textAlign: 'center'
+              }}>
+                Compressing photos...
+              </div>
+            )}
+            
             {/* Show selected photos */}
-            {formData.photos.length > 0 && (
+            {formData.photos.length > 0 && !isCompressing && (
               <div style={{
                 marginTop: '8px',
                 display: 'flex',

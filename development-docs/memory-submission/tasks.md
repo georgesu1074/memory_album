@@ -23,13 +23,13 @@
 - [x] Implement multipart form data parsing
 - [x] Add server-side validation
 - [x] Upload photos to Supabase Storage
-- [ ] Implement photo resizing/optimization
+- [x] Implement photo resizing/optimization
 - [x] Create memory record in database
 - [ ] Add rate limiting (10/min per IP)
 - [ ] Implement error logging
 - [x] Add success response with memory ID
 
 ## Progress
-- **Completed**: 18/20 tasks (90%)
-- **Status**: Photo upload to Supabase Storage implemented!
+- **Completed**: 19/20 tasks (95%)
+- **Status**: Photo compression and optimization complete!
 - **Remaining**: Rate limiting and error logging (nice-to-have features)

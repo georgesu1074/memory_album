@@ -34,6 +34,7 @@
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "autoprefixer": "^10.4.21",
+    "browser-image-compression": "^2.0.2",
     "dotenv": "^17.2.1",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.540.0",
