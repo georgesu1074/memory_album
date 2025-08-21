@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Camera, Image } from 'lucide-react'
+import { X, Camera, Image, CheckCircle } from 'lucide-react'
 import GuestDropdown from './GuestDropdown'
 
 interface FormData {
@@ -25,9 +25,10 @@ interface MemorySubmissionModalProps {
   guests: Guest[]
   isOpen: boolean
   onClose: () => void
+  onMemoryAdded?: () => void
 }
 
-export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onClose }: MemorySubmissionModalProps) {
+export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onClose, onMemoryAdded }: MemorySubmissionModalProps) {
   const [formData, setFormData] = useState<FormData>({
     memoryType: 'both',
     guestId: null,
@@ -38,6 +39,7 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
   
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -52,6 +54,17 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
   }, [isOpen])
 
   if (!isOpen) return null
+
+  const handleShareAnother = () => {
+    setShowSuccess(false)
+    setError(null)
+  }
+
+  const handleClose = () => {
+    setShowSuccess(false)
+    setError(null)
+    onClose()
+  }
   
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
@@ -78,7 +91,11 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
         throw new Error(data.error || 'Failed to save memory')
       }
 
-      // Success! Reset form and close modal
+      // Success! Show success screen
+      console.log('Memory saved successfully:', data)
+      setShowSuccess(true)
+      
+      // Reset form for next submission
       setFormData({
         memoryType: 'both',
         guestId: null,
@@ -87,13 +104,10 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
         photos: []
       })
       
-      // TODO: Show success message
-      console.log('Memory saved successfully:', data)
-      
-      onClose()
-      
-      // Optionally refresh the page to show the new memory
-      window.location.reload()
+      // Notify parent to refresh memories
+      if (onMemoryAdded) {
+        onMemoryAdded()
+      }
       
     } catch (err) {
       console.error('Error submitting memory:', err)
@@ -132,9 +146,11 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
           justifyContent: 'space-between',
           alignItems: 'center'
         }}>
-          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Share a Memory</h2>
+          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
+            {showSuccess ? 'Memory Shared!' : 'Share a Memory'}
+          </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             style={{
               background: 'none',
               border: 'none',
@@ -146,7 +162,68 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
           </button>
         </div>
         
-        {/* Form */}
+        {/* Success Screen */}
+        {showSuccess ? (
+          <div style={{ padding: '40px 20px', textAlign: 'center' }}>
+            <CheckCircle style={{ 
+              width: '64px', 
+              height: '64px', 
+              color: '#10b981',
+              margin: '0 auto 20px'
+            }} />
+            <h3 style={{ 
+              fontSize: '20px', 
+              fontWeight: '600', 
+              marginBottom: '12px',
+              color: '#111827'
+            }}>
+              Thank you for sharing!
+            </h3>
+            <p style={{ 
+              fontSize: '14px', 
+              color: '#6b7280',
+              marginBottom: '32px'
+            }}>
+              Your memory has been saved and will be treasured forever.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button
+                onClick={handleShareAnother}
+                style={{
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  fontWeight: '500',
+                  fontSize: '14px',
+                  color: 'white',
+                  backgroundColor: '#8b5cf6',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#7c3aed'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#8b5cf6'}
+              >
+                Share Another Memory
+              </button>
+              <button
+                onClick={handleClose}
+                style={{
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  fontWeight: '500',
+                  fontSize: '14px',
+                  color: '#374151',
+                  backgroundColor: 'white',
+                  border: '1px solid #e5e7eb',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
           {/* Memory Type Selector */}
           <div style={{ marginBottom: '20px' }}>
@@ -431,6 +508,7 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
             {isSubmitting ? 'Sharing...' : 'Share Memory'}
           </button>
         </form>
+        )}
       </div>
     </div>
   )

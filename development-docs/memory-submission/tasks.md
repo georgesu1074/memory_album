@@ -12,8 +12,8 @@
 - [x] Implement photo upload component with preview
 - [x] Add client-side form validation
 - [x] Create submission loading states
-- [ ] Build success confirmation screen
-- [ ] Add "Share Another" flow
+- [x] Build success confirmation screen
+- [x] Add "Share Another" flow
 - [x] Implement error handling UI
 
 ### Epic: Memory Submission API
@@ -21,7 +21,7 @@
 - [x] Create GET /api/weddings/[slug]/guests/search endpoint
 - [x] Create POST /api/weddings/[slug]/memories endpoint
 - [ ] Implement multipart form data parsing
-- [ ] Add server-side validation
+- [x] Add server-side validation
 - [ ] Upload photos to Supabase Storage
 - [ ] Implement photo resizing/optimization
 - [x] Create memory record in database
@@ -30,6 +30,6 @@
 - [ ] Add success response with memory ID
 
 ## Progress
-- **Completed**: 13/20 tasks (65%)
-- **Status**: Memory submission API created, form now saves to database
-- **Next Task**: Build success confirmation screen
+- **Completed**: 16/20 tasks (80%)
+- **Status**: Success screen implemented with "Share Another" flow
+- **Next Task**: Upload photos to Supabase Storage (remaining tasks are photo-related)

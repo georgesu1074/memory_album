@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Plus } from 'lucide-react'
 import MemorySubmissionModal from './MemorySubmissionModal'
 
@@ -19,8 +19,25 @@ interface WeddingPageClientProps {
   weddingSlug: string
 }
 
-export default function WeddingPageClient({ wedding, guests, memories, weddingSlug }: WeddingPageClientProps) {
+export default function WeddingPageClient({ wedding, guests, memories: initialMemories, weddingSlug }: WeddingPageClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [memories, setMemories] = useState(initialMemories)
+  const [isLoadingMemories, setIsLoadingMemories] = useState(false)
+
+  const refreshMemories = useCallback(async () => {
+    setIsLoadingMemories(true)
+    try {
+      const response = await fetch(`/api/weddings/${weddingSlug}/memories`)
+      if (response.ok) {
+        const data = await response.json()
+        setMemories(data.memories)
+      }
+    } catch (error) {
+      console.error('Error refreshing memories:', error)
+    } finally {
+      setIsLoadingMemories(false)
+    }
+  }, [weddingSlug])
 
   return (
     <>
@@ -59,7 +76,10 @@ export default function WeddingPageClient({ wedding, guests, memories, weddingSl
 
           {/* Memories */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">Memories ({memories?.length || 0})</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Memories ({memories?.length || 0})
+              {isLoadingMemories && <span className="text-sm text-gray-500 ml-2">Updating...</span>}
+            </h2>
             {memories?.length > 0 ? (
               <div className="space-y-4">
                 {memories.map((memory) => (
@@ -97,6 +117,7 @@ export default function WeddingPageClient({ wedding, guests, memories, weddingSl
         guests={guests}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onMemoryAdded={refreshMemories}
       />
     </>
   )
