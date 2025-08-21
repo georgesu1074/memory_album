@@ -112,7 +112,8 @@ Extract 3-5 relevant keywords from the memory.
  */
 export async function generateGroupSummary(
   memories: string[],
-  category: string
+  category: string,
+  isSingleMemory: boolean = false
 ): Promise<string> {
   try {
     const client = getGeminiClient()
@@ -124,8 +125,17 @@ export async function generateGroupSummary(
       }
     })
 
-    const prompt = `
+    const prompt = isSingleMemory ? `
+Create a beautiful, concise summary of this wedding memory about "${category}".
+Capture the essence of the moment in 1-2 sentences, making it heartwarming and suitable for a wedding memory album.
+
+Memory:
+${memories[0]}
+
+Summary:
+` : `
 Summarize these ${memories.length} wedding memories from the "${category}" category in 2-3 sentences.
+Combine the different perspectives into a cohesive narrative that captures the essence of this shared experience.
 Make it heartwarming and suitable for a wedding memory album.
 
 Memories:

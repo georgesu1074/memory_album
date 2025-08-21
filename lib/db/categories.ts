@@ -78,21 +78,34 @@ export async function updateCategorySummary(
     .eq('status', 'completed')
     .order('created_at', { ascending: true })
   
-  if (memoriesError || !memories || memories.length < 2) {
-    // Don't generate summary for single memory, but count was still incremented
+  if (memoriesError || !memories || memories.length === 0) {
+    // No memories found, shouldn't happen but handle gracefully
     return
   }
   
   try {
-    // Generate summary combining all perspectives
-    const memoryTexts = memories.map(m => 
-      `${m.guest_name}: "${m.memory_text}"`
-    )
+    let summary: string
     
-    const summary = await generateGroupSummary(
-      memoryTexts,
-      categoryName
-    )
+    if (memories.length === 1) {
+      // For single memory, create a concise summary of the event
+      const memory = memories[0]
+      summary = await generateGroupSummary(
+        [`${memory.guest_name}: "${memory.memory_text}"`],
+        categoryName,
+        true // Flag for single memory
+      )
+    } else {
+      // For multiple memories, combine perspectives
+      const memoryTexts = memories.map(m => 
+        `${m.guest_name}: "${m.memory_text}"`
+      )
+      
+      summary = await generateGroupSummary(
+        memoryTexts,
+        categoryName,
+        false
+      )
+    }
     
     // Update category with summary and count
     await supabase
