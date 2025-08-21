@@ -112,37 +112,32 @@ Extract 3-5 relevant keywords from the memory.
  */
 export async function generateGroupSummary(
   memories: string[],
-  category: string,
-  isSingleMemory: boolean = false
+  category: string
 ): Promise<string> {
   try {
     const client = getGeminiClient()
     const model = client.getGenerativeModel({ 
       model: GEMINI_CONFIG.model,
       generationConfig: {
-        temperature: 0.5,
+        temperature: 0.6,
         maxOutputTokens: 200,
       }
     })
 
-    const prompt = isSingleMemory ? `
-Create a beautiful, concise summary of this wedding memory about "${category}".
-Capture the essence of the moment in 1-2 sentences, making it heartwarming and suitable for a wedding memory album.
+    const sentenceGuidance = memories.length === 1 
+      ? "1-2 sentences" 
+      : `2-${Math.min(memories.length + 1, 5)} sentences`
 
-Memory:
-${memories[0]}
+    const prompt = `
+Create a heartwarming, story-like summary of "${category}" from these wedding memory perspectives.
+Write it as a mini anecdote that captures the magic of this moment in ${sentenceGuidance}.
+Weave together any different perspectives into one cohesive narrative.
+Make it feel like a treasured story being retold at future gatherings.
 
-Summary:
-` : `
-Summarize these ${memories.length} wedding memories from the "${category}" category in 2-3 sentences.
-Combine the different perspectives into a cohesive narrative that captures the essence of this shared experience.
-Make it heartwarming and suitable for a wedding memory album.
+${memories.length === 1 ? 'Memory' : 'Memories'}:
+${memories.map((m, i) => `${memories.length > 1 ? `${i + 1}. ` : ''}${m}`).join('\n')}
 
-Memories:
-${memories.map((m, i) => `${i + 1}. ${m}`).join('\n')}
-
-Summary:
-`
+Story Summary:`
 
     const result = await model.generateContent(prompt)
     const response = await result.response
