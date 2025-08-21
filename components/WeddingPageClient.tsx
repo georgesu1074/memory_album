@@ -4,9 +4,17 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import MemorySubmissionModal from './MemorySubmissionModal'
 
+interface Guest {
+  id: string
+  first_name: string
+  last_name: string
+  full_name: string
+  email: string | null
+}
+
 interface WeddingPageClientProps {
   wedding: any
-  guests: any[]
+  guests: Guest[]
   memories: any[]
   weddingSlug: string
 }
@@ -86,6 +94,7 @@ export default function WeddingPageClient({ wedding, guests, memories, weddingSl
       {/* Memory Submission Modal */}
       <MemorySubmissionModal
         weddingSlug={weddingSlug}
+        guests={guests}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

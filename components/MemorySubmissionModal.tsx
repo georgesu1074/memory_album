@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { X, Camera, Image } from 'lucide-react'
+import GuestDropdown from './GuestDropdown'
 
 interface FormData {
   memoryType: 'bride' | 'groom' | 'both'
@@ -11,13 +12,22 @@ interface FormData {
   photos: File[]
 }
 
+interface Guest {
+  id: string
+  first_name: string
+  last_name: string
+  full_name: string
+  email: string | null
+}
+
 interface MemorySubmissionModalProps {
   weddingSlug: string
+  guests: Guest[]
   isOpen: boolean
   onClose: () => void
 }
 
-export default function MemorySubmissionModal({ weddingSlug, isOpen, onClose }: MemorySubmissionModalProps) {
+export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onClose }: MemorySubmissionModalProps) {
   const [formData, setFormData] = useState<FormData>({
     memoryType: 'both',
     guestId: null,
@@ -188,10 +198,9 @@ export default function MemorySubmissionModal({ weddingSlug, isOpen, onClose }: 
             </div>
           </div>
           
-          {/* Guest Name Input */}
+          {/* Guest Name Dropdown */}
           <div style={{ marginBottom: '20px' }}>
             <label 
-              htmlFor="guestName"
               style={{ 
                 display: 'block', 
                 fontSize: '14px', 
@@ -202,24 +211,12 @@ export default function MemorySubmissionModal({ weddingSlug, isOpen, onClose }: 
             >
               Your name
             </label>
-            <input
-              id="guestName"
-              type="text"
-              required
-              placeholder="Start typing to search..."
+            <GuestDropdown
+              guests={guests}
               value={formData.guestName}
-              onChange={(e) => setFormData({ ...formData, guestName: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                fontSize: '14px',
-                outline: 'none',
-                boxSizing: 'border-box'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
-              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+              guestId={formData.guestId}
+              onChange={(name, guestId) => setFormData({ ...formData, guestName: name, guestId })}
+              required
             />
           </div>
           

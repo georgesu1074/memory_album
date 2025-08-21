@@ -7,7 +7,7 @@
 
 - [x] Create mobile-first submission form component
 - [x] Add memory type selector (Bride/Groom/Both)
-- [ ] Create guest name search dropdown with autocomplete
+- [x] Create guest name search dropdown with autocomplete
 - [x] Build textarea with character counter
 - [x] Implement photo upload component with preview
 - [x] Add client-side form validation
@@ -18,7 +18,7 @@
 
 ### Epic: Memory Submission API
 
-- [ ] Create GET /api/weddings/[slug]/guests/search endpoint
+- [x] Create GET /api/weddings/[slug]/guests/search endpoint
 - [ ] Create POST /api/weddings/[slug]/memories endpoint
 - [ ] Implement multipart form data parsing
 - [ ] Add server-side validation
@@ -30,6 +30,6 @@
 - [ ] Add success response with memory ID
 
 ## Progress
-- **Completed**: 10/20 tasks (50%)
-- **Status**: Modal UI complete with form validation, need API integration
-- **Next Task**: Create guest name search dropdown with autocomplete
+- **Completed**: 11/20 tasks (55%)
+- **Status**: Guest search autocomplete working, need memory submission API
+- **Next Task**: Create POST /api/weddings/[slug]/memories endpoint
