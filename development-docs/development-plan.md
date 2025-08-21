@@ -81,41 +81,20 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 
 **Goal**: AI organizes memories and stores embeddings
 
-### Epic: AI Categorization
+### Epic: Simple AI Categorization (SIMPLIFIED APPROACH)
 
-- [ ] Implement Gemini function calling for categorization
-  - Set up API client
-  - Create categorization prompt
-  - Parse structured response
-- [ ] Create memory matching logic
-  - Find existing categories in database
-  - Use similarity scoring to match
-  - Handle race conditions with DB locks
-- [ ] Build memory grouping system
-  - Assign memories to categories
-  - Update category counts
-  - Generate group titles
-- [ ] Add category consolidation logic (merge duplicates)
-  - Find similar categories periodically
-  - Merge memories from duplicate categories
-  - Update counts and summaries
-- [ ] Configure Vercel cron for processing
-  - Set up background job for categorization queue
-  - Add consolidation job (every 5 minutes)
-  - Configure retry intervals
-- [ ] Create summary generation for grouped memories
-- [ ] Add retry logic for AI failures
-- [ ] Implement fallback categorization
-- [ ] Add profanity/safety filtering
+- ~~[ ] Add category and processing_status fields to memories table~~ → ai-categorization
+- ~~[ ] Create simple categorizer with Gemini tool calls~~ → ai-categorization
+- ~~[ ] Implement `/api/cron/categorize` endpoint~~ → ai-categorization
+- ~~[ ] Add basic retry logic for failures~~ → ai-categorization
+- ~~[ ] Test categorization with sample memories~~ → ai-categorization
 
 ### Epic: Embedding Storage (Future-Ready)
 
-- [ ] Generate embeddings for new memories
-- [ ] Store embeddings in Qdrant with metadata
-- [ ] Create background job for embedding generation
-- [ ] Add embedding generation to submission flow
-- [ ] Implement error handling for embedding failures
-- [ ] Create monitoring for embedding pipeline
+- ~~[ ] Generate embeddings for categorized memories~~ → ai-categorization
+- ~~[ ] Store embeddings in Qdrant with metadata~~ → ai-categorization
+- ~~[ ] Add embedding generation to categorization flow~~ → ai-categorization
+- ~~[ ] Create simple monitoring endpoint~~ → ai-categorization
 
 ## Sprint 4: Memory Album Display
 
