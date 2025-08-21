@@ -81,20 +81,29 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 
 **Goal**: AI organizes memories and stores embeddings
 
-### Epic: Simple AI Categorization (SIMPLIFIED APPROACH)
+### Epic: Event-Based AI Categorization
 
-- ~~[ ] Add category and processing_status fields to memories table~~ → ai-categorization
-- ~~[ ] Create simple categorizer with Gemini tool calls~~ → ai-categorization
-- ~~[ ] Implement `/api/cron/categorize` endpoint~~ → ai-categorization
-- ~~[ ] Add basic retry logic for failures~~ → ai-categorization
-- ~~[ ] Test categorization with sample memories~~ → ai-categorization
+- ~~[ ] Add category, confidence, and metadata fields to memories table~~ → ai-categorization
+- ~~[ ] Create event-categorizer with Gemini tool calls~~ → ai-categorization
+- ~~[ ] Implement get_existing_categories tool function~~ → ai-categorization
+- ~~[ ] Implement get_memories_in_category tool function~~ → ai-categorization
+- ~~[ ] Add immediate async categorization to submission~~ → ai-categorization
+- ~~[ ] Store categorization metadata and confidence~~ → ai-categorization
 
-### Epic: Embedding Storage (Future-Ready)
+### Epic: Embedding Pipeline
 
-- ~~[ ] Generate embeddings for categorized memories~~ → ai-categorization
-- ~~[ ] Store embeddings in Qdrant with metadata~~ → ai-categorization
-- ~~[ ] Add embedding generation to categorization flow~~ → ai-categorization
-- ~~[ ] Create simple monitoring endpoint~~ → ai-categorization
+- ~~[ ] Generate embeddings after categorization~~ → ai-categorization
+- ~~[ ] Store in Qdrant with wedding namespace~~ → ai-categorization
+- ~~[ ] Include category in embedding metadata~~ → ai-categorization
+- ~~[ ] Handle embedding failures gracefully~~ → ai-categorization
+
+### Epic: Retry System
+
+- ~~[ ] Create `/api/cron/retry-categorization` endpoint~~ → ai-categorization
+- ~~[ ] Implement exponential backoff (1, 2, 4 min)~~ → ai-categorization
+- ~~[ ] Add max retry limit (3 attempts)~~ → ai-categorization
+- ~~[ ] Monitor failure rates~~ → ai-categorization
+- ~~[ ] Auto-stop when no failures~~ → ai-categorization
 
 ## Sprint 4: Memory Album Display
 
