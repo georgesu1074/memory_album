@@ -106,7 +106,73 @@ ORDER BY created_at DESC;
 
 ---
 
-### 6. Verify Embeddings in Qdrant
+### 6. Test Category Summary Generation
+
+**Purpose:** Verify AI generates story-like summaries that scale with memory count
+
+#### Test 6A: Add More Vegas Memories (Test Multi-Perspective Summary)
+
+**Memory 5:**
+- Guest: **"Tom Bradley"**
+- Type: **"Groom"**
+- Text: **"That Vegas bachelor party was insane! Jake losing his shoe at the blackjack table became the weekend's running joke. We even made him a cardboard replacement!"**
+
+**Memory 6:**
+- Guest: **"Ryan Cooper"**
+- Type: **"Groom"**  
+- Text: **"The best part of Vegas 2023 was when security thought Jake's missing shoe was a prank. Watching him explain it seriously while hopping on one foot was priceless!"**
+
+**Expected Category Summary (3 memories → 3-4 sentences):**
+Should weave all three perspectives into a cohesive story about the legendary shoe incident.
+
+#### Test 6B: Add More Sunset Beach Memories (Test Romantic Summary)
+
+**Memory 7:**
+- Guest: **"Jennifer Lee"**
+- Type: **"Bride"**
+- Text: **"I was the secret photographer at Sunset Beach! Watching her face transform from confusion to pure joy when he dropped to one knee - that's the shot that made it all worth it."**
+
+**Memory 8:**
+- Guest: **"David Park"**
+- Type: **"Both"**
+- Text: **"We were all hiding behind various rocks at Sunset Beach, trying not to giggle. When she said yes, we couldn't help but cheer - totally blew our cover but made the moment even better!"**
+
+**Expected Category Summary (4 memories → 3-5 sentences):**
+Should create a heartwarming narrative combining all perspectives of the proposal.
+
+#### Test 6C: Single Memory Summary (New Category)
+
+**Memory 9:**
+- Guest: **"Lisa Martinez"**
+- Type: **"Bride"**
+- Text: **"The bride's 30th birthday surprise in Paris was unforgettable. She thought we were just having dinner, but we'd secretly flown in her parents from Australia. Her tears of joy lit up the entire restaurant!"**
+
+**Expected Category:** "30th Birthday Surprise in Paris" or similar
+**Expected Summary (1 memory → 1-2 sentences):**
+Should create a concise, touching summary of this single memory.
+
+**Database Verification:**
+```sql
+-- Check categories table for summaries
+SELECT name, memory_count, summary 
+FROM categories 
+WHERE wedding_id = '16dd6f94-1cd7-4446-b748-367ca94a2c18'
+ORDER BY memory_count DESC;
+```
+
+**Success Criteria:**
+- [ ] Single memory gets 1-2 sentence summary
+- [ ] 3 memories get 3-4 sentence summary  
+- [ ] 4+ memories get 3-5 sentence summary
+- [ ] Summaries read like mini stories, not clinical descriptions
+- [ ] Different perspectives are woven together cohesively
+
+**Status:** [ ] Pass [ ] Fail
+**Notes:**
+
+---
+
+### 7. Verify Embeddings in Qdrant
 
 **Check Qdrant Dashboard or use API:**
 ```bash
@@ -124,7 +190,7 @@ curl -X GET "$QDRANT_URL/collections/wedding-{wedding_id}/points/{memory_id}" \
 
 ---
 
-### 7. Test Retry Mechanism (Failed Categorization)
+### 8. Test Retry Mechanism (Failed Categorization)
 
 **Steps:**
 1. Temporarily break something (e.g., wrong API key)

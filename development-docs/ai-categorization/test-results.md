@@ -283,6 +283,38 @@ SELECT status, COUNT(*) FROM memories GROUP BY status;
 
 ---
 
+## Test 6: Story-Like Summary Generation (PENDING)
+
+### Test 6A: Multi-Perspective Vegas Story
+**Memories to Add:**
+- Tom Bradley: Cardboard shoe replacement story
+- Ryan Cooper: Security confusion story
+
+**Expected Summary (3 memories):** 3-4 sentences weaving the shoe incident into a cohesive narrative
+
+**Actual Summary:** [PENDING]
+
+### Test 6B: Romantic Proposal Narrative  
+**Memories to Add:**
+- Jennifer Lee: Photographer's perspective
+- David Park: Hidden friends' perspective
+
+**Expected Summary (4 memories):** 3-5 sentences creating heartwarming proposal story
+
+**Actual Summary:** [PENDING]
+
+### Test 6C: Single Memory Story
+**Memory to Add:**
+- Lisa Martinez: Paris birthday surprise
+
+**Expected Summary (1 memory):** 1-2 sentences capturing the moment's magic
+
+**Actual Summary:** [PENDING]
+
+**Status**: [ ] **PENDING TEST**
+
+---
+
 ## Sign-off Checklist
 - [x] Categories are specific events, not generic ✅
 - [x] Multiple perspectives get grouped correctly ✅
