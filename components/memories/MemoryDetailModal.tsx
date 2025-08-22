@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { X, ChevronLeft, ChevronRight, Calendar, User, Share2, Link, Check } from 'lucide-react'
 import PhotoCarousel from './PhotoCarousel'
+import PhotoLightbox from './PhotoLightbox'
 
 interface Memory {
   id: string
@@ -38,6 +39,9 @@ interface MemoryDetailModalProps {
 export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryDetailModalProps) {
   const [selectedMemoryIndex, setSelectedMemoryIndex] = useState<number | null>(null)
   const [showCopied, setShowCopied] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxPhotos, setLightboxPhotos] = useState<any[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState(0)
   
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -222,15 +226,18 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
                   {/* Photo Thumbnails (if this memory has photos) */}
                   {memory.memory_photos && memory.memory_photos.length > 0 && (
                     <div className="flex gap-2 mt-3 overflow-x-auto">
-                      {memory.memory_photos.map((photo) => (
+                      {memory.memory_photos.map((photo, photoIndex) => (
                         <img
                           key={photo.id}
                           src={photo.thumbnail_url || photo.url}
                           alt=""
-                          className="h-16 w-16 object-cover rounded"
+                          className="h-16 w-16 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
                           onClick={(e) => {
                             e.stopPropagation()
-                            // TODO: Open photo in lightbox
+                            // Open this memory's photos in lightbox
+                            setLightboxPhotos(memory.memory_photos || [])
+                            setLightboxIndex(photoIndex)
+                            setLightboxOpen(true)
                           }}
                         />
                       ))}
@@ -249,6 +256,14 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
           </div>
         </div>
       </div>
+      
+      {/* Photo Lightbox for individual memory photos */}
+      <PhotoLightbox
+        photos={lightboxPhotos}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   )
 }

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Expand } from 'lucide-react'
+import PhotoLightbox from './PhotoLightbox'
 
 interface Photo {
   id: string
@@ -18,6 +19,8 @@ interface PhotoCarouselProps {
 export default function PhotoCarousel({ photos }: PhotoCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const startX = useRef<number | null>(null)
   const isDragging = useRef(false)
@@ -98,7 +101,11 @@ export default function PhotoCarousel({ photos }: PhotoCarouselProps) {
               <img
                 src={photo.url}
                 alt={`Photo ${index + 1}`}
-                className="w-full h-full object-contain bg-gray-100"
+                className="w-full h-full object-contain bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  setLightboxIndex(index)
+                  setLightboxOpen(true)
+                }}
               />
               {/* Photo attribution */}
               {photo.guestName && (
@@ -111,6 +118,19 @@ export default function PhotoCarousel({ photos }: PhotoCarouselProps) {
             </div>
           ))}
         </div>
+
+        {/* Expand Button */}
+        <button
+          onClick={() => {
+            setLightboxIndex(currentIndex)
+            setLightboxOpen(true)
+          }}
+          className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-lg shadow-lg transition-all flex items-center gap-2"
+          aria-label="View fullscreen"
+        >
+          <Expand className="h-4 w-4 text-gray-700" />
+          <span className="text-sm text-gray-700 hidden sm:inline">View fullscreen</span>
+        </button>
 
         {/* Navigation Arrows - Desktop */}
         {photos.length > 1 && (
@@ -174,6 +194,14 @@ export default function PhotoCarousel({ photos }: PhotoCarouselProps) {
           ))}
         </div>
       </div>
+      
+      {/* Photo Lightbox */}
+      <PhotoLightbox
+        photos={photos}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   )
 }
