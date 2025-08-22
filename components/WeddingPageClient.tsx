@@ -49,6 +49,7 @@ export default function WeddingPageClient({
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isPullRefreshing, setIsPullRefreshing] = useState(false);
+  const [isUpdatingAfterSubmission, setIsUpdatingAfterSubmission] = useState(false);
   const [totalCounts, setTotalCounts] = useState({
     all: 0,
     bride: 0,
@@ -112,20 +113,43 @@ export default function WeddingPageClient({
   }, [weddingSlug, categories.length, activeTab, isLoadingMore, hasMore]);
 
   // Refresh categories (for pull-to-refresh and after memory submission)
-  const refreshCategories = useCallback(async () => {
+  const refreshCategories = useCallback(async (delay = 0, afterMemorySubmission = false) => {
+    // Show updating indicator for memory submissions with delay
+    if (afterMemorySubmission && delay > 0) {
+      setIsUpdatingAfterSubmission(true);
+    }
+    
+    // Add optional delay for memory submission to ensure server processing
+    if (delay > 0) {
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+    
     setIsLoadingCategories(true);
+    setIsUpdatingAfterSubmission(false);
     try {
-      // For memory submission refresh, we need to reload ALL categories
-      // to ensure we get updated photos and counts
+      // After memory submission, ALWAYS fetch ALL categories regardless of current tab
+      // This ensures we get updates even if the new memory went to a different category type
+      const typeParam = afterMemorySubmission ? 'all' : activeTab;
+      
+      // Fetch more categories when updating after submission to ensure we get everything
+      const limit = afterMemorySubmission ? 50 : 20;
+      
       const response = await fetch(
-        `/api/weddings/${weddingSlug}/categories?offset=0&limit=20&type=all`
+        `/api/weddings/${weddingSlug}/categories?offset=0&limit=${limit}&type=${typeParam}&t=${Date.now()}`
       );
 
       if (response.ok) {
         const data = await response.json();
-        // Update all categories, then filter will handle display
-        setCategories(data.categories);
-        setHasMore(false); // Reset since we loaded all
+        
+        if (afterMemorySubmission) {
+          // Replace ALL categories to ensure complete refresh
+          setCategories(data.categories || []);
+        } else {
+          // For tab changes, just update with filtered results
+          setCategories([...data.categories]);
+        }
+        
+        setHasMore(afterMemorySubmission ? false : data.hasMore);
         // Also refresh total counts
         fetchTotalCounts();
       }
@@ -135,7 +159,7 @@ export default function WeddingPageClient({
       setIsLoadingCategories(false);
       setIsPullRefreshing(false);
     }
-  }, [weddingSlug]);
+  }, [weddingSlug, activeTab]);
 
   // Filter categories based on active tab
   const filteredCategories =
@@ -219,6 +243,14 @@ export default function WeddingPageClient({
             <RefreshCw className="h-5 w-5 text-purple-600 animate-spin" />
           </div>
         )}
+        
+        {/* Updating after submission indicator */}
+        {isUpdatingAfterSubmission && (
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-purple-600 text-white rounded-full shadow-lg px-4 py-2 flex items-center gap-2">
+            <RefreshCw className="h-4 w-4 animate-spin" />
+            <span className="text-sm">Processing memory...</span>
+          </div>
+        )}
         {/* Header */}
         <div className="bg-white shadow-sm">
           <div className="max-w-6xl mx-auto px-4 py-4">
@@ -297,7 +329,7 @@ export default function WeddingPageClient({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCategories.map((category) => (
                 <CategoryCard
-                  key={category.id}
+                  key={`${category.id}-${category.memory_count}-${category.memories?.[0]?.memory_photos?.[0]?.id || ''}`}
                   category={category}
                   onClick={() => {
                     setSelectedCategory(category);
@@ -357,8 +389,12 @@ export default function WeddingPageClient({
         weddingSlug={weddingSlug}
         guests={guests}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onMemoryAdded={refreshCategories}
+        onClose={() => {
+          setIsModalOpen(false);
+          // Refresh when closing modal in case user closes after sharing
+          refreshCategories(0, true);
+        }}
+        onMemoryAdded={() => refreshCategories(5000, true)}
       />
 
       {/* Memory Detail Modal */}
