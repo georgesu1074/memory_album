@@ -40,9 +40,9 @@
 - [x] Add photo attribution in carousel
 - [x] Create back navigation for detail view (X button)
 
-## Remaining Polish Features (Optional)
-- [ ] Implement photo lightbox/zoom
-- [ ] Add sharing functionality
+## Polish Features (Completed)
+- [x] Add sharing functionality (viral growth feature)
+- [x] Implement photo lightbox/zoom
 
 ## Notes
 - Mobile-first approach is critical
