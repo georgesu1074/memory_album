@@ -108,12 +108,36 @@ Categories now include nested memories with photos:
 - Contributor counts show engagement
 - AI summaries provide context at a glance
 
+## Additional Features Added
+
+### Memory Detail Modal (Latest)
+- **MemoryDetailModal Component**
+  - Full-screen modal for viewing all memories in a category
+  - Mobile-optimized with full-screen view
+  - Desktop modal with proper sizing
+  - Shows category summary and stats
+  
+- **PhotoCarousel Component**
+  - Swipeable photo carousel with touch support
+  - Aggregates all photos from category memories
+  - Desktop: Arrow navigation and thumbnail strip
+  - Mobile: Swipe gestures and dot indicators
+  - Keyboard navigation support (arrow keys)
+  - Photo attribution display
+  
+- **Journal Entry Display**
+  - Individual memory cards with expand/collapse
+  - Shows date, contributor, and memory type
+  - Photo thumbnails for memories with images
+  - "Show more/less" for long text entries
+  - Clean, readable layout matching reference UI
+
 ## Next Steps
-- Implement memory detail modal
 - Add infinite scroll for categories
-- Build photo carousel for detail view
 - Add pull-to-refresh on mobile
-- Implement sharing functionality
+- Implement photo lightbox/zoom
+- Add sharing functionality
+- Implement loading skeletons
 
 ## Screenshots
 - Category cards with photos and badges

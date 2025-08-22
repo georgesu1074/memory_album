@@ -28,15 +28,19 @@
 - [ ] Add pull-to-refresh on mobile
 - [ ] Implement loading skeletons
 
-## Memory Detail View
-- [ ] Create memory detail modal (mobile-optimized)
-- [ ] Build photo carousel component for detail view
-- [ ] Display AI-generated summary in detail view
-- [ ] Show individual journal entries in detail view
-- [ ] Add contributor names and timestamps
+## Memory Detail View (Completed)
+- [x] Create memory detail modal (mobile-optimized)
+- [x] Build photo carousel component for detail view
+- [x] Display AI-generated summary in detail view
+- [x] Show individual journal entries in detail view
+- [x] Add contributor names and timestamps
+- [x] Implement swipe gestures for photo carousel
+- [x] Add thumbnail strip for desktop view
+- [x] Create expandable memory cards
+- [x] Add photo attribution in carousel
 - [ ] Implement photo lightbox/zoom
 - [ ] Add sharing functionality
-- [ ] Create back navigation for detail view
+- [x] Create back navigation for detail view (X button)
 
 ## Notes
 - Mobile-first approach is critical
