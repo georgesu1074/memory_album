@@ -93,8 +93,29 @@ CREATE TABLE memory_photos (
 CREATE INDEX idx_memory_photos_memory_id ON memory_photos(memory_id);
 ```
 
+### categories
+AI-generated categories that group related memories together.
+
+```sql
+CREATE TABLE categories (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  wedding_id UUID NOT NULL REFERENCES weddings(id) ON DELETE CASCADE,
+  name VARCHAR(200) NOT NULL,
+  summary TEXT,
+  memory_count INTEGER DEFAULT 0,
+  keywords TEXT[],
+  theme VARCHAR(100),
+  memory_type TEXT CHECK (memory_type IN ('bride', 'groom', 'both')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+
+CREATE INDEX idx_categories_wedding_id ON categories(wedding_id);
+CREATE INDEX idx_categories_memory_type ON categories(wedding_id, memory_type);
+```
+
 ### memory_groups
-AI-generated groupings of related memories.
+AI-generated groupings of related memories (deprecated - use categories instead).
 
 ```sql
 CREATE TABLE memory_groups (
@@ -147,6 +168,48 @@ CREATE TRIGGER update_memories_updated_at BEFORE UPDATE ON memories
 
 CREATE TRIGGER update_memory_groups_updated_at BEFORE UPDATE ON memory_groups
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_categories_updated_at BEFORE UPDATE ON categories
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+```
+
+### Update category memory_type trigger
+Automatically updates a category's memory_type based on its memories.
+
+```sql
+CREATE OR REPLACE FUNCTION update_category_memory_type()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Update the category's memory_type based on all its memories
+  UPDATE categories
+  SET memory_type = (
+    SELECT 
+      CASE 
+        -- If any memory is 'both' or there are both bride and groom memories, category is 'both'
+        WHEN bool_or(m.memory_type = 'both') OR 
+             (bool_or(m.memory_type = 'bride') AND bool_or(m.memory_type = 'groom')) 
+        THEN 'both'
+        -- If all memories are 'bride'
+        WHEN bool_and(m.memory_type = 'bride') THEN 'bride'
+        -- If all memories are 'groom'
+        WHEN bool_and(m.memory_type = 'groom') THEN 'groom'
+        -- Default to 'both' if unclear
+        ELSE 'both'
+      END
+    FROM memories m
+    WHERE m.category_id = COALESCE(NEW.category_id, OLD.category_id)
+  ),
+  updated_at = NOW()
+  WHERE id = COALESCE(NEW.category_id, OLD.category_id);
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_category_on_memory_change
+AFTER INSERT OR UPDATE OF memory_type, category_id OR DELETE ON memories
+FOR EACH ROW
+EXECUTE FUNCTION update_category_memory_type();
 
 CREATE TRIGGER update_wedding_guests_updated_at BEFORE UPDATE ON wedding_guests
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
