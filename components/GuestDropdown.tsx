@@ -123,7 +123,8 @@ export default function GuestDropdown({
             fontSize: '14px',
             outline: 'none',
             boxSizing: 'border-box',
-            backgroundColor: guestId ? '#f9fafb' : 'white'
+            backgroundColor: guestId ? '#f9fafb' : 'white',
+            color: '#1f2937'
           }}
           onFocusCapture={(e) => e.target.style.borderColor = '#8b5cf6'}
           onBlurCapture={(e) => e.target.style.borderColor = '#d1d5db'}

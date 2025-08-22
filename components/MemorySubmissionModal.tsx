@@ -386,7 +386,9 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
                 outline: 'none',
                 boxSizing: 'border-box',
                 resize: 'none',
-                fontFamily: 'inherit'
+                fontFamily: 'inherit',
+                color: '#1f2937',
+                backgroundColor: 'white'
               }}
               onFocus={(e) => e.target.style.borderColor = '#8b5cf6'}
               onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
