@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import { Plus } from 'lucide-react'
+import { useState, useCallback, useEffect, useRef } from 'react'
+import { Plus, RefreshCw } from 'lucide-react'
 import MemorySubmissionModal from './MemorySubmissionModal'
 import CategoryCard from './memories/CategoryCard'
 import MemoryDetailModal from './memories/MemoryDetailModal'
@@ -37,19 +37,81 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
   const [activeTab, setActiveTab] = useState<'all' | 'bride' | 'groom' | 'together'>('all')
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [isPullRefreshing, setIsPullRefreshing] = useState(false)
+  const [totalCounts, setTotalCounts] = useState({
+    all: 0,
+    bride: 0,
+    groom: 0,
+    together: 0
+  })
+  const observerRef = useRef<IntersectionObserver | null>(null)
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+  const pullStartY = useRef<number | null>(null)
+  
+  // Fetch total counts on mount
+  useEffect(() => {
+    fetchTotalCounts()
+  }, [])
+  
+  const fetchTotalCounts = async () => {
+    try {
+      // Fetch total counts for all tabs
+      const response = await fetch(`/api/weddings/${weddingSlug}/categories/counts`)
+      if (response.ok) {
+        const counts = await response.json()
+        setTotalCounts(counts)
+      }
+    } catch (error) {
+      console.error('Error fetching total counts:', error)
+    }
+  }
 
+  // Load more categories for infinite scroll
+  const loadMoreCategories = useCallback(async () => {
+    if (isLoadingMore || !hasMore) return
+    
+    setIsLoadingMore(true)
+    try {
+      const response = await fetch(
+        `/api/weddings/${weddingSlug}/categories?offset=${categories.length}&limit=6&type=${activeTab}`
+      )
+      
+      if (response.ok) {
+        const data = await response.json()
+        setCategories(prev => [...prev, ...data.categories])
+        setHasMore(data.hasMore)
+      }
+    } catch (error) {
+      console.error('Error loading more categories:', error)
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [weddingSlug, categories.length, activeTab, isLoadingMore, hasMore])
+
+  // Refresh categories (for pull-to-refresh and after memory submission)
   const refreshCategories = useCallback(async () => {
     setIsLoadingCategories(true)
     try {
-      // For now, we'll reload the page to get fresh data
-      // In the future, we could create an API endpoint for categories
-      window.location.reload()
+      const response = await fetch(
+        `/api/weddings/${weddingSlug}/categories?offset=0&limit=6&type=${activeTab}`
+      )
+      
+      if (response.ok) {
+        const data = await response.json()
+        setCategories(data.categories)
+        setHasMore(data.hasMore)
+        // Also refresh total counts
+        fetchTotalCounts()
+      }
     } catch (error) {
       console.error('Error refreshing categories:', error)
     } finally {
       setIsLoadingCategories(false)
+      setIsPullRefreshing(false)
     }
-  }, [weddingSlug])
+  }, [weddingSlug, activeTab])
 
   // Filter categories based on active tab
   const filteredCategories = activeTab === 'all' 
@@ -60,17 +122,77 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
         return type === activeTab
       })
 
-  // Calculate counts
-  const counts = {
-    all: categories.length,
-    bride: categories.filter(c => c.memory_type?.toLowerCase() === 'bride').length,
-    groom: categories.filter(c => c.memory_type?.toLowerCase() === 'groom').length,
-    together: categories.filter(c => c.memory_type?.toLowerCase() === 'both').length,
+  // We now use totalCounts from the API instead of calculating from loaded categories
+
+  // Set up infinite scroll observer
+  useEffect(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect()
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          loadMoreCategories()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (loadMoreRef.current) {
+      observerRef.current.observe(loadMoreRef.current)
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [hasMore, isLoadingMore, loadMoreCategories])
+
+  // Reset when tab changes
+  useEffect(() => {
+    setCategories([])
+    setHasMore(true)
+    refreshCategories()
+  }, [activeTab])
+
+  // Pull-to-refresh handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    pullStartY.current = e.touches[0].clientY
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!pullStartY.current) return
+    
+    const currentY = e.touches[0].clientY
+    const diff = currentY - pullStartY.current
+    
+    // If pulled down more than 100px and at the top of the page
+    if (diff > 100 && window.scrollY === 0 && !isPullRefreshing) {
+      setIsPullRefreshing(true)
+      refreshCategories()
+    }
+  }
+
+  const handleTouchEnd = () => {
+    pullStartY.current = null
   }
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+      <div 
+        className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Pull-to-refresh indicator */}
+        {isPullRefreshing && (
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-white rounded-full shadow-lg p-3">
+            <RefreshCw className="h-5 w-5 text-purple-600 animate-spin" />
+          </div>
+        )}
         {/* Header */}
         <div className="bg-white shadow-sm">
           <div className="max-w-6xl mx-auto px-4 py-4">
@@ -116,7 +238,7 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
                     }
                   `}
                 >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)} ({counts[tab]})
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)} ({totalCounts[tab]})
                 </button>
               ))}
             </div>
@@ -146,6 +268,24 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
                   : `No ${activeTab === 'together' ? 'couple' : activeTab} memories yet`}
               </p>
               <p className="text-sm text-gray-400">Be the first to share a memory!</p>
+            </div>
+          )}
+          
+          {/* Infinite scroll trigger */}
+          {filteredCategories.length > 0 && (
+            <div 
+              ref={loadMoreRef} 
+              className="h-20 flex items-center justify-center"
+            >
+              {isLoadingMore && (
+                <div className="flex items-center gap-2 text-gray-500">
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  <span className="text-sm">Loading more...</span>
+                </div>
+              )}
+              {!hasMore && filteredCategories.length > 0 && (
+                <p className="text-sm text-gray-400">No more memories to load</p>
+              )}
             </div>
           )}
         </div>

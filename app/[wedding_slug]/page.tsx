@@ -35,7 +35,7 @@ export default async function WeddingPage({ params }: PageProps) {
     .eq('wedding_id', wedding.id)
     .order('full_name')
 
-  // Fetch categories with their memories and photos
+  // Fetch initial categories with their memories and photos (first 6 for initial load)
   const { data: categories } = await supabase
     .from('categories')
     .select(`
@@ -56,6 +56,7 @@ export default async function WeddingPage({ params }: PageProps) {
     `)
     .eq('wedding_id', wedding.id)
     .order('memory_count', { ascending: false })
+    .range(0, 5) // Load first 6 categories initially
 
   return (
     <WeddingPageClient 
