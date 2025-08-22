@@ -50,9 +50,19 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
   const loadMoreRef = useRef<HTMLDivElement>(null)
   const pullStartY = useRef<number | null>(null)
   
-  // Fetch total counts on mount
+  // Fetch total counts on mount and handle deep linking
   useEffect(() => {
     fetchTotalCounts()
+    
+    // Check for category hash in URL for deep linking
+    if (window.location.hash) {
+      const categoryId = window.location.hash.substring(1)
+      const linkedCategory = categories.find(c => c.id === categoryId)
+      if (linkedCategory) {
+        setSelectedCategory(linkedCategory)
+        setIsDetailModalOpen(true)
+      }
+    }
   }, [])
   
   const fetchTotalCounts = async () => {

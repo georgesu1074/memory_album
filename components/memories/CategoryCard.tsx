@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, Camera } from 'lucide-react'
+import { Users, Camera, Share2 } from 'lucide-react'
 
 interface Memory {
   id: string
@@ -33,6 +33,7 @@ interface CategoryCardProps {
 
 export default function CategoryCard({ category, onClick }: CategoryCardProps) {
   const [imageError, setImageError] = useState(false)
+  const [showCopied, setShowCopied] = useState(false)
   
   // Get all photos from all memories in this category
   const allPhotos = category.memories?.flatMap(m => m.memory_photos || []) || []
@@ -44,6 +45,35 @@ export default function CategoryCard({ category, onClick }: CategoryCardProps) {
     category.memories?.map(m => m.guest_name || m.wedding_guests?.full_name || 'Anonymous') || []
   )
   const contributorCount = contributors.size
+  
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent opening the modal
+    
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${category.id}`
+    const shareText = `Check out these ${category.name} memories!`
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: category.name,
+          text: shareText,
+          url: shareUrl
+        })
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          console.error('Error sharing:', err)
+        }
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl)
+        setShowCopied(true)
+        setTimeout(() => setShowCopied(false), 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
+  }
   
   return (
     <div 
@@ -103,15 +133,29 @@ export default function CategoryCard({ category, onClick }: CategoryCardProps) {
           </p>
         )}
         
-        {/* Stats */}
-        <div className="flex items-center gap-4 text-xs text-gray-500">
-          <div className="flex items-center gap-1">
-            <Users className="w-3.5 h-3.5" />
-            <span>{contributorCount} {contributorCount === 1 ? 'person' : 'people'}</span>
+        {/* Stats and Share */}
+        <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <Users className="w-3.5 h-3.5" />
+              <span>{contributorCount} {contributorCount === 1 ? 'person' : 'people'}</span>
+            </div>
+            <div>
+              {category.memory_count} {category.memory_count === 1 ? 'memory' : 'memories'}
+            </div>
           </div>
-          <div>
-            {category.memory_count} {category.memory_count === 1 ? 'memory' : 'memories'}
-          </div>
+          <button
+            onClick={handleShare}
+            className="p-1.5 hover:bg-gray-100 rounded-md transition-colors relative"
+            aria-label="Share category"
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            {showCopied && (
+              <span className="absolute -top-8 right-0 text-xs bg-gray-800 text-white px-2 py-1 rounded whitespace-nowrap">
+                Copied!
+              </span>
+            )}
+          </button>
         </div>
       </div>
     </div>

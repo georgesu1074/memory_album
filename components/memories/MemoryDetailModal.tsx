@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, ChevronLeft, ChevronRight, Calendar, User } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Calendar, User, Share2, Link, Check } from 'lucide-react'
 import PhotoCarousel from './PhotoCarousel'
 
 interface Memory {
@@ -37,6 +37,7 @@ interface MemoryDetailModalProps {
 
 export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryDetailModalProps) {
   const [selectedMemoryIndex, setSelectedMemoryIndex] = useState<number | null>(null)
+  const [showCopied, setShowCopied] = useState(false)
   
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -65,6 +66,36 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
     ? category.memories[selectedMemoryIndex] 
     : null
 
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}${window.location.pathname}#${category.id}`
+    const shareText = `Check out these ${category.name} memories from our wedding!`
+    
+    // Try native share API first (mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: category.name,
+          text: shareText,
+          url: shareUrl
+        })
+      } catch (err) {
+        // User cancelled or error
+        if ((err as Error).name !== 'AbortError') {
+          console.error('Error sharing:', err)
+        }
+      }
+    } else {
+      // Fallback to copy to clipboard
+      try {
+        await navigator.clipboard.writeText(shareUrl)
+        setShowCopied(true)
+        setTimeout(() => setShowCopied(false), 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
@@ -91,13 +122,31 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
               )).size === 1 ? 'person' : 'people'}
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-4"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5 text-gray-500" />
-          </button>
+          <div className="flex items-center gap-2 ml-4">
+            <button
+              onClick={handleShare}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors relative"
+              aria-label="Share"
+            >
+              {showCopied ? (
+                <Check className="h-5 w-5 text-green-600" />
+              ) : (
+                <Share2 className="h-5 w-5 text-gray-500" />
+              )}
+              {showCopied && (
+                <span className="absolute -bottom-8 right-0 text-xs bg-gray-800 text-white px-2 py-1 rounded whitespace-nowrap">
+                  Link copied!
+                </span>
+              )}
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5 text-gray-500" />
+            </button>
+          </div>
         </div>
 
         {/* Content */}
