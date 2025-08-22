@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Camera, Image, CheckCircle } from "lucide-react";
 import imageCompression from "browser-image-compression";
 import GuestDropdown from "./GuestDropdown";
@@ -48,6 +48,8 @@ export default function MemorySubmissionModal({
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const photoUrlsRef = useRef<string[]>([]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -61,27 +63,53 @@ export default function MemorySubmissionModal({
     };
   }, [isOpen]);
 
+  // Clean up photo URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      // Clean up all URLs when component unmounts
+      photoUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, []);
+
   if (!isOpen) return null;
 
   const handleShareAnother = () => {
     setShowSuccess(false);
     setError(null);
+    // Clear photo URLs
+    photoUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+    photoUrlsRef.current = [];
+    setPhotoUrls([]);
   };
 
   const handleClose = () => {
     setShowSuccess(false);
     setError(null);
+    // Clear photo URLs
+    photoUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+    photoUrlsRef.current = [];
+    setPhotoUrls([]);
     onClose();
   };
 
   const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []).slice(0, 5);
+    const newFiles = Array.from(e.target.files || []);
+    
+    // Calculate how many photos we can add (max 5 total)
+    const remainingSlots = 5 - formData.photos.length;
+    if (remainingSlots <= 0) {
+      setError("Maximum 5 photos allowed");
+      return;
+    }
+    
+    const filesToAdd = newFiles.slice(0, remainingSlots);
 
     setIsCompressing(true);
+    setError(null); // Clear any previous error
 
     // Compress images before storing
     const compressedFiles: File[] = [];
-    for (const file of files) {
+    for (const file of filesToAdd) {
       try {
         const options = {
           maxSizeMB: 1, // Max 1MB per image
@@ -110,8 +138,18 @@ export default function MemorySubmissionModal({
       }
     }
 
-    setFormData({ ...formData, photos: compressedFiles });
+    // Create preview URLs for the NEW compressed files
+    const newUrls = compressedFiles.map(file => URL.createObjectURL(file));
+    
+    // Append to existing photos and URLs
+    const allUrls = [...photoUrls, ...newUrls];
+    photoUrlsRef.current = allUrls;
+    setPhotoUrls(allUrls);
+    setFormData({ ...formData, photos: [...formData.photos, ...compressedFiles] });
     setIsCompressing(false);
+    
+    // Clear the input so the same file can be selected again if needed
+    e.target.value = '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -155,6 +193,11 @@ export default function MemorySubmissionModal({
         memoryText: "",
         photos: [],
       });
+      
+      // Clear photo URLs
+      photoUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+      photoUrlsRef.current = [];
+      setPhotoUrls([]);
 
       // Notify parent to refresh memories
       if (onMemoryAdded) {
@@ -556,7 +599,9 @@ export default function MemorySubmissionModal({
                       color: "#6b7280",
                     }}
                   >
-                    Up to 5 photos, 10MB each
+                    {formData.photos.length > 0 
+                      ? `${formData.photos.length}/5 photos selected` 
+                      : "Up to 5 photos, 10MB each"}
                   </p>
                 </div>
               </label>
@@ -590,31 +635,30 @@ export default function MemorySubmissionModal({
                 >
                   {formData.photos.map((photo, index) => (
                     <div key={index} style={{ position: "relative" }}>
-                      <div
+                      <img
+                        src={photoUrls[index]}
+                        alt={`Photo ${index + 1}`}
                         style={{
                           width: "64px",
                           height: "64px",
-                          backgroundColor: "#f3f4f6",
+                          objectFit: "cover",
                           borderRadius: "8px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
+                          backgroundColor: "#f3f4f6",
                         }}
-                      >
-                        <Image
-                          style={{
-                            height: "32px",
-                            width: "32px",
-                            color: "#9ca3af",
-                          }}
-                        />
-                      </div>
+                      />
                       <button
                         type="button"
                         onClick={() => {
                           const newPhotos = [...formData.photos];
                           newPhotos.splice(index, 1);
                           setFormData({ ...formData, photos: newPhotos });
+                          
+                          // Clean up the removed photo URL and update the array
+                          URL.revokeObjectURL(photoUrls[index]);
+                          const newUrls = [...photoUrls];
+                          newUrls.splice(index, 1);
+                          photoUrlsRef.current = newUrls;
+                          setPhotoUrls(newUrls);
                         }}
                         style={{
                           position: "absolute",
