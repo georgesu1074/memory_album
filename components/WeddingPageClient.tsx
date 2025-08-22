@@ -305,12 +305,12 @@ export default function WeddingPageClient({
                     ${
                       activeTab === tab
                         ? tab === "all"
-                          ? "border-[#d4899f] text-[#a85a72]"
+                          ? "border-gray-600 text-gray-700"
                           : tab === "bride"
-                          ? "border-[#d4899f] text-[#a85a72]"
+                          ? "border-[#e8b4c2] text-[#a85a72]"
                           : tab === "groom"
-                          ? "border-gray-500 text-gray-700"
-                          : "border-[#f5d5db] text-[#c27189]"
+                          ? "border-blue-500 text-blue-600"
+                          : "border-gray-400 text-gray-600"
                         : "border-transparent text-gray-500 hover:text-gray-700"
                     }
                   `}
