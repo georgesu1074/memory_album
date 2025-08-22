@@ -282,7 +282,7 @@ export default function WeddingPageClient({
         </div>
 
         {/* Category Grid */}
-        <div className="max-w-6xl mx-auto px-4 py-8 pb-36">
+        <div className="max-w-6xl mx-auto px-4 py-8">
           {isLoadingCategories && filteredCategories.length === 0 ? (
             // Simple, elegant loading state
             <div className="flex flex-col items-center justify-center py-20">
