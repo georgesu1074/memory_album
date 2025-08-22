@@ -152,6 +152,7 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
 
   // Reset when tab changes
   useEffect(() => {
+    setIsLoadingCategories(true) // Show loading state immediately
     setCategories([])
     setHasMore(true)
     refreshCategories()
@@ -247,7 +248,21 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
 
         {/* Category Grid */}
         <div className="max-w-6xl mx-auto px-4 py-8">
-          {filteredCategories.length > 0 ? (
+          {isLoadingCategories && filteredCategories.length === 0 ? (
+            // Loading state when switching tabs or initial load
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="bg-white rounded-lg shadow-sm overflow-hidden animate-pulse">
+                  <div className="aspect-[4/3] bg-gray-200" />
+                  <div className="p-4">
+                    <div className="h-6 bg-gray-200 rounded mb-2" />
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-3" />
+                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredCategories.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCategories.map((category) => (
                 <CategoryCard 
