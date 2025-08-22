@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase/client'
 import { uploadPhoto, STORAGE_BUCKETS } from '@/lib/supabase/storage'
 import { processMemory } from '@/lib/ai/event-categorizer'
+import { updateCategoryMemoryType } from '@/lib/categories/update-memory-type'
 
 export async function POST(
   request: NextRequest,

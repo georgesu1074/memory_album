@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { CategoryInfo, MemoryExample, CategorizationMetadata } from '@/types/categorization'
 import { processMemoryEmbedding, EmbeddingMetadata } from './embedding-generator'
 import { findOrCreateCategory, updateCategorySummary } from '@/lib/db/categories'
+import { updateCategoryMemoryType } from '@/lib/categories/update-memory-type'
 
 // Tool function declarations for Gemini
 const tools = [{
@@ -347,6 +348,15 @@ export async function processMemory(
     } catch (summaryError) {
       console.error('Failed to update category summary:', summaryError)
       // Don't fail the whole process if summary fails
+    }
+    
+    // Update category memory_type based on all its memories
+    try {
+      await updateCategoryMemoryType(category.id)
+      console.log(`[PROCESS] Category memory_type updated for "${result.category}"`)
+    } catch (memoryTypeError) {
+      console.error('Failed to update category memory_type:', memoryTypeError)
+      // Don't fail the whole process if memory_type update fails
     }
     
     // Generate and store embedding (don't fail if this fails)
