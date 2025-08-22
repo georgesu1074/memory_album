@@ -35,18 +35,33 @@ export default async function WeddingPage({ params }: PageProps) {
     .eq('wedding_id', wedding.id)
     .order('full_name')
 
-  // Fetch memories
-  const { data: memories } = await supabase
-    .from('memories')
-    .select('*, wedding_guests(full_name)')
+  // Fetch categories with their memories and photos
+  const { data: categories } = await supabase
+    .from('categories')
+    .select(`
+      *,
+      memories:memories(
+        id,
+        memory_text,
+        guest_name,
+        memory_type,
+        created_at,
+        wedding_guests(full_name),
+        memory_photos(
+          id,
+          url,
+          thumbnail_url
+        )
+      )
+    `)
     .eq('wedding_id', wedding.id)
-    .order('created_at', { ascending: false })
+    .order('memory_count', { ascending: false })
 
   return (
     <WeddingPageClient 
       wedding={wedding}
       guests={guests || []}
-      memories={memories || []}
+      categories={categories || []}
       weddingSlug={wedding_slug}
     />
   )

@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { Plus } from 'lucide-react'
 import MemorySubmissionModal from './MemorySubmissionModal'
+import CategoryCard from './memories/CategoryCard'
 
 interface Guest {
   id: string
@@ -12,49 +13,56 @@ interface Guest {
   email: string | null
 }
 
+interface Category {
+  id: string
+  name: string
+  summary: string | null
+  memory_count: number
+  memory_type: 'bride' | 'groom' | 'both' | null
+  memories?: any[]
+}
+
 interface WeddingPageClientProps {
   wedding: any
   guests: Guest[]
-  memories: any[]
+  categories: Category[]
   weddingSlug: string
 }
 
-export default function WeddingPageClient({ wedding, guests, memories: initialMemories, weddingSlug }: WeddingPageClientProps) {
+export default function WeddingPageClient({ wedding, guests, categories: initialCategories, weddingSlug }: WeddingPageClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [memories, setMemories] = useState(initialMemories)
-  const [isLoadingMemories, setIsLoadingMemories] = useState(false)
+  const [categories, setCategories] = useState(initialCategories)
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false)
   const [activeTab, setActiveTab] = useState<'all' | 'bride' | 'groom' | 'together'>('all')
 
-  const refreshMemories = useCallback(async () => {
-    setIsLoadingMemories(true)
+  const refreshCategories = useCallback(async () => {
+    setIsLoadingCategories(true)
     try {
-      const response = await fetch(`/api/weddings/${weddingSlug}/memories`)
-      if (response.ok) {
-        const data = await response.json()
-        setMemories(data.memories)
-      }
+      // For now, we'll reload the page to get fresh data
+      // In the future, we could create an API endpoint for categories
+      window.location.reload()
     } catch (error) {
-      console.error('Error refreshing memories:', error)
+      console.error('Error refreshing categories:', error)
     } finally {
-      setIsLoadingMemories(false)
+      setIsLoadingCategories(false)
     }
   }, [weddingSlug])
 
-  // Filter memories based on active tab
-  const filteredMemories = activeTab === 'all' 
-    ? memories 
-    : memories.filter(m => {
-        const type = m.memory_type?.toLowerCase()
+  // Filter categories based on active tab
+  const filteredCategories = activeTab === 'all' 
+    ? categories 
+    : categories.filter(c => {
+        const type = c.memory_type?.toLowerCase()
         if (activeTab === 'together') return type === 'both'
         return type === activeTab
       })
 
   // Calculate counts
   const counts = {
-    all: memories.length,
-    bride: memories.filter(m => m.memory_type?.toLowerCase() === 'bride').length,
-    groom: memories.filter(m => m.memory_type?.toLowerCase() === 'groom').length,
-    together: memories.filter(m => m.memory_type?.toLowerCase() === 'both').length,
+    all: categories.length,
+    bride: categories.filter(c => c.memory_type?.toLowerCase() === 'bride').length,
+    groom: categories.filter(c => c.memory_type?.toLowerCase() === 'groom').length,
+    together: categories.filter(c => c.memory_type?.toLowerCase() === 'both').length,
   }
 
   return (
@@ -112,57 +120,19 @@ export default function WeddingPageClient({ wedding, guests, memories: initialMe
           </div>
         </div>
 
-        {/* Memory Grid */}
+        {/* Category Grid */}
         <div className="max-w-6xl mx-auto px-4 py-8">
-          {filteredMemories.length > 0 ? (
+          {filteredCategories.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredMemories.map((memory) => (
-                <div key={memory.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                  {/* Image Section */}
-                  <div className="aspect-[4/3] relative bg-gray-100">
-                    {memory.memory_photos && memory.memory_photos.length > 0 ? (
-                      <img 
-                        src={memory.memory_photos[0].url}
-                        alt="Memory"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%23f3f4f6"/%3E%3Cpath d="M200 120c-8.8 0-16 7.2-16 16s7.2 16 16 16 16-7.2 16-16-7.2-16-16-16zm0-20c-19.9 0-36 16.1-36 36s16.1 36 36 36 36-16.1 36-36-16.1-36-36-36zm0-20c-30.9 0-56 25.1-56 56s25.1 56 56 56 56-25.1 56-56-25.1-56-56-56z" fill="%23d1d5db"/%3E%3C/svg%3E'
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                    )}
-                    {memory.memory_photos && memory.memory_photos.length > 1 && (
-                      <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
-                        +{memory.memory_photos.length - 1}
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Content Section */}
-                  <div className="p-4">
-                    <p className="text-gray-700 text-sm mb-3 line-clamp-3">
-                      {memory.ai_summary || memory.memory_text}
-                    </p>
-                    <div className="text-xs text-gray-500">
-                      <span className="font-medium">
-                        {memory.wedding_guests?.full_name || memory.guest_name}
-                      </span>
-                      {memory.created_at && (
-                        <span className="ml-2">
-                          {new Date(memory.created_at).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric'
-                          })}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              {filteredCategories.map((category) => (
+                <CategoryCard 
+                  key={category.id} 
+                  category={category}
+                  onClick={() => {
+                    // TODO: Open category detail modal
+                    console.log('Opening category:', category.name)
+                  }}
+                />
               ))}
             </div>
           ) : (
@@ -193,7 +163,7 @@ export default function WeddingPageClient({ wedding, guests, memories: initialMe
         guests={guests}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onMemoryAdded={refreshMemories}
+        onMemoryAdded={refreshCategories}
       />
     </>
   )
