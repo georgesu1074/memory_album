@@ -111,25 +111,25 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 
 ### Epic: Memory Album UI
 
-- [ ] Create album page with responsive grid
-- [ ] Build memory card component
-- [ ] Implement filter buttons (All/Bride/Groom/Both)
-- [ ] Add memory count displays
-- [ ] Create smooth animations for cards
-- [ ] Build infinite scroll or pagination
-- [ ] Add pull-to-refresh on mobile
-- [ ] Implement loading skeletons
+- ~~[ ] Create album page with responsive grid~~ → memory-album
+- ~~[ ] Build memory card component~~ → memory-album
+- ~~[ ] Implement filter buttons (All/Bride/Groom/Both)~~ → memory-album
+- ~~[ ] Add memory count displays~~ → memory-album
+- ~~[ ] Create smooth animations for cards~~ → memory-album
+- ~~[ ] Build infinite scroll or pagination~~ → memory-album
+- ~~[ ] Add pull-to-refresh on mobile~~ → memory-album
+- ~~[ ] Implement loading skeletons~~ → memory-album
 
 ### Epic: Memory Detail View
 
-- [ ] Create memory detail page/modal
-- [ ] Build photo carousel component
-- [ ] Display AI-generated summary
-- [ ] Show individual journal entries
-- [ ] Add contributor names and timestamps
-- [ ] Implement photo lightbox
-- [ ] Add sharing functionality
-- [ ] Create back navigation
+- ~~[ ] Create memory detail page/modal~~ → memory-album
+- ~~[ ] Build photo carousel component~~ → memory-album
+- ~~[ ] Display AI-generated summary~~ → memory-album
+- ~~[ ] Show individual journal entries~~ → memory-album
+- ~~[ ] Add contributor names and timestamps~~ → memory-album
+- ~~[ ] Implement photo lightbox~~ → memory-album
+- ~~[ ] Add sharing functionality~~ → memory-album
+- ~~[ ] Create back navigation~~ → memory-album
 
 ## Sprint 5: Wedding Configuration
 
