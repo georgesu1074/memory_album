@@ -23,10 +23,10 @@
 - [x] Add beautiful hover effects for desktop
 - [x] Ensure mobile responsiveness
 
-## Memory Album UI (In Progress)
-- [ ] Build infinite scroll (better for mobile than pagination)
-- [ ] Add pull-to-refresh on mobile
-- [ ] Implement loading skeletons
+## Memory Album UI (Completed)
+- [x] Build infinite scroll (better for mobile than pagination)
+- [x] Add pull-to-refresh on mobile
+- [x] Implement loading indicators (elegant spinner instead of skeletons)
 
 ## Memory Detail View (Completed)
 - [x] Create memory detail modal (mobile-optimized)
@@ -38,9 +38,11 @@
 - [x] Add thumbnail strip for desktop view
 - [x] Create expandable memory cards
 - [x] Add photo attribution in carousel
+- [x] Create back navigation for detail view (X button)
+
+## Remaining Polish Features (Optional)
 - [ ] Implement photo lightbox/zoom
 - [ ] Add sharing functionality
-- [x] Create back navigation for detail view (X button)
 
 ## Notes
 - Mobile-first approach is critical

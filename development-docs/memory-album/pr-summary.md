@@ -132,12 +132,51 @@ Categories now include nested memories with photos:
   - "Show more/less" for long text entries
   - Clean, readable layout matching reference UI
 
-## Next Steps
-- Add infinite scroll for categories
-- Add pull-to-refresh on mobile
-- Implement photo lightbox/zoom
-- Add sharing functionality
-- Implement loading skeletons
+## Additional Features Added (Continued)
+
+### Infinite Scroll & Pull-to-Refresh
+- **Infinite Scroll Implementation**
+  - Loads 6 categories initially, then 6 more on scroll
+  - Uses Intersection Observer for efficient detection
+  - Shows "Loading more..." indicator at bottom
+  - "No more memories" message when all loaded
+  - Works seamlessly with tab filtering
+  
+- **Pull-to-Refresh for Mobile**
+  - Touch gesture support (pull down from top)
+  - Animated refresh spinner
+  - Testable in Chrome DevTools mobile mode
+  - Smooth refresh of categories and counts
+  
+- **Accurate Category Counts**
+  - Separate API endpoint for total counts
+  - Tab badges show total categories, not just loaded
+  - Counts update when new memories added
+  - No more count changes during scroll
+
+- **Loading States**
+  - Elegant spinning ring loader (purple brand color)
+  - Prevents "No memories" flash on tab switch
+  - Clean, minimal loading indicator
+  - Better UX than skeleton cards
+
+## API Endpoints Created
+- `/api/weddings/[slug]/categories` - Paginated category fetching
+- `/api/weddings/[slug]/categories/counts` - Total counts per memory type
+
+## Completed Features Summary
+✅ Category-based memory display with aggregation  
+✅ Filter tabs (All/Bride/Groom/Together)  
+✅ Memory Detail Modal with photo carousel  
+✅ Touch/swipe gestures for mobile  
+✅ Infinite scroll with smart loading  
+✅ Pull-to-refresh on mobile devices  
+✅ Accurate count displays  
+✅ Beautiful loading states  
+
+## Optional Future Enhancements
+- Photo lightbox/zoom functionality
+- Social sharing features
 
 ## Screenshots
 - Category cards with photos and badges

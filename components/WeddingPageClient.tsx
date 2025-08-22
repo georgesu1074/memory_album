@@ -249,18 +249,14 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
         {/* Category Grid */}
         <div className="max-w-6xl mx-auto px-4 py-8">
           {isLoadingCategories && filteredCategories.length === 0 ? (
-            // Loading state when switching tabs or initial load
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-white rounded-lg shadow-sm overflow-hidden animate-pulse">
-                  <div className="aspect-[4/3] bg-gray-200" />
-                  <div className="p-4">
-                    <div className="h-6 bg-gray-200 rounded mb-2" />
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-3" />
-                    <div className="h-3 bg-gray-200 rounded w-1/2" />
-                  </div>
-                </div>
-              ))}
+            // Simple, elegant loading state
+            <div className="flex flex-col items-center justify-center py-20">
+              <div className="relative">
+                {/* Spinning ring */}
+                <div className="w-12 h-12 border-4 border-purple-200 rounded-full"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-purple-600 rounded-full border-t-transparent animate-spin"></div>
+              </div>
+              <p className="mt-4 text-gray-500 text-sm">Loading memories...</p>
             </div>
           ) : filteredCategories.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
