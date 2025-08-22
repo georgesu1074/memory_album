@@ -47,7 +47,7 @@ export default function CategoryCard({
       title: 'Bride',
       subtitle: "Memories of the bride",
       icon: User,
-      gradient: 'from-pink-500 to-rose-600',
+      gradient: 'linear-gradient(135deg, #ec4899 0%, #e11d48 100%)',
       lightGradient: 'from-pink-50 to-rose-50',
       iconColor: 'text-pink-500',
       borderColor: 'border-pink-200'
@@ -56,7 +56,7 @@ export default function CategoryCard({
       title: 'Groom',
       subtitle: "Memories of the groom",
       icon: User,
-      gradient: 'from-blue-500 to-indigo-600',
+      gradient: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
       lightGradient: 'from-blue-50 to-indigo-50',
       iconColor: 'text-blue-500',
       borderColor: 'border-blue-200'
@@ -65,7 +65,7 @@ export default function CategoryCard({
       title: 'Together',
       subtitle: "Memories of the couple",
       icon: Heart,
-      gradient: 'from-purple-500 to-pink-600',
+      gradient: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
       lightGradient: 'from-purple-50 to-pink-50',
       iconColor: 'text-purple-500',
       borderColor: 'border-purple-200'
@@ -106,7 +106,7 @@ export default function CategoryCard({
     <div 
       className={`
         relative overflow-hidden rounded-2xl shadow-lg cursor-pointer
-        transform transition-all duration-300 
+        transform transition-all duration-300 bg-white
         ${isPressed ? 'scale-95' : 'hover:scale-[1.02] hover:shadow-xl'}
       `}
       onClick={onClick}
@@ -119,19 +119,24 @@ export default function CategoryCard({
       tabIndex={0}
     >
       {/* Background Image or Gradient */}
-      <div className="relative h-64 sm:h-72">
-        {bestPhoto ? (
+      <div 
+        className="relative h-64 sm:h-72"
+        style={{ background: config.gradient }}
+      >
+        {bestPhoto && (
           <>
             <img 
               src={bestPhoto.url}
               alt={`${config.title} memories`}
               className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                // Hide image on error to show gradient fallback
+                (e.target as HTMLImageElement).style.display = 'none'
+              }}
             />
             {/* Dark overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           </>
-        ) : (
-          <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient}`} />
         )}
         
         {/* Category Badge */}
