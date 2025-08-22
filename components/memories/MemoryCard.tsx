@@ -9,6 +9,7 @@ interface Memory {
   guest_name: string
   memory_text: string
   memory_photos: any[]
+  memory_type: string | null
   ai_category: string | null
   ai_summary: string | null
   created_at: string
@@ -97,9 +98,9 @@ export default function MemoryCard({
         )}
         
         {/* Category badge */}
-        {memory.ai_category && (
-          <div className={`absolute top-2 left-2 text-xs px-2 py-1 rounded-full ${getCategoryColor(memory.ai_category)}`}>
-            {memory.ai_category}
+        {memory.memory_type && (
+          <div className={`absolute top-2 left-2 text-xs px-2 py-1 rounded-full ${getCategoryColor(memory.memory_type)}`}>
+            {memory.memory_type === 'both' ? 'Together' : memory.memory_type.charAt(0).toUpperCase() + memory.memory_type.slice(1)}
           </div>
         )}
       </div>

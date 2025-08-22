@@ -1,6 +1,17 @@
 # Sprint 4: Memory Album Display - Tasks
 
-## Memory Album UI
+## Homepage Category Cards
+- [x] Remove guest list from main UI
+- [x] Create category card component
+- [x] Display 3 cards (Bride, Groom, Both)
+- [x] Show memory count per category
+- [x] Display memory text snippet (AI summary when available)
+- [x] Use best photo as card background
+- [x] Add gradient overlays for readability
+- [x] Implement beautiful hover/tap effects
+- [x] Polish overall styling with gradients and modern design
+
+## Memory Album UI (Previous - Being Revised)
 - [x] Create album page with responsive mobile-first grid
 - [x] Build memory card component optimized for mobile
 - [x] Implement filter buttons (All/Bride/Groom/Both) with mobile UI

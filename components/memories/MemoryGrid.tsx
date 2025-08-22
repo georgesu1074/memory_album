@@ -11,6 +11,7 @@ interface Memory {
   guest_name: string
   memory_text: string
   memory_photos: any[]
+  memory_type: string | null
   ai_category: string | null
   ai_summary: string | null
   created_at: string
@@ -49,15 +50,15 @@ export default function MemoryGrid({
   // Filter memories based on selected category
   const filteredMemories = memories.filter(memory => {
     if (filter === 'all') return true
-    return memory.ai_category?.toLowerCase() === filter
+    return memory.memory_type?.toLowerCase() === filter
   })
 
   // Memory counts for each category
   const counts = {
     all: memories.length,
-    bride: memories.filter(m => m.ai_category?.toLowerCase() === 'bride').length,
-    groom: memories.filter(m => m.ai_category?.toLowerCase() === 'groom').length,
-    both: memories.filter(m => m.ai_category?.toLowerCase() === 'both').length,
+    bride: memories.filter(m => m.memory_type?.toLowerCase() === 'bride').length,
+    groom: memories.filter(m => m.memory_type?.toLowerCase() === 'groom').length,
+    both: memories.filter(m => m.memory_type?.toLowerCase() === 'both').length,
   }
 
   // Pull-to-refresh implementation for mobile

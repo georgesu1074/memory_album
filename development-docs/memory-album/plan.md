@@ -57,20 +57,21 @@ app/
 
 ## Implementation Phases
 
-### Phase 1: Memory Grid (Mobile)
-1. Create responsive grid layout
-   - CSS Grid with auto-fit
-   - 2 columns on mobile, 3-4 on tablet, 5-6 on desktop
-   - Consistent aspect ratios
-2. Build memory card component
-   - Show first photo as thumbnail
-   - Display guest name
-   - Show truncated memory text
-   - Category badge (Bride/Groom/Both)
-3. Implement infinite scroll
-   - Load 20 memories initially
-   - Fetch next batch at 80% scroll
-   - Show loading spinner at bottom
+### Phase 1: Category Cards View (Mobile-First)
+1. Create category-based homepage
+   - Remove guest list from main UI (only in modal)
+   - Display 3 category cards (Bride, Groom, Both)
+   - Show aggregated data per category
+2. Build category card component
+   - Display category name with elegant typography
+   - Show memory count for the category
+   - Display AI-generated summary snippet
+   - Use best photo as background/thumbnail
+   - Beautiful gradient overlays for text readability
+3. Polish the design
+   - Modern, wedding-appropriate aesthetic
+   - Smooth animations and transitions
+   - Premium feel with subtle shadows and effects
 
 ### Phase 2: Filtering & Interactions
 1. Add filter buttons
@@ -87,19 +88,20 @@ app/
    - Haptic feedback (if available)
 
 ### Phase 3: Memory Detail View
-1. Create modal/page for details
-   - Full-screen on mobile
-   - Modal on desktop
+1. Create modal/page for category memories
+   - Full-screen view on mobile
+   - Shows all memories in selected category
+   - Beautiful grid layout of individual memories
    - Smooth open/close animation
-2. Photo carousel
-   - Swipeable with touch
-   - Pinch-to-zoom
-   - Photo indicators
-3. Content display
-   - AI summary at top
-   - Individual entries below
+2. Individual memory cards in detail view
+   - Photo thumbnails
+   - Full memory text
    - Contributor info
    - Timestamps
+3. Memory expansion
+   - Click memory to see full details
+   - Photo carousel for multiple photos
+   - Complete text and metadata
 
 ### Phase 4: Polish & Animations
 1. Add micro-interactions
