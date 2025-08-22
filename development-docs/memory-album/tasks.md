@@ -1,14 +1,14 @@
 # Sprint 4: Memory Album Display - Tasks
 
 ## Memory Album UI
-- [ ] Create album page with responsive mobile-first grid
-- [ ] Build memory card component optimized for mobile
-- [ ] Implement filter buttons (All/Bride/Groom/Both) with mobile UI
-- [ ] Add memory count displays
-- [ ] Create smooth animations for cards
+- [x] Create album page with responsive mobile-first grid
+- [x] Build memory card component optimized for mobile
+- [x] Implement filter buttons (All/Bride/Groom/Both) with mobile UI
+- [x] Add memory count displays
+- [x] Create smooth animations for cards
 - [ ] Build infinite scroll (better for mobile than pagination)
-- [ ] Add pull-to-refresh on mobile
-- [ ] Implement loading skeletons
+- [x] Add pull-to-refresh on mobile
+- [x] Implement loading skeletons
 
 ## Memory Detail View
 - [ ] Create memory detail modal (mobile-optimized)

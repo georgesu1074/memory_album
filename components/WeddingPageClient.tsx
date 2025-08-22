@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, Users } from 'lucide-react'
 import MemorySubmissionModal from './MemorySubmissionModal'
+import MemoryGrid from './memories/MemoryGrid'
 
 interface Guest {
   id: string
@@ -23,6 +24,7 @@ export default function WeddingPageClient({ wedding, guests, memories: initialMe
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [memories, setMemories] = useState(initialMemories)
   const [isLoadingMemories, setIsLoadingMemories] = useState(false)
+  const [showGuestList, setShowGuestList] = useState(false)
 
   const refreshMemories = useCallback(async () => {
     setIsLoadingMemories(true)
@@ -41,75 +43,88 @@ export default function WeddingPageClient({ wedding, guests, memories: initialMe
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 p-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Header with Share Memory Button */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <div className="flex justify-between items-start mb-4">
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <div className="bg-white shadow-sm sticky top-0 z-30">
+          <div className="px-4 py-4">
+            <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-3xl font-bold mb-2" style={{ color: wedding.theme_color }}>
+                <h1 className="text-2xl font-bold" style={{ color: wedding.theme_color }}>
                   {wedding.couple_names}
                 </h1>
-                <p className="text-gray-600">Wedding Date: {wedding.wedding_date || 'TBD'}</p>
+                <p className="text-sm text-gray-600">{wedding.wedding_date || 'Wedding Date TBD'}</p>
               </div>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-              >
-                <Plus className="h-5 w-5" />
-                Share Memory
-              </button>
+              <div className="flex gap-2">
+                {/* Guest List Toggle - Mobile Only */}
+                <button
+                  onClick={() => setShowGuestList(!showGuestList)}
+                  className="md:hidden bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-lg transition-colors"
+                  aria-label="Toggle guest list"
+                >
+                  <Users className="h-5 w-5" />
+                  <span className="sr-only">Guest List</span>
+                </button>
+                {/* Share Memory Button - Desktop Only */}
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors items-center gap-2"
+                >
+                  <Plus className="h-5 w-5" />
+                  Share Memory
+                </button>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Guest List */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4">Guest List ({guests?.length || 0})</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {guests?.map((guest) => (
-                <div key={guest.id} className="text-sm p-2 bg-gray-50 rounded">
-                  {guest.full_name}
+        {/* Guest List Drawer - Mobile */}
+        {showGuestList && (
+          <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setShowGuestList(false)}>
+            <div 
+              className="absolute right-0 top-0 h-full w-3/4 max-w-sm bg-white shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b">
+                <h2 className="text-lg font-semibold">Guest List ({guests?.length || 0})</h2>
+              </div>
+              <div className="p-4 overflow-y-auto h-full pb-20">
+                <div className="space-y-2">
+                  {guests?.map((guest) => (
+                    <div key={guest.id} className="text-sm p-3 bg-gray-50 rounded-lg">
+                      {guest.full_name}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
+        )}
 
-          {/* Memories */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4">
-              Memories ({memories?.length || 0})
-              {isLoadingMemories && <span className="text-sm text-gray-500 ml-2">Updating...</span>}
-            </h2>
-            {memories?.length > 0 ? (
-              <div className="space-y-4">
-                {memories.map((memory) => (
-                  <div key={memory.id} className="border-l-4 border-purple-500 pl-4">
-                    <p className="text-gray-800 mb-2">{memory.memory_text}</p>
-                    {memory.memory_photos && memory.memory_photos.length > 0 && (
-                      <div className="flex gap-2 mb-2">
-                        {memory.memory_photos.map((photo: any) => (
-                          <img 
-                            key={photo.id}
-                            src={photo.url} 
-                            alt="Memory photo"
-                            className="w-20 h-20 object-cover rounded"
-                          />
-                        ))}
-                      </div>
-                    )}
-                    <p className="text-sm text-gray-500">
-                      - {memory.wedding_guests?.full_name || memory.guest_name || 'Anonymous'}
-                      {memory.ai_category && ` • ${memory.ai_category}`}
-                    </p>
+        {/* Main Content Area */}
+        <div className="md:flex md:gap-6 md:p-6 md:max-w-7xl md:mx-auto">
+          {/* Guest List - Desktop Only */}
+          <div className="hidden md:block md:w-64 lg:w-80">
+            <div className="bg-white rounded-lg shadow-sm p-4 sticky top-24">
+              <h2 className="text-lg font-semibold mb-3">Guest List ({guests?.length || 0})</h2>
+              <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+                {guests?.map((guest) => (
+                  <div key={guest.id} className="text-sm p-2 bg-gray-50 rounded">
+                    {guest.full_name}
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="text-center py-8 text-gray-500">
-                <p className="mb-2">No memories shared yet</p>
-                <p className="text-sm">Be the first to share a memory!</p>
-              </div>
-            )}
+            </div>
+          </div>
+
+          {/* Memory Grid */}
+          <div className="flex-1">
+            <MemoryGrid 
+              memories={memories}
+              isLoading={isLoadingMemories}
+              onRefresh={refreshMemories}
+              weddingSlug={weddingSlug}
+              themeColor={wedding.theme_color}
+            />
           </div>
         </div>
       </div>
