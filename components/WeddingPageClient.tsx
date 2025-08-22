@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import { Plus } from 'lucide-react'
 import MemorySubmissionModal from './MemorySubmissionModal'
 import CategoryCard from './memories/CategoryCard'
+import MemoryDetailModal from './memories/MemoryDetailModal'
 
 interface Guest {
   id: string
@@ -34,6 +35,8 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
   const [categories, setCategories] = useState(initialCategories)
   const [isLoadingCategories, setIsLoadingCategories] = useState(false)
   const [activeTab, setActiveTab] = useState<'all' | 'bride' | 'groom' | 'together'>('all')
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
   const refreshCategories = useCallback(async () => {
     setIsLoadingCategories(true)
@@ -129,8 +132,8 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
                   key={category.id} 
                   category={category}
                   onClick={() => {
-                    // TODO: Open category detail modal
-                    console.log('Opening category:', category.name)
+                    setSelectedCategory(category)
+                    setIsDetailModalOpen(true)
                   }}
                 />
               ))}
@@ -164,6 +167,16 @@ export default function WeddingPageClient({ wedding, guests, categories: initial
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onMemoryAdded={refreshCategories}
+      />
+
+      {/* Memory Detail Modal */}
+      <MemoryDetailModal
+        category={selectedCategory}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false)
+          setSelectedCategory(null)
+        }}
       />
     </>
   )
