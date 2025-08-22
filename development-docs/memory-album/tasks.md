@@ -1,25 +1,32 @@
 # Sprint 4: Memory Album Display - Tasks
 
-## Homepage Category Cards
-- [x] Remove guest list from main UI
-- [x] Create category card component
-- [x] Display 3 cards (Bride, Groom, Both)
-- [x] Show memory count per category
-- [x] Display memory text snippet (AI summary when available)
-- [x] Use best photo as card background
-- [x] Add gradient overlays for readability
-- [x] Implement beautiful hover/tap effects
-- [x] Polish overall styling with gradients and modern design
+## Backend Tasks (Completed)
+- [x] Add memory_type field to categories table (SQL migration)
+- [x] Move category memory_type update logic from SQL trigger to TypeScript
+- [x] Integrate updateCategoryMemoryType() into memory processing flow
+- [x] Remove SQL trigger via Supabase SQL Editor
 
-## Memory Album UI (Previous - Being Revised)
-- [x] Create album page with responsive mobile-first grid
-- [x] Build memory card component optimized for mobile
-- [x] Implement filter buttons (All/Bride/Groom/Both) with mobile UI
-- [x] Add memory count displays
-- [x] Create smooth animations for cards
+## Homepage Category Cards (Completed)
+- [x] Fix Tailwind CSS v4 alpha issues (downgraded to v3)
+- [x] Fix white text on white background in form inputs
+- [x] Remove guest list from main UI
+- [x] Create CategoryCard component with photo aggregation
+- [x] Update page.tsx to fetch categories with nested memories/photos
+- [x] Display categories instead of individual memories
+- [x] Show memory count per category
+- [x] Show contributor count per category
+- [x] Display AI-generated summary on cards
+- [x] Use first photo from memories as card image
+- [x] Add photo count badges
+- [x] Add memory_type badges (Bride/Groom/Together)
+- [x] Implement filter tabs (All/Bride/Groom/Together)
+- [x] Add beautiful hover effects for desktop
+- [x] Ensure mobile responsiveness
+
+## Memory Album UI (In Progress)
 - [ ] Build infinite scroll (better for mobile than pagination)
-- [x] Add pull-to-refresh on mobile
-- [x] Implement loading skeletons
+- [ ] Add pull-to-refresh on mobile
+- [ ] Implement loading skeletons
 
 ## Memory Detail View
 - [ ] Create memory detail modal (mobile-optimized)

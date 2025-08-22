@@ -57,32 +57,36 @@ app/
 
 ## Implementation Phases
 
-### Phase 1: Category Cards View (Mobile-First)
-1. Create category-based homepage
-   - Remove guest list from main UI (only in modal)
-   - Display 3 category cards (Bride, Groom, Both)
-   - Show aggregated data per category
-2. Build category card component
-   - Display category name with elegant typography
-   - Show memory count for the category
-   - Display AI-generated summary snippet
-   - Use best photo as background/thumbnail
-   - Beautiful gradient overlays for text readability
-3. Polish the design
-   - Modern, wedding-appropriate aesthetic
-   - Smooth animations and transitions
-   - Premium feel with subtle shadows and effects
+### Phase 1: Category Cards View (Mobile-First) ✅ COMPLETED
+1. Create category-based homepage ✅
+   - Remove guest list from main UI (only in modal) ✅
+   - Display dynamic category cards (not fixed to 3) ✅
+   - Show aggregated data per category ✅
+2. Build category card component ✅
+   - Display category name with elegant typography ✅
+   - Show memory count for the category ✅
+   - Show contributor count (unique feature added) ✅
+   - Display AI-generated summary snippet ✅
+   - Use best photo as background/thumbnail ✅
+   - Photo count badges for multiple photos ✅
+   - Memory type badges (Bride/Groom/Together) ✅
+3. Polish the design ✅
+   - Modern, wedding-appropriate aesthetic ✅
+   - Smooth animations and transitions ✅
+   - Premium feel with subtle shadows and effects ✅
+   - Fixed Tailwind CSS issues ✅
+   - Fixed input text visibility ✅
 
-### Phase 2: Filtering & Interactions
-1. Add filter buttons
-   - Sticky position at top
-   - Horizontal scroll on mobile
-   - Active state indication
-   - Smooth filter transitions
-2. Memory count displays
-   - Total count per category
-   - Update dynamically with filters
-3. Pull-to-refresh
+### Phase 2: Filtering & Interactions ✅ PARTIALLY COMPLETED
+1. Add filter buttons ✅
+   - Tabs at top (All/Bride/Groom/Together) ✅
+   - Active state indication ✅
+   - Smooth filter transitions ✅
+   - Mobile responsive ✅
+2. Memory count displays ✅
+   - Total count per category ✅
+   - Update dynamically with filters ✅
+3. Pull-to-refresh ⏳ TODO
    - Native mobile gesture
    - Loading indicator
    - Haptic feedback (if available)
