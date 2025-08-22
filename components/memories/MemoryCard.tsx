@@ -51,11 +51,11 @@ export default function MemoryCard({
   const getCategoryColor = (category: string | null) => {
     switch (category?.toLowerCase()) {
       case 'bride':
-        return 'bg-pink-100 text-pink-700'
+        return 'bg-[#fdf0f2] text-[#8b4759]'
       case 'groom':
         return 'bg-blue-100 text-blue-700'
       case 'both':
-        return 'bg-purple-100 text-purple-700'
+        return 'bg-gray-100 text-gray-700'
       default:
         return 'bg-gray-100 text-gray-700'
     }
@@ -92,8 +92,8 @@ export default function MemoryCard({
             )}
           </>
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-50 to-purple-100">
-            <Heart className="h-12 w-12 text-purple-300" />
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-gray-50">
+            <Heart className="h-12 w-12 text-[#e8b4c2]" />
           </div>
         )}
         

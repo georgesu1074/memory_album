@@ -90,7 +90,7 @@ export default function CategoryCard({ category, onClick }: CategoryCardProps) {
             onError={() => setImageError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-gray-50">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-white/80 rounded-full mb-2">
                 <Camera className="w-8 h-8 text-gray-400" />
@@ -111,9 +111,9 @@ export default function CategoryCard({ category, onClick }: CategoryCardProps) {
         {/* Memory type badge */}
         {category.memory_type && (
           <div className={`absolute top-2 left-2 text-xs px-2 py-1 rounded-full font-medium
-            ${category.memory_type === 'bride' ? 'bg-pink-500/90 text-white' :
+            ${category.memory_type === 'bride' ? 'bg-[#e8b4c2]/90 text-white' :
               category.memory_type === 'groom' ? 'bg-blue-500/90 text-white' :
-              'bg-purple-500/90 text-white'}`}
+              'bg-gray-400/90 text-white'}`}
           >
             {category.memory_type === 'both' ? 'Together' : 
              category.memory_type.charAt(0).toUpperCase() + category.memory_type.slice(1)}

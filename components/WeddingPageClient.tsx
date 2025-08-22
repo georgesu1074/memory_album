@@ -246,7 +246,8 @@ export default function WeddingPageClient({
         
         {/* Updating after submission indicator */}
         {isUpdatingAfterSubmission && (
-          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-purple-600 text-white rounded-full shadow-lg px-4 py-2 flex items-center gap-2">
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 text-white rounded-full shadow-lg px-4 py-2 flex items-center gap-2"
+               style={{ backgroundColor: '#d4899f' }}>
             <RefreshCw className="h-4 w-4 animate-spin" />
             <span className="text-sm">Processing memory...</span>
           </div>
@@ -274,7 +275,16 @@ export default function WeddingPageClient({
               </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="text-white px-4 py-2 rounded-lg font-medium transition-all shadow-sm"
+                style={{ backgroundColor: '#d4899f' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e8b4c2';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#d4899f';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 Share Memory
               </button>
@@ -295,12 +305,12 @@ export default function WeddingPageClient({
                     ${
                       activeTab === tab
                         ? tab === "all"
-                          ? "border-purple-600 text-purple-600"
+                          ? "border-[#d4899f] text-[#a85a72]"
                           : tab === "bride"
-                          ? "border-pink-500 text-pink-600"
+                          ? "border-[#d4899f] text-[#a85a72]"
                           : tab === "groom"
-                          ? "border-blue-500 text-blue-600"
-                          : "border-purple-500 text-purple-600"
+                          ? "border-gray-500 text-gray-700"
+                          : "border-[#f5d5db] text-[#c27189]"
                         : "border-transparent text-gray-500 hover:text-gray-700"
                     }
                   `}
@@ -320,8 +330,8 @@ export default function WeddingPageClient({
             <div className="flex flex-col items-center justify-center py-20">
               <div className="relative">
                 {/* Spinning ring */}
-                <div className="w-12 h-12 border-4 border-purple-200 rounded-full"></div>
-                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-purple-600 rounded-full border-t-transparent animate-spin"></div>
+                <div className="w-12 h-12 border-4 border-[#fdf0f2] rounded-full"></div>
+                <div className="absolute top-0 left-0 w-12 h-12 border-4 border-[#d4899f] rounded-full border-t-transparent animate-spin"></div>
               </div>
               <p className="mt-4 text-gray-500 text-sm">Loading memories...</p>
             </div>
@@ -378,7 +388,10 @@ export default function WeddingPageClient({
       {/* Floating Action Button on Mobile */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-6 right-6 bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-lg transition-all hover:scale-110 md:hidden"
+        className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all hover:scale-110 md:hidden"
+        style={{ backgroundColor: '#d4899f' }}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e8b4c2'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#d4899f'}
         aria-label="Share Memory"
       >
         <Plus className="h-6 w-6" />

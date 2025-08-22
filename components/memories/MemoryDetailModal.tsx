@@ -164,7 +164,7 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
 
           {/* Category Summary */}
           {category.summary && (
-            <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-50 border-b">
+            <div className="p-6 bg-gradient-to-br from-pink-50 via-white to-gray-50 border-b">
               <h3 className="text-lg font-semibold mb-2 text-gray-900">Our Story</h3>
               <p className="text-gray-700 leading-relaxed">{category.summary}</p>
             </div>
@@ -178,7 +178,7 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
                 <div
                   key={memory.id}
                   className={`bg-white border rounded-lg p-4 transition-all cursor-pointer hover:shadow-md ${
-                    selectedMemoryIndex === index ? 'ring-2 ring-purple-500 shadow-md' : ''
+                    selectedMemoryIndex === index ? 'ring-2 ring-gray-300 shadow-md' : ''
                   }`}
                   onClick={() => setSelectedMemoryIndex(
                     selectedMemoryIndex === index ? null : index
@@ -206,9 +206,9 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
                     </div>
                     {memory.memory_type && (
                       <span className={`text-xs px-2 py-1 rounded-full font-medium
-                        ${memory.memory_type === 'bride' ? 'bg-pink-100 text-pink-700' :
+                        ${memory.memory_type === 'bride' ? 'bg-[#fdf0f2] text-[#8b4759]' :
                           memory.memory_type === 'groom' ? 'bg-blue-100 text-blue-700' :
-                          'bg-purple-100 text-purple-700'}`}
+                          'bg-gray-100 text-gray-700'}`}
                       >
                         {memory.memory_type === 'both' ? 'Together' : 
                          memory.memory_type.charAt(0).toUpperCase() + memory.memory_type.slice(1)}
@@ -246,7 +246,7 @@ export default function MemoryDetailModal({ category, isOpen, onClose }: MemoryD
 
                   {/* Expand/Collapse indicator */}
                   {memory.memory_text.length > 200 && (
-                    <button className="text-sm text-purple-600 mt-2 font-medium">
+                    <button className="text-sm text-[#d4899f] mt-2 font-medium">
                       {selectedMemoryIndex === index ? 'Show less' : 'Show more'}
                     </button>
                   )}

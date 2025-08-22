@@ -173,23 +173,22 @@ export default function PhotoCarousel({ photos }: PhotoCarouselProps) {
 
       {/* Thumbnail Strip - Desktop */}
       <div className="hidden md:block bg-white border-t p-4">
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-3 overflow-x-auto px-2">
           {photos.map((photo, index) => (
             <button
               key={photo.id}
               onClick={() => setCurrentIndex(index)}
-              className={`flex-shrink-0 relative ${
-                index === currentIndex ? 'ring-2 ring-purple-500' : ''
+              className={`flex-shrink-0 relative rounded-lg overflow-hidden transition-all ${
+                index === currentIndex 
+                  ? 'shadow-lg scale-110 ring-2 ring-gray-200' 
+                  : 'hover:shadow-md hover:scale-105 opacity-70 hover:opacity-100'
               }`}
             >
               <img
                 src={photo.thumbnail_url || photo.url}
                 alt={`Thumbnail ${index + 1}`}
-                className="h-16 w-16 object-cover rounded"
+                className="h-16 w-16 object-cover"
               />
-              {index === currentIndex && (
-                <div className="absolute inset-0 bg-purple-500/20 rounded" />
-              )}
             </button>
           ))}
         </div>

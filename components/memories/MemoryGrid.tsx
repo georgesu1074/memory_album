@@ -104,7 +104,7 @@ export default function MemoryGrid({
           }}
         >
           <RefreshCw 
-            className={`h-6 w-6 text-purple-600 ${pullDistance > 60 ? 'animate-spin' : ''}`}
+            className={`h-6 w-6 text-[#d4899f] ${pullDistance > 60 ? 'animate-spin' : ''}`}
           />
         </div>
       )}

@@ -323,15 +323,15 @@ export default function MemorySubmissionModal({
                   fontWeight: "500",
                   fontSize: "14px",
                   color: "white",
-                  backgroundColor: "#8b5cf6",
+                  backgroundColor: "#d4899f",
                   border: "none",
                   cursor: "pointer",
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#7c3aed")
+                  (e.currentTarget.style.backgroundColor = "#e8b4c2")
                 }
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#8b5cf6")
+                  (e.currentTarget.style.backgroundColor = "#d4899f")
                 }
               >
                 Share Another Memory
@@ -400,11 +400,11 @@ export default function MemorySubmissionModal({
                     padding: "8px 12px",
                     border: "2px solid",
                     borderColor:
-                      formData.memoryType === "bride" ? "#8b5cf6" : "#e5e7eb",
+                      formData.memoryType === "bride" ? "#e8b4c2" : "#e5e7eb",
                     backgroundColor:
-                      formData.memoryType === "bride" ? "#f3e8ff" : "white",
+                      formData.memoryType === "bride" ? "#fdf0f2" : "white",
                     color:
-                      formData.memoryType === "bride" ? "#7c3aed" : "#374151",
+                      formData.memoryType === "bride" ? "#8b4759" : "#374151",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px",
@@ -422,11 +422,11 @@ export default function MemorySubmissionModal({
                     padding: "8px 12px",
                     border: "2px solid",
                     borderColor:
-                      formData.memoryType === "groom" ? "#8b5cf6" : "#e5e7eb",
+                      formData.memoryType === "groom" ? "#6b7280" : "#e5e7eb",
                     backgroundColor:
-                      formData.memoryType === "groom" ? "#f3e8ff" : "white",
+                      formData.memoryType === "groom" ? "#f3f4f6" : "white",
                     color:
-                      formData.memoryType === "groom" ? "#7c3aed" : "#374151",
+                      formData.memoryType === "groom" ? "#374151" : "#374151",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px",
@@ -444,11 +444,11 @@ export default function MemorySubmissionModal({
                     padding: "8px 12px",
                     border: "2px solid",
                     borderColor:
-                      formData.memoryType === "both" ? "#8b5cf6" : "#e5e7eb",
+                      formData.memoryType === "both" ? "#f5d5db" : "#e5e7eb",
                     backgroundColor:
-                      formData.memoryType === "both" ? "#f3e8ff" : "white",
+                      formData.memoryType === "both" ? "#fdfbfb" : "white",
                     color:
-                      formData.memoryType === "both" ? "#7c3aed" : "#374151",
+                      formData.memoryType === "both" ? "#a85a72" : "#374151",
                     borderRadius: "8px",
                     cursor: "pointer",
                     fontSize: "14px",
@@ -713,18 +713,18 @@ export default function MemorySubmissionModal({
                 fontWeight: "500",
                 fontSize: "14px",
                 color: "white",
-                backgroundColor: isSubmitting ? "#9ca3af" : "#8b5cf6",
+                backgroundColor: isSubmitting ? "#9ca3af" : "#d4899f",
                 border: "none",
                 cursor: isSubmitting ? "not-allowed" : "pointer",
                 transition: "background-color 0.2s",
               }}
               onMouseEnter={(e) =>
                 !isSubmitting &&
-                (e.currentTarget.style.backgroundColor = "#7c3aed")
+                (e.currentTarget.style.backgroundColor = "#e8b4c2")
               }
               onMouseLeave={(e) =>
                 !isSubmitting &&
-                (e.currentTarget.style.backgroundColor = "#8b5cf6")
+                (e.currentTarget.style.backgroundColor = "#d4899f")
               }
             >
               {isSubmitting ? "Sharing..." : "Share Memory"}
