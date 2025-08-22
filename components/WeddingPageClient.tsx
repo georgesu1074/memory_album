@@ -252,50 +252,52 @@ export default function WeddingPageClient({
             <span className="text-sm">Processing memory...</span>
           </div>
         )}
-        {/* Header */}
-        <div className="bg-white shadow-sm">
-          <div className="max-w-6xl mx-auto px-4 py-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-2xl font-semibold text-gray-900">
-                  {wedding.couple_names}
-                </h1>
-                <p className="text-sm text-gray-500">
-                  {wedding.wedding_date
-                    ? new Date(wedding.wedding_date).toLocaleDateString(
-                        "en-US",
-                        {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        }
-                      )
-                    : "Wedding Date TBD"}
-                </p>
+        {/* Sticky Header and Tabs Container */}
+        <div className="sticky top-0 z-30 bg-white">
+          {/* Header */}
+          <div className="shadow-sm">
+            <div className="max-w-6xl mx-auto px-4 py-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h1 className="text-2xl font-semibold text-gray-900">
+                    {wedding.couple_names}
+                  </h1>
+                  <p className="text-sm text-gray-500">
+                    {wedding.wedding_date
+                      ? new Date(wedding.wedding_date).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )
+                      : "Wedding Date TBD"}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-white px-4 py-2 rounded-lg font-medium transition-all shadow-sm"
+                  style={{ backgroundColor: '#d4899f' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#e8b4c2';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#d4899f';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  Share Memory
+                </button>
               </div>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="text-white px-4 py-2 rounded-lg font-medium transition-all shadow-sm"
-                style={{ backgroundColor: '#d4899f' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e8b4c2';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#d4899f';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                Share Memory
-              </button>
             </div>
           </div>
-        </div>
 
-        {/* Tabs */}
-        <div className="bg-white border-b">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="flex space-x-8">
+          {/* Tabs */}
+          <div className="border-b">
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="flex space-x-8">
               {(["all", "bride", "groom", "together"] as const).map((tab) => (
                 <button
                   key={tab}
@@ -319,6 +321,7 @@ export default function WeddingPageClient({
                   {totalCounts[tab]})
                 </button>
               ))}
+              </div>
             </div>
           </div>
         </div>
