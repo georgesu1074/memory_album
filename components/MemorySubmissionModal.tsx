@@ -164,21 +164,26 @@ export default function MemorySubmissionModal({ weddingSlug, guests, isOpen, onC
       position: 'fixed',
       top: '0',
       left: '0',
-      width: '100%',
-      height: '100%',
+      right: '0',
+      bottom: '0',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       zIndex: 99999,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      padding: '20px',
+      boxSizing: 'border-box'
     }}>
       <div style={{
         backgroundColor: 'white',
         borderRadius: '8px',
         maxWidth: '500px',
-        width: '90%',
-        maxHeight: '90vh',
-        overflow: 'auto'
+        width: '100%',
+        maxHeight: '100%',
+        overflow: 'auto',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         {/* Header */}
         <div style={{
