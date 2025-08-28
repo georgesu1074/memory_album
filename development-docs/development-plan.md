@@ -256,6 +256,28 @@ Each epic is complete when:
 - Payment processing
 - Custom themes beyond color
 
+## Sprint 8: Security & Authentication (Future)
+
+### Epic: Authentication System
+- [ ] Add user accounts (email/password)
+- [ ] Implement JWT authentication
+- [ ] Add login/signup pages
+- [ ] Link weddings to user accounts
+- [ ] Add password reset flow
+
+### Epic: Security Hardening
+- [ ] Replace admin client usage with proper auth
+- [ ] Add Row Level Security policies
+- [ ] Implement ownership verification
+- [ ] Add rate limiting to APIs
+- [ ] Secure inactive wedding access
+- [ ] Add audit logging
+
+### Epic: OAuth Integration (Optional)
+- [ ] Google Sign-In
+- [ ] Link to bride/groom emails
+- [ ] Social login options
+
 ## Notes
 
 - Focus on mobile experience first
@@ -264,3 +286,4 @@ Each epic is complete when:
 - Ask for help with manual setup steps
 - Document any design changes
 - Celebrate small wins!
+- Security improvements planned for Sprint 8 (after MVP features)
