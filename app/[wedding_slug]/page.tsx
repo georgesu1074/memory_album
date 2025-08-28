@@ -10,16 +10,37 @@ interface PageProps {
 export default async function WeddingPage({ params }: PageProps) {
   const { wedding_slug } = await params
   
-  // Fetch wedding data with bride and groom details
+  // Fetch wedding data first (separate queries for now due to Supabase join limitations)
   const { data: wedding, error: weddingError } = await supabase
     .from('weddings')
-    .select(`
-      *,
-      groom:groom_details(*),
-      bride:bride_details(*)
-    `)
+    .select('*')
     .eq('slug', wedding_slug)
     .single()
+
+  // Fetch related detail records if they exist
+  if (wedding?.groom_id) {
+    const { data: groomDetails } = await supabase
+      .from('groom_details')
+      .select('*')
+      .eq('id', wedding.groom_id)
+      .single()
+    
+    if (groomDetails) {
+      wedding.groom = groomDetails
+    }
+  }
+
+  if (wedding?.bride_id) {
+    const { data: brideDetails } = await supabase
+      .from('bride_details')
+      .select('*')
+      .eq('id', wedding.bride_id)
+      .single()
+    
+    if (brideDetails) {
+      wedding.bride = brideDetails
+    }
+  }
 
   if (weddingError || !wedding) {
     return (
