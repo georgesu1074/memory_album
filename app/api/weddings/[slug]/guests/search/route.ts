@@ -1,62 +1,88 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/client'
+import { NextRequest, NextResponse } from 'next/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = await params
-    const searchParams = request.nextUrl.searchParams
-    const query = searchParams.get('q') || ''
+    const { slug } = params;
+    const { searchParams } = new URL(request.url);
+    const query = searchParams.get('q')?.toLowerCase() || '';
+    const limit = parseInt(searchParams.get('limit') || '10');
+    
+    const supabaseAdmin = createAdminClient();
 
-    // First get the wedding by slug
-    const { data: wedding, error: weddingError } = await supabase
+    // Get the wedding ID from slug
+    const { data: wedding, error: weddingError } = await supabaseAdmin
       .from('weddings')
       .select('id')
       .eq('slug', slug)
-      .single()
+      .single();
 
     if (weddingError || !wedding) {
       return NextResponse.json(
         { error: 'Wedding not found' },
         { status: 404 }
-      )
+      );
     }
 
-    // Search guests by name
-    let guestsQuery = supabase
+    if (!query) {
+      // Return all guests if no query
+      const { data: guests, error } = await supabaseAdmin
+        .from('wedding_guests')
+        .select('*')
+        .eq('wedding_id', wedding.id)
+        .order('full_name')
+        .limit(limit);
+
+      if (error) {
+        throw error;
+      }
+
+      return NextResponse.json({ guests: guests || [] });
+    }
+
+    // Search for guests with fuzzy matching
+    // Using ilike for case-insensitive partial matching
+    const { data: guests, error } = await supabaseAdmin
       .from('wedding_guests')
-      .select('id, first_name, last_name, full_name, email')
+      .select('*')
       .eq('wedding_id', wedding.id)
+      .or(`full_name.ilike.%${query}%,email.ilike.%${query}%,party_name.ilike.%${query}%`)
       .order('full_name')
+      .limit(limit);
 
-    // If there's a search query, filter by it
-    if (query) {
-      guestsQuery = guestsQuery.or(
-        `first_name.ilike.%${query}%,last_name.ilike.%${query}%,full_name.ilike.%${query}%`
-      )
+    if (error) {
+      throw error;
     }
 
-    // Limit to 10 results for autocomplete
-    guestsQuery = guestsQuery.limit(10)
+    // Sort results by relevance (exact matches first)
+    const sortedGuests = guests?.sort((a, b) => {
+      const aName = a.full_name?.toLowerCase() || '';
+      const bName = b.full_name?.toLowerCase() || '';
+      
+      // Exact match
+      if (aName === query) return -1;
+      if (bName === query) return 1;
+      
+      // Starts with query
+      if (aName.startsWith(query)) return -1;
+      if (bName.startsWith(query)) return 1;
+      
+      // Contains query
+      return 0;
+    }) || [];
 
-    const { data: guests, error: guestsError } = await guestsQuery
-
-    if (guestsError) {
-      console.error('Error searching guests:', guestsError)
-      return NextResponse.json(
-        { error: 'Failed to search guests' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json({ guests: guests || [] })
+    return NextResponse.json({ 
+      guests: sortedGuests,
+      total: sortedGuests.length 
+    });
   } catch (error) {
-    console.error('API error:', error)
+    console.error('Error searching guests:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to search guests' },
       { status: 500 }
-    )
+    );
   }
 }

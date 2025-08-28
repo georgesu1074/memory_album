@@ -368,10 +368,9 @@ export default function WeddingConfigPage() {
                 </a>
                 <button
                   onClick={() => router.push(`/${weddingSlug}/guests`)}
-                  className="block w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-center font-medium hover:bg-gray-200"
-                  disabled
+                  className="block w-full px-4 py-2 bg-purple-100 text-purple-700 rounded-lg text-center font-medium hover:bg-purple-200"
                 >
-                  Manage Guest List (Coming Soon)
+                  Manage Guest List
                 </button>
                 <button
                   onClick={() => router.push(`/${weddingSlug}/memories`)}
