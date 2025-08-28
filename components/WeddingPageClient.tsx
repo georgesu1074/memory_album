@@ -5,6 +5,7 @@ import { Plus, RefreshCw } from "lucide-react";
 import MemorySubmissionModal from "./MemorySubmissionModal";
 import CategoryCard from "./memories/CategoryCard";
 import MemoryDetailModal from "./memories/MemoryDetailModal";
+import WeddingHeroSection from "./WeddingHeroSection";
 import { WeddingWithDetails, getGroomDisplayName, getBrideDisplayName, getCoupleNames } from "@/types/wedding";
 
 interface Guest {
@@ -230,70 +231,40 @@ export default function WeddingPageClient({
     pullStartY.current = null;
   };
 
+  const themeColor = wedding.theme_color || '#8B5CF6';
+  const secondaryColor = wedding.secondary_color || '#EC4899';
+
   return (
     <>
       <div
-        className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50"
+        className="min-h-screen bg-gray-50"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
+        {/* Hero Section */}
+        <WeddingHeroSection 
+          wedding={wedding} 
+          onShareMemory={() => setIsModalOpen(true)} 
+        />
+
         {/* Pull-to-refresh indicator */}
         {isPullRefreshing && (
           <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-white rounded-full shadow-lg p-3">
-            <RefreshCw className="h-5 w-5 text-purple-600 animate-spin" />
+            <RefreshCw className="h-5 w-5 animate-spin" style={{ color: themeColor }} />
           </div>
         )}
         
         {/* Updating after submission indicator */}
         {isUpdatingAfterSubmission && (
           <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 text-white rounded-full shadow-lg px-4 py-2 flex items-center gap-2"
-               style={{ backgroundColor: '#d4899f' }}>
+               style={{ backgroundColor: themeColor }}>
             <RefreshCw className="h-4 w-4 animate-spin" />
             <span className="text-sm">Processing memory...</span>
           </div>
         )}
-        {/* Sticky Header and Tabs Container */}
-        <div className="sticky top-0 z-30 bg-white">
-          {/* Header */}
-          <div className="shadow-sm">
-            <div className="max-w-6xl mx-auto px-4 py-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h1 className="text-2xl font-semibold text-gray-900">
-                    {getCoupleNames(wedding)}
-                  </h1>
-                  <p className="text-sm text-gray-500">
-                    {wedding.wedding_date
-                      ? new Date(wedding.wedding_date).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                          }
-                        )
-                      : "Wedding Date TBD"}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="text-white px-4 py-2 rounded-lg font-medium transition-all shadow-sm"
-                  style={{ backgroundColor: '#d4899f' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#e8b4c2';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#d4899f';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  Share Memory
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Sticky Tabs Container */}
+        <div className="sticky top-0 z-30 bg-white shadow-sm">
 
           {/* Tabs */}
           <div className="border-b">
@@ -314,20 +285,21 @@ export default function WeddingPageClient({
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`
-                      py-3 px-1 border-b-2 font-medium text-sm transition-colors
-                      ${
-                        activeTab === tab
-                          ? tab === "all"
-                            ? "border-gray-600 text-gray-700"
-                            : tab === "bride"
-                            ? "border-[#e8b4c2] text-[#a85a72]"
-                            : tab === "groom"
-                            ? "border-blue-500 text-blue-600"
-                            : "border-gray-400 text-gray-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                    className="py-3 px-1 border-b-2 font-medium text-sm transition-colors"
+                    style={{
+                      borderColor: activeTab === tab ? themeColor : 'transparent',
+                      color: activeTab === tab ? themeColor : '#6B7280',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== tab) {
+                        e.currentTarget.style.color = '#374151';
                       }
-                    `}
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== tab) {
+                        e.currentTarget.style.color = '#6B7280';
+                      }
+                    }}
                   >
                     {tabLabel} ({totalCounts[tab]})
                   </button>
@@ -404,9 +376,9 @@ export default function WeddingPageClient({
       <button
         onClick={() => setIsModalOpen(true)}
         className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all hover:scale-110 md:hidden"
-        style={{ backgroundColor: '#d4899f' }}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e8b4c2'}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#d4899f'}
+        style={{ backgroundColor: themeColor }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
         aria-label="Share Memory"
       >
         <Plus className="h-6 w-6" />

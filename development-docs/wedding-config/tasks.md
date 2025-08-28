@@ -109,11 +109,11 @@ Implement wedding configuration system for couples to set up their memory collec
 
 ### Epic: Landing Pages
 
-- [ ] Create wedding-specific landing page
-  - Dynamic route /[wedding_slug]
-  - Fetch wedding details with bride/groom info
-  - Apply custom theme
-  - Show activation status
+- [x] Create wedding-specific landing page
+  - Dynamic route /[wedding_slug] ✓
+  - Fetch wedding details with bride/groom info ✓
+  - Apply custom theme (TODO)
+  - Show activation status ✓
 
 - [ ] Build welcome message with couple names
   - Use display_name from bride/groom details
