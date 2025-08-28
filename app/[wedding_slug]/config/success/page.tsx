@@ -1,30 +1,67 @@
-import { notFound } from 'next/navigation';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { supabaseAdmin } from '@/lib/supabase-admin';
 import QRCodeGenerator from '@/components/wedding-config/QRCodeGenerator';
 
-export default async function WeddingSuccessPage({ 
-  params 
-}: { 
-  params: { wedding_slug: string } 
-}) {
-  const { data: wedding, error } = await supabaseAdmin
-    .from('weddings')
-    .select(`
-      *,
-      bride:bride_details!weddings_bride_id_fkey(*),
-      groom:groom_details!weddings_groom_id_fkey(*)
-    `)
-    .eq('slug', params.wedding_slug)
-    .single();
+export default function WeddingSuccessPage() {
+  const params = useParams();
+  const [wedding, setWedding] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (error || !wedding) {
-    notFound();
+  useEffect(() => {
+    async function fetchWedding() {
+      try {
+        const response = await fetch(`/api/weddings/${params.wedding_slug}/config`);
+        const data = await response.json();
+        
+        if (response.ok && data.wedding) {
+          setWedding(data.wedding);
+        }
+      } catch (error) {
+        console.error('Error fetching wedding:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchWedding();
+  }, [params.wedding_slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center">
+            <p className="text-lg text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!wedding) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-2">Wedding Not Found</h1>
+            <p className="text-gray-600">This wedding page doesn't exist.</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const weddingUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://memories.love'}/${wedding.slug}`;
   const brideName = wedding.bride?.display_name || wedding.bride?.name || 'Bride';
   const groomName = wedding.groom?.display_name || wedding.groom?.name || 'Groom';
+
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(weddingUrl);
+    // You could add a toast notification here
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4">
@@ -59,7 +96,7 @@ export default async function WeddingSuccessPage({
                   View Wedding Page
                 </Link>
                 <button
-                  onClick={() => navigator.clipboard.writeText(weddingUrl)}
+                  onClick={handleCopyUrl}
                   className="px-4 py-2 bg-white text-purple-600 border border-purple-600 rounded-lg font-medium hover:bg-purple-50"
                 >
                   Copy URL

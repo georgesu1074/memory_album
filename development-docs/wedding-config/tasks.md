@@ -50,6 +50,14 @@ Implement wedding configuration system for couples to set up their memory collec
   - Add activation confirmation
   - Update landing page based on status
 
+- [ ] Create wedding configuration page (/[slug]/config)
+  - Build settings page UI
+  - Display current wedding details
+  - Add activation toggle switch
+  - Allow editing theme colors
+  - Update wedding date
+  - Save changes functionality
+
 - [ ] Create setup confirmation page
   - Show all wedding details
   - Display QR code

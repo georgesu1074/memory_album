@@ -106,7 +106,7 @@ export default function SlugValidator({
             required
             value={data.slug || ''}
             onChange={(e) => handleSlugChange(e.target.value)}
-            className={`flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent ${
+            className={`flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent bg-white text-gray-900 ${
               isAvailable === true
                 ? 'border-green-500 focus:ring-green-500'
                 : isAvailable === false

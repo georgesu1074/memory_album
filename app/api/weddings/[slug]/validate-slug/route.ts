@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function POST(
   request: NextRequest,
@@ -9,6 +9,7 @@ export async function POST(
     const body = await request.json();
     const { slug: newSlug } = body;
     const currentSlug = params.slug;
+    const supabaseAdmin = createAdminClient();
 
     if (!newSlug) {
       return NextResponse.json(

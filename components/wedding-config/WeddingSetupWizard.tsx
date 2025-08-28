@@ -99,7 +99,7 @@ export default function WeddingSetupWizard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden text-gray-900">
           {/* Progress Bar */}
           <div className="h-2 bg-gray-200">
             <div
@@ -164,41 +164,29 @@ export default function WeddingSetupWizard() {
             />
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="px-6 py-4 border-t bg-gray-50 flex justify-between">
-            <button
-              onClick={handleBack}
-              disabled={currentStep === 0}
-              className={`px-4 py-2 rounded-lg font-medium ${
-                currentStep === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-              }`}
-            >
-              Back
-            </button>
+          {/* Navigation Buttons - Hide on confirmation step since it has its own buttons */}
+          {currentStep < STEPS.length - 1 && (
+            <div className="px-6 py-4 border-t bg-gray-50 flex justify-between">
+              <button
+                onClick={handleBack}
+                disabled={currentStep === 0}
+                className={`px-4 py-2 rounded-lg font-medium ${
+                  currentStep === 0
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                }`}
+              >
+                Back
+              </button>
 
-            {currentStep < STEPS.length - 1 ? (
               <button
                 onClick={handleNext}
                 className="px-6 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700"
               >
                 Next
               </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className={`px-6 py-2 rounded-lg font-medium ${
-                  isSubmitting
-                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'
-                }`}
-              >
-                {isSubmitting ? 'Creating...' : 'Create Wedding'}
-              </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 interface CreateWeddingRequest {
   bride: {
@@ -36,6 +36,7 @@ function validateSlug(slug: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabaseAdmin = createAdminClient();
     const body = await request.json() as CreateWeddingRequest;
 
     // Validate required fields
@@ -75,46 +76,76 @@ export async function POST(request: NextRequest) {
       weddingSlug = generateSlug(body.bride.name, body.groom.name);
     }
 
-    // Start a transaction by creating all records
-    // First, create bride details
+    // Start by creating the wedding first
+    const { data: wedding, error: weddingError } = await supabaseAdmin
+      .from('weddings')
+      .insert({
+        slug: weddingSlug,
+        wedding_date: body.wedding_date || null,
+        theme_color: body.theme_color,
+        secondary_color: body.secondary_color || null,
+        is_active: false // Start inactive until couple confirms setup
+      })
+      .select()
+      .single();
+
+    if (weddingError) {
+      console.error('Error creating wedding:', weddingError);
+      return NextResponse.json(
+        { error: 'Failed to create wedding' },
+        { status: 500 }
+      );
+    }
+
+    // Now create bride details with the wedding_id
     const { data: brideDetails, error: brideError } = await supabaseAdmin
       .from('bride_details')
       .insert({
+        wedding_id: wedding.id,
         name: body.bride.name,
         email: body.bride.email || null,
-        display_name: body.bride.display_name || body.bride.name,
-        wedding_id: null // Will be updated after wedding creation
+        display_name: body.bride.display_name || body.bride.name
       })
       .select()
       .single();
 
     if (brideError) {
       console.error('Error creating bride details:', brideError);
+      // Clean up the wedding
+      await supabaseAdmin
+        .from('weddings')
+        .delete()
+        .eq('id', wedding.id);
+      
       return NextResponse.json(
         { error: 'Failed to create bride details' },
         { status: 500 }
       );
     }
 
-    // Create groom details
+    // Create groom details with the wedding_id
     const { data: groomDetails, error: groomError } = await supabaseAdmin
       .from('groom_details')
       .insert({
+        wedding_id: wedding.id,
         name: body.groom.name,
         email: body.groom.email || null,
-        display_name: body.groom.display_name || body.groom.name,
-        wedding_id: null // Will be updated after wedding creation
+        display_name: body.groom.display_name || body.groom.name
       })
       .select()
       .single();
 
     if (groomError) {
       console.error('Error creating groom details:', groomError);
-      // Clean up bride details
+      // Clean up bride details and wedding
       await supabaseAdmin
         .from('bride_details')
         .delete()
         .eq('id', brideDetails.id);
+      await supabaseAdmin
+        .from('weddings')
+        .delete()
+        .eq('id', wedding.id);
       
       return NextResponse.json(
         { error: 'Failed to create groom details' },
@@ -122,17 +153,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create wedding with references to bride and groom
-    const { data: wedding, error: weddingError } = await supabaseAdmin
+    // Update wedding with bride_id and groom_id references
+    const { data: updatedWedding, error: updateError } = await supabaseAdmin
       .from('weddings')
-      .insert({
-        slug: weddingSlug,
-        wedding_date: body.wedding_date || null,
-        theme_color: body.theme_color,
+      .update({
         bride_id: brideDetails.id,
-        groom_id: groomDetails.id,
-        is_active: false // Start inactive until couple confirms setup
+        groom_id: groomDetails.id
       })
+      .eq('id', wedding.id)
       .select(`
         *,
         bride:bride_details!weddings_bride_id_fkey(*),
@@ -140,40 +168,25 @@ export async function POST(request: NextRequest) {
       `)
       .single();
 
-    if (weddingError) {
-      console.error('Error creating wedding:', weddingError);
-      // Clean up both detail records
-      await supabaseAdmin
-        .from('bride_details')
-        .delete()
-        .eq('id', brideDetails.id);
-      await supabaseAdmin
-        .from('groom_details')
-        .delete()
-        .eq('id', groomDetails.id);
+    if (updateError) {
+      console.error('Error updating wedding with details:', updateError);
+      // Clean up all records
+      await Promise.all([
+        supabaseAdmin.from('bride_details').delete().eq('id', brideDetails.id),
+        supabaseAdmin.from('groom_details').delete().eq('id', groomDetails.id),
+        supabaseAdmin.from('weddings').delete().eq('id', wedding.id)
+      ]);
       
       return NextResponse.json(
-        { error: 'Failed to create wedding' },
+        { error: 'Failed to link wedding details' },
         { status: 500 }
       );
     }
 
-    // Update bride and groom details with wedding_id
-    await Promise.all([
-      supabaseAdmin
-        .from('bride_details')
-        .update({ wedding_id: wedding.id })
-        .eq('id', brideDetails.id),
-      supabaseAdmin
-        .from('groom_details')
-        .update({ wedding_id: wedding.id })
-        .eq('id', groomDetails.id)
-    ]);
-
     return NextResponse.json({
       success: true,
       wedding: {
-        ...wedding,
+        ...updatedWedding,
         url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/${weddingSlug}`
       }
     });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if slug is already taken
+    const supabaseAdmin = createAdminClient();
     const { data: existingWedding } = await supabaseAdmin
       .from('weddings')
       .select('id')

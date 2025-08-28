@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function GET(
   request: NextRequest,
@@ -9,6 +9,7 @@ export async function GET(
     const { slug } = params;
 
     // Fetch wedding with bride and groom details
+    const supabaseAdmin = createAdminClient();
     const { data: wedding, error } = await supabaseAdmin
       .from('weddings')
       .select(`
@@ -57,6 +58,7 @@ export async function PATCH(
   try {
     const { slug } = params;
     const body = await request.json();
+    const supabaseAdmin = createAdminClient();
 
     // First, fetch the wedding to get bride_id and groom_id
     const { data: wedding, error: fetchError } = await supabaseAdmin

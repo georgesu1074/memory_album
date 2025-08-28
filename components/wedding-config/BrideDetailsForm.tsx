@@ -45,7 +45,7 @@ export default function BrideDetailsForm({
           required
           value={data.bride?.name || ''}
           onChange={(e) => handleChange('name', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent bg-white text-gray-900"
           placeholder="Jane Smith"
         />
       </div>
@@ -59,7 +59,7 @@ export default function BrideDetailsForm({
           type="text"
           value={data.bride?.display_name || ''}
           onChange={(e) => handleChange('display_name', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent bg-white text-gray-900"
           placeholder="Jane (or leave blank to use full name)"
         />
         <p className="mt-1 text-sm text-gray-500">This is how the name will appear on the wedding page</p>
@@ -74,7 +74,7 @@ export default function BrideDetailsForm({
           type="email"
           value={data.bride?.email || ''}
           onChange={(e) => handleChange('email', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent bg-white text-gray-900"
           placeholder="jane@example.com"
         />
         <p className="mt-1 text-sm text-gray-500">Optional - for future dashboard access</p>
