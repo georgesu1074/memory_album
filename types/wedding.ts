@@ -33,27 +33,3 @@ export function getCoupleNames(wedding: WeddingWithDetails): string {
   const brideName = getBrideDisplayName(wedding)
   return `${groomName} & ${brideName}`
 }
-
-// For backward compatibility
-export function parseCoupleNames(coupleNames: string): { groomName: string; brideName: string } {
-  let groomName = 'Groom'
-  let brideName = 'Bride'
-  
-  if (coupleNames.includes('&')) {
-    const parts = coupleNames.split('&').map(s => s.trim())
-    groomName = parts[0] || 'Groom'
-    brideName = parts[1] || 'Bride'
-  } else if (coupleNames.includes(' and ')) {
-    const parts = coupleNames.split(' and ').map(s => s.trim())
-    groomName = parts[0] || 'Groom'
-    brideName = parts[1] || 'Bride'
-  } else {
-    const parts = coupleNames.split(' ')
-    if (parts.length >= 2) {
-      groomName = parts[0]
-      brideName = parts[parts.length - 1]
-    }
-  }
-  
-  return { groomName, brideName }
-}

@@ -5,7 +5,6 @@ export type Database = {
         Row: {
           id: string
           slug: string
-          couple_names: string
           wedding_date: string | null
           theme_color: string
           is_active: boolean
@@ -18,7 +17,6 @@ export type Database = {
         Insert: {
           id?: string
           slug: string
-          couple_names: string
           wedding_date?: string | null
           theme_color?: string
           is_active?: boolean
@@ -31,7 +29,6 @@ export type Database = {
         Update: {
           id?: string
           slug?: string
-          couple_names?: string
           wedding_date?: string | null
           theme_color?: string
           is_active?: boolean

@@ -6,12 +6,11 @@ const seedData = async () => {
   console.log('🌱 Seeding database...')
 
   try {
-    // Create test wedding
+    // First create the wedding
     const { data: wedding, error: weddingError } = await supabase
       .from('weddings')
       .insert({
         slug: 'test-wedding-2024',
-        couple_names: 'Alex & Jordan',
         wedding_date: '2024-12-31',
         theme_color: '#8B5CF6',
         is_active: true,
@@ -22,6 +21,46 @@ const seedData = async () => {
 
     if (weddingError) throw weddingError
     console.log('✅ Created test wedding:', wedding.slug)
+
+    // Create groom details
+    const { data: groomDetails, error: groomError } = await supabase
+      .from('groom_details')
+      .insert({
+        wedding_id: wedding.id,
+        name: 'Alex',
+        display_name: 'Alex'
+      })
+      .select()
+      .single()
+
+    if (groomError) throw groomError
+    console.log('✅ Created groom details:', groomDetails.name)
+
+    // Create bride details  
+    const { data: brideDetails, error: brideError } = await supabase
+      .from('bride_details')
+      .insert({
+        wedding_id: wedding.id,
+        name: 'Jordan',
+        display_name: 'Jordan'
+      })
+      .select()
+      .single()
+
+    if (brideError) throw brideError
+    console.log('✅ Created bride details:', brideDetails.name)
+
+    // Update wedding with detail IDs
+    const { error: updateError } = await supabase
+      .from('weddings')
+      .update({
+        groom_id: groomDetails.id,
+        bride_id: brideDetails.id
+      })
+      .eq('id', wedding.id)
+
+    if (updateError) throw updateError
+    console.log('✅ Linked wedding to bride and groom details')
 
     // Create test guests
     const guests = [

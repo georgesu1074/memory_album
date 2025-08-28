@@ -261,7 +261,7 @@ export default function WeddingPageClient({
               <div className="flex justify-between items-center">
                 <div>
                   <h1 className="text-2xl font-semibold text-gray-900">
-                    {wedding.groom && wedding.bride ? getCoupleNames(wedding) : wedding.couple_names}
+                    {getCoupleNames(wedding)}
                   </h1>
                   <p className="text-sm text-gray-500">
                     {wedding.wedding_date

@@ -26,7 +26,6 @@ const testBrideGroomDetails = async () => {
     if (wedding) {
       console.log('✅ Wedding found:', {
         slug: wedding.slug,
-        couple_names: wedding.couple_names,
         groom_id: wedding.groom_id,
         bride_id: wedding.bride_id
       })
@@ -54,7 +53,7 @@ const testBrideGroomDetails = async () => {
     console.log('\nTest 2: Checking all weddings have detail records...')
     const { data: allWeddings, error: allError } = await supabase
       .from('weddings')
-      .select('id, slug, couple_names, groom_id, bride_id')
+      .select('id, slug, groom_id, bride_id')
 
     if (allError) {
       console.error('❌ Error fetching all weddings:', allError)
