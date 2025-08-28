@@ -42,6 +42,8 @@ export default function GuestsPage() {
   const [importSummary, setImportSummary] = useState<ImportSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedGuests, setSelectedGuests] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
   const [newGuest, setNewGuest] = useState({
     full_name: '',
     email: '',
@@ -151,6 +153,65 @@ export default function GuestsPage() {
     }
   };
 
+  const handleSelectAll = () => {
+    if (selectedGuests.size === guests.length) {
+      // Unselect all if all are selected
+      setSelectedGuests(new Set());
+    } else {
+      // Select all
+      setSelectedGuests(new Set(guests.map(g => g.id)));
+    }
+  };
+
+  const handleSelectGuest = (guestId: string) => {
+    const newSelected = new Set(selectedGuests);
+    if (newSelected.has(guestId)) {
+      newSelected.delete(guestId);
+    } else {
+      newSelected.add(guestId);
+    }
+    setSelectedGuests(newSelected);
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedGuests.size === 0) return;
+    
+    const confirmMessage = selectedGuests.size === 1 
+      ? 'Are you sure you want to delete this guest?' 
+      : `Are you sure you want to delete ${selectedGuests.size} guests?`;
+    
+    if (!confirm(confirmMessage)) return;
+
+    setDeleting(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/weddings/${weddingSlug}/guests/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestIds: Array.from(selectedGuests) }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete guests');
+      }
+
+      const result = await response.json();
+      
+      // Clear selection and refresh
+      setSelectedGuests(new Set());
+      await fetchGuests();
+      
+      // Show success message briefly
+      setImportSummary(null);
+      setError(null);
+    } catch (err) {
+      setError('Failed to delete guests');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const exportGuests = () => {
     const headers = ['Name', 'Email', 'Phone', 'Table', 'Party', 'Party Size', 'RSVP', 'Dietary', 'Notes'];
     const rows = guests.map(g => [
@@ -253,6 +314,16 @@ export default function GuestsPage() {
 
             {/* Actions */}
             <div className="flex gap-2">
+              {selectedGuests.size > 0 && (
+                <button
+                  onClick={handleDeleteSelected}
+                  disabled={deleting}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                >
+                  {deleting ? 'Deleting...' : `Delete (${selectedGuests.size})`}
+                </button>
+              )}
+
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
                 className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
@@ -399,6 +470,14 @@ export default function GuestsPage() {
                 <thead className="bg-gray-50 border-b">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <input
+                        type="checkbox"
+                        checked={guests.length > 0 && selectedGuests.size === guests.length}
+                        onChange={handleSelectAll}
+                        className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                      />
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -423,7 +502,15 @@ export default function GuestsPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {guests.map((guest) => (
-                    <tr key={guest.id} className="hover:bg-gray-50">
+                    <tr key={guest.id} className={`hover:bg-gray-50 ${selectedGuests.has(guest.id) ? 'bg-purple-50' : ''}`}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <input
+                          type="checkbox"
+                          checked={selectedGuests.has(guest.id)}
+                          onChange={() => handleSelectGuest(guest.id)}
+                          className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                        />
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {guest.full_name}
                       </td>
