@@ -150,13 +150,6 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
           </button>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="mt-12 animate-bounce">
-          <div className="text-gray-400 text-sm">Scroll to explore memories</div>
-          <svg className="w-6 h-6 mx-auto mt-2 text-gray-400" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
-        </div>
       </div>
     </div>
   );
