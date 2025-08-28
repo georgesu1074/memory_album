@@ -3,10 +3,10 @@ import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
     const supabaseAdmin = createAdminClient();
 
@@ -32,12 +32,19 @@ export async function POST(
       );
     }
 
+    // Split full name into first and last name
+    const fullNameTrimmed = body.full_name.trim();
+    const nameParts = fullNameTrimmed.split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
     // Check for duplicate
     const { data: existingGuest } = await supabaseAdmin
       .from('wedding_guests')
       .select('id')
       .eq('wedding_id', wedding.id)
-      .eq('full_name', body.full_name.trim())
+      .eq('first_name', firstName)
+      .eq('last_name', lastName)
       .single();
 
     if (existingGuest) {
@@ -47,10 +54,11 @@ export async function POST(
       );
     }
 
-    // Prepare guest record
+    // Prepare guest record (full_name is generated, so we don't include it)
     const guestRecord = {
       wedding_id: wedding.id,
-      full_name: body.full_name.trim(),
+      first_name: firstName,
+      last_name: lastName,
       email: body.email?.trim() || null,
       phone: body.phone?.trim() || null,
       table_number: body.table_number?.trim() || null,
