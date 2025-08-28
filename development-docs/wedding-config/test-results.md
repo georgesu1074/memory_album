@@ -142,8 +142,17 @@ curl -X POST http://localhost:3002/api/weddings/create \
 - **Status**: Working - returns wedding object with bride/groom details
 
 ### Test Summary
-✅ **Wedding Creation Flow**: Complete end-to-end
-✅ **API Endpoints**: All working after fixes  
+✅ **Wedding Creation Flow**: Complete end-to-end with 5-step wizard
+✅ **API Endpoints**: All CRUD operations working
+✅ **Wedding Configuration Page**: Built and functional at /[slug]/config  
+✅ **Guest List Management**: Full import/export/delete functionality
+✅ **CSV Import**: Zola format support with RSVP filtering
 ✅ **UI Components**: Functional with proper styling
 ✅ **Database**: Tables created, relationships working
-⚠️ **Missing**: Wedding configuration/settings page (not built yet)
+✅ **Security Audit**: Documented, planned for Sprint 8
+
+## Additional Features Completed (Not in Original Plan)
+✅ **Multi-select Delete**: Added checkbox selection for bulk guest deletion
+✅ **RSVP Status Filtering**: Only imports attending guests, filters declined
+✅ **CSV Parser Fix**: Properly handles all columns including last one
+✅ **Activation/Deactivation**: Toggle wedding between preview and live modes
