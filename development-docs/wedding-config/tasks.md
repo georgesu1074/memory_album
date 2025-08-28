@@ -44,13 +44,13 @@ Implement wedding configuration system for couples to set up their memory collec
   - Test Drive connection
   - Store encrypted credentials
 
-- [ ] Add wedding activation toggle
+- [x] Add wedding activation toggle
   - Create is_active toggle in settings
   - Show preview mode when inactive
   - Add activation confirmation
   - Update landing page based on status
 
-- [ ] Create wedding configuration page (/[slug]/config)
+- [x] Create wedding configuration page (/[slug]/config)
   - Build settings page UI
   - Display current wedding details
   - Add activation toggle switch
@@ -58,7 +58,7 @@ Implement wedding configuration system for couples to set up their memory collec
   - Update wedding date
   - Save changes functionality
 
-- [ ] Create setup confirmation page
+- [x] Create setup confirmation page
   - Show all wedding details
   - Display QR code
   - Provide sharing instructions
