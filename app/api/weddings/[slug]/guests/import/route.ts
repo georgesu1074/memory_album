@@ -47,20 +47,34 @@ export async function POST(
     }
 
     const csvText = await file.text();
-    const guests = parseCSV(csvText);
+    const parseResult = parseCSV(csvText);
 
-    if (guests.length === 0) {
+    if (parseResult.guests.length === 0) {
       return NextResponse.json(
-        { error: 'No valid guest data found in CSV' },
+        { error: 'No attending guests found in CSV. All guests were either declined or had no valid names.' },
         { status: 400 }
       );
     }
+    
+    const guests = parseResult.guests;
 
-    // Prepare guest records with wedding_id
-    const guestRecords = guests.map(guest => ({
-      ...guest,
-      wedding_id: wedding.id,
-    }));
+    // Prepare guest records with wedding_id and split names
+    const guestRecords = guests.map(guest => {
+      // Split full_name into first and last for the database
+      const nameParts = (guest.full_name || '').trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      // Remove full_name from the record since it's generated
+      const { full_name, ...guestData } = guest;
+      
+      return {
+        ...guestData,
+        first_name: firstName,
+        last_name: lastName,
+        wedding_id: wedding.id,
+      };
+    });
 
     // Insert guests in batches to avoid timeout
     const batchSize = 50;
@@ -74,16 +88,19 @@ export async function POST(
     for (let i = 0; i < guestRecords.length; i += batchSize) {
       const batch = guestRecords.slice(i, i + batchSize);
       
-      // Check for existing guests by name and wedding_id
-      const existingNames = batch.map(g => g.full_name);
+      // Check for existing guests by first and last name combination
+      const guestNames = batch.map(g => `${g.first_name} ${g.last_name}`.trim());
       const { data: existingGuests } = await supabaseAdmin
         .from('wedding_guests')
-        .select('full_name')
-        .eq('wedding_id', wedding.id)
-        .in('full_name', existingNames);
+        .select('first_name, last_name')
+        .eq('wedding_id', wedding.id);
 
-      const existingNameSet = new Set(existingGuests?.map(g => g.full_name) || []);
-      const newGuests = batch.filter(g => !existingNameSet.has(g.full_name));
+      const existingNameSet = new Set(
+        existingGuests?.map(g => `${g.first_name} ${g.last_name}`.trim()) || []
+      );
+      const newGuests = batch.filter(g => 
+        !existingNameSet.has(`${g.first_name} ${g.last_name}`.trim())
+      );
       const duplicateCount = batch.length - newGuests.length;
 
       if (newGuests.length > 0) {
@@ -106,7 +123,9 @@ export async function POST(
     return NextResponse.json({
       success: true,
       summary: {
-        total: guests.length,
+        total: parseResult.stats.total,
+        attending: guests.length,
+        declined: parseResult.stats.declined,
         imported: results.imported,
         duplicates: results.duplicates,
         failed: results.failed,
@@ -122,9 +141,9 @@ export async function POST(
   }
 }
 
-function parseCSV(csvText: string): GuestData[] {
+function parseCSV(csvText: string): { guests: GuestData[], stats: { total: number, declined: number, filtered: number } } {
   const lines = csvText.trim().split('\n');
-  if (lines.length < 2) return [];
+  if (lines.length < 2) return { guests: [], stats: { total: 0, declined: 0, filtered: 0 } };
 
   // Parse header to determine column mapping
   const headers = lines[0].toLowerCase().split(',').map(h => h.trim().replace(/"/g, ''));
@@ -135,6 +154,11 @@ function parseCSV(csvText: string): GuestData[] {
     'full name': 'full_name',
     'guest name': 'full_name',
     'guest': 'full_name',
+    'first name': 'first_name',  // Zola format
+    'last name': 'last_name',     // Zola format
+    'title': 'title',             // Zola format
+    'suffix': 'suffix',           // Zola format
+    'wedding': 'rsvp_status',     // Zola format (Attending/Declined/No Response)
     'email': 'email',
     'email address': 'email',
     'phone': 'phone',
@@ -166,8 +190,14 @@ function parseCSV(csvText: string): GuestData[] {
     }
   });
 
+  // Check if we have Zola format (separate first/last name columns)
+  const hasFirstNameCol = headers.includes('first name');
+  const hasLastNameCol = headers.includes('last name');
+  const isZolaFormat = hasFirstNameCol && hasLastNameCol;
+
   // Parse data rows
   const guests: GuestData[] = [];
+  const stats = { total: 0, declined: 0, filtered: 0 };
   
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
@@ -179,13 +209,25 @@ function parseCSV(csvText: string): GuestData[] {
 
     const guest: any = {};
     let hasName = false;
+    let firstName = '';
+    let lastName = '';
+    let title = '';
+    let suffix = '';
 
     cleanValues.forEach((value, index) => {
       const field = columnMap[index];
       if (field && value) {
         if (field === 'full_name') {
           hasName = true;
-          guest[field] = value;
+          guest.full_name = value;
+        } else if (field === 'first_name') {
+          firstName = value;
+        } else if (field === 'last_name') {
+          lastName = value;
+        } else if (field === 'title') {
+          title = value;
+        } else if (field === 'suffix') {
+          suffix = value;
         } else if (field === 'party_size') {
           guest[field] = parseInt(value) || 1;
         } else {
@@ -194,11 +236,44 @@ function parseCSV(csvText: string): GuestData[] {
       }
     });
 
-    // Only add guest if they have at least a name
-    if (hasName) {
+    // For Zola format, combine first and last names
+    if (isZolaFormat && (firstName || lastName)) {
+      const nameParts = [];
+      if (title) nameParts.push(title);
+      if (firstName) nameParts.push(firstName);
+      if (lastName) nameParts.push(lastName);
+      if (suffix) nameParts.push(suffix);
+      
+      const fullName = nameParts.join(' ').trim();
+      if (fullName && fullName !== 'Guest') { // Skip generic "Guest" entries
+        guest.full_name = fullName;
+        hasName = true;
+      }
+    }
+
+    // Count total valid names
+    if (hasName && guest.full_name) {
+      stats.total++;
+      
+      // Check RSVP status - only include guests who are attending
+      // If rsvp_status exists and is "Declined" or "No Response", skip this guest
+      if (guest.rsvp_status) {
+        const status = guest.rsvp_status.toLowerCase().trim();
+        if (status === 'declined' || status === 'no response' || status === 'not attending') {
+          stats.declined++;
+          continue; // Skip this guest
+        }
+        // If status is "Attending", keep them and clear the rsvp_status
+        if (status === 'attending' || status === 'yes' || status === 'accepted') {
+          delete guest.rsvp_status; // Don't store "Attending" in the database
+        }
+      }
+      
       guests.push(guest as GuestData);
+    } else {
+      stats.filtered++; // Count guests with no valid name
     }
   }
 
-  return guests;
+  return { guests, stats };
 }

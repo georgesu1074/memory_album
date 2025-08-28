@@ -66,42 +66,42 @@ Implement wedding configuration system for couples to set up their memory collec
 
 ### Epic: Guest List Management
 
-- [ ] Create guest list upload endpoint
+- [x] Create guest list upload endpoint
   - POST /api/weddings/[slug]/guests/import
   - Support CSV file upload
   - Return import summary
 
-- [ ] Build CSV parser for Zola format
+- [x] Build CSV parser for Zola format
   - Parse Zola guest list format
   - Handle various CSV formats
   - Validate guest data
   - Handle duplicates
 
-- [ ] Add guest list management UI
+- [x] Add guest list management UI
   - Display guest list table
   - Show guest count statistics
   - Add search/filter functionality
   - Support sorting
 
-- [ ] Implement bulk guest import
+- [x] Implement bulk guest import
   - Process CSV in batches
   - Show import progress
   - Handle errors gracefully
   - Generate import report
 
-- [ ] Create guest search API endpoint
+- [x] Create guest search API endpoint
   - GET /api/weddings/[slug]/guests/search
   - Support fuzzy name matching
   - Return guest details
   - Cache frequent searches
 
-- [ ] Add manual guest entry form
+- [x] Add manual guest entry form
   - Create single guest add form
   - Support quick add mode
   - Validate guest data
   - Update list in real-time
 
-- [ ] Build guest list export functionality
+- [x] Build guest list export functionality
   - Export to CSV format
   - Include all guest fields
   - Support filtered exports

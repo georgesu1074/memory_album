@@ -21,6 +21,8 @@ interface Guest {
 
 interface ImportSummary {
   total: number;
+  attending?: number;
+  declined?: number;
   imported: number;
   duplicates: number;
   failed: number;
@@ -214,8 +216,14 @@ export default function GuestsPage() {
           <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
             <h3 className="font-semibold text-green-900 mb-2">Import Summary</h3>
             <div className="text-green-700 space-y-1">
-              <p>Total rows: {importSummary.total}</p>
-              <p>Successfully imported: {importSummary.imported}</p>
+              <p>Total valid guests in CSV: {importSummary.total}</p>
+              {importSummary.declined !== undefined && importSummary.declined > 0 && (
+                <p className="text-gray-600">Declined/Not attending (skipped): {importSummary.declined}</p>
+              )}
+              {importSummary.attending !== undefined && (
+                <p>Attending guests processed: {importSummary.attending}</p>
+              )}
+              <p className="font-semibold">Successfully imported: {importSummary.imported}</p>
               {importSummary.duplicates > 0 && <p>Duplicates skipped: {importSummary.duplicates}</p>}
               {importSummary.failed > 0 && <p className="text-red-600">Failed: {importSummary.failed}</p>}
               {importSummary.errors.length > 0 && (
