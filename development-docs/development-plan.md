@@ -135,36 +135,36 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 
 **Goal**: Simple setup for wedding couples
 
-### Epic: Wedding Setup Flow
+### Epic: Wedding Setup Flow (IN PROGRESS - see /development-docs/wedding-config/)
 
-- [ ] Create wedding configuration API endpoints
-- [ ] Build wedding setup form
-- [ ] Implement slug validation and generation
-- [ ] Add theme color picker
-- [ ] Create QR code generation
-- [ ] Build Google Drive connection flow (manual OAuth)
-- [ ] Add wedding activation toggle
-- [ ] Create setup confirmation page
+- ~~[ ] Create wedding configuration API endpoints~~ → wedding-config
+- ~~[ ] Build wedding setup form~~ → wedding-config
+- ~~[ ] Implement slug validation and generation~~ → wedding-config
+- ~~[ ] Add theme color picker~~ → wedding-config
+- ~~[ ] Create QR code generation~~ → wedding-config
+- ~~[ ] Build Google Drive connection flow (manual OAuth)~~ → wedding-config
+- ~~[ ] Add wedding activation toggle~~ → wedding-config
+- ~~[ ] Create setup confirmation page~~ → wedding-config
 
 ### Epic: Guest List Management
 
-- [ ] Create guest list upload endpoint
-- [ ] Build CSV parser for Zola format
-- [ ] Add guest list management UI
-- [ ] Implement bulk guest import
-- [ ] Create guest search API endpoint
-- [ ] Add manual guest entry form
-- [ ] Build guest list export functionality
+- ~~[ ] Create guest list upload endpoint~~ → wedding-config
+- ~~[ ] Build CSV parser for Zola format~~ → wedding-config
+- ~~[ ] Add guest list management UI~~ → wedding-config
+- ~~[ ] Implement bulk guest import~~ → wedding-config
+- ~~[ ] Create guest search API endpoint~~ → wedding-config
+- ~~[ ] Add manual guest entry form~~ → wedding-config
+- ~~[ ] Build guest list export functionality~~ → wedding-config
 
 ### Epic: Landing Pages
 
-- [ ] Create wedding-specific landing page
-- [ ] Build welcome message with couple names
-- [ ] Add wedding date display
-- [ ] Apply custom theme colors
-- [ ] Create mobile-optimized layout
-- [ ] Add meta tags for sharing
-- [ ] Implement Open Graph images
+- ~~[ ] Create wedding-specific landing page~~ → wedding-config
+- ~~[ ] Build welcome message with couple names~~ → wedding-config
+- ~~[ ] Add wedding date display~~ → wedding-config
+- ~~[ ] Apply custom theme colors~~ → wedding-config
+- ~~[ ] Create mobile-optimized layout~~ → wedding-config
+- ~~[ ] Add meta tags for sharing~~ → wedding-config
+- ~~[ ] Implement Open Graph images~~ → wedding-config
 
 ## Sprint 6: Background Jobs & Data Export
 
