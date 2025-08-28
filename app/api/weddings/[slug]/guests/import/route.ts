@@ -65,8 +65,9 @@ export async function POST(
       const firstName = nameParts[0] || '';
       const lastName = nameParts.slice(1).join(' ') || '';
       
-      // Remove full_name from the record since it's generated
-      const { full_name, ...guestData } = guest;
+      // Remove full_name and rsvp_status from the record
+      // full_name is generated, rsvp_status should not be stored (we only import attending guests)
+      const { full_name, rsvp_status, ...guestData } = guest;
       
       return {
         ...guestData,
@@ -203,9 +204,28 @@ function parseCSV(csvText: string): { guests: GuestData[], stats: { total: numbe
     const line = lines[i].trim();
     if (!line) continue;
 
-    // Simple CSV parsing (handles basic quoted values)
-    const values = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g) || [];
-    const cleanValues = values.map(v => v.trim().replace(/^"|"$/g, ''));
+    // Better CSV parsing that handles all columns including the last one
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+      if (char === '"' && (j === 0 || line[j-1] === ',')) {
+        inQuotes = true;
+      } else if (char === '"' && inQuotes) {
+        inQuotes = false;
+      } else if (char === ',' && !inQuotes) {
+        values.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    // Don't forget the last value!
+    values.push(current.trim());
+    
+    const cleanValues = values.map(v => v.replace(/^"|"$/g, '').trim());
 
     const guest: any = {};
     let hasName = false;
@@ -263,10 +283,7 @@ function parseCSV(csvText: string): { guests: GuestData[], stats: { total: numbe
           stats.declined++;
           continue; // Skip this guest
         }
-        // If status is "Attending", keep them and clear the rsvp_status
-        if (status === 'attending' || status === 'yes' || status === 'accepted') {
-          delete guest.rsvp_status; // Don't store "Attending" in the database
-        }
+        // Keep the guest if they're attending (we'll remove rsvp_status later during mapping)
       }
       
       guests.push(guest as GuestData);
