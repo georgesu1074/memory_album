@@ -69,14 +69,41 @@ export async function updateCategorySummary(
   // First increment the count
   await incrementCategoryCount(categoryId)
   
-  // Get the couple's names from the wedding
+  // Get the wedding with bride and groom details
   const { data: wedding } = await supabase
     .from('weddings')
-    .select('couple_names')
+    .select('couple_names, groom_id, bride_id')
     .eq('id', weddingId)
     .single()
   
-  const coupleNames = wedding?.couple_names || 'the couple'
+  // Get bride and groom names if detail records exist
+  let groomName = 'Groom'
+  let brideName = 'Bride'
+  
+  if (wedding?.groom_id) {
+    const { data: groomDetails } = await supabase
+      .from('groom_details')
+      .select('name, display_name')
+      .eq('id', wedding.groom_id)
+      .single()
+    
+    groomName = groomDetails?.display_name || groomDetails?.name || 'Groom'
+  }
+  
+  if (wedding?.bride_id) {
+    const { data: brideDetails } = await supabase
+      .from('bride_details')
+      .select('name, display_name')
+      .eq('id', wedding.bride_id)
+      .single()
+    
+    brideName = brideDetails?.display_name || brideDetails?.name || 'Bride'
+  }
+  
+  // Fallback to couple_names if no detail records
+  const coupleNames = wedding?.groom_id && wedding?.bride_id 
+    ? `${groomName} and ${brideName}` 
+    : wedding?.couple_names || 'the couple'
   
   // Get all memories in this category
   const { data: memories, error: memoriesError } = await supabase
@@ -116,7 +143,9 @@ export async function updateCategorySummary(
       memoryTexts,
       categoryName,
       coupleNames,
-      primaryType
+      primaryType,
+      groomName,
+      brideName
     )
     
     // Update category with summary and count

@@ -114,7 +114,9 @@ export async function generateGroupSummary(
   memories: string[],
   category: string,
   coupleNames: string,
-  primaryType: 'bride' | 'groom' | 'both' = 'both'
+  primaryType: 'bride' | 'groom' | 'both' = 'both',
+  groomName: string = 'Groom',
+  brideName: string = 'Bride'
 ): Promise<string> {
   try {
     const client = getGeminiClient()
@@ -130,17 +132,14 @@ export async function generateGroupSummary(
       ? "1-2 sentences" 
       : `2-${Math.min(memories.length + 1, 5)} sentences`
 
-    // Parse couple names to identify bride and groom
-    const [name1, name2] = coupleNames.split(' and ').map(n => n.trim())
-    
-    // Determine focus based on memory type
+    // Use the provided individual names
     let focusGuidance: string
     if (primaryType === 'bride') {
-      focusGuidance = `Focus on the bride (likely ${name1} or ${name2} - infer from context).`
+      focusGuidance = `Focus on the bride (${brideName}).`
     } else if (primaryType === 'groom') {
-      focusGuidance = `Focus on the groom (likely ${name1} or ${name2} - infer from context).`
+      focusGuidance = `Focus on the groom (${groomName}).`
     } else {
-      focusGuidance = `Focus on both ${name1} and ${name2}.`
+      focusGuidance = `Focus on both ${groomName} and ${brideName}.`
     }
 
     const prompt = `
