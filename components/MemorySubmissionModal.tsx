@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { X, Camera, Image, CheckCircle } from "lucide-react";
 import imageCompression from "browser-image-compression";
 import GuestDropdown from "./GuestDropdown";
+import { WeddingWithDetails, getGroomDisplayName, getBrideDisplayName } from "@/types/wedding";
 
 interface FormData {
   memoryType: "bride" | "groom" | "both";
@@ -23,6 +24,7 @@ interface Guest {
 
 interface MemorySubmissionModalProps {
   weddingSlug: string;
+  wedding?: WeddingWithDetails;
   guests: Guest[];
   isOpen: boolean;
   onClose: () => void;
@@ -31,6 +33,7 @@ interface MemorySubmissionModalProps {
 
 export default function MemorySubmissionModal({
   weddingSlug,
+  wedding,
   guests,
   isOpen,
   onClose,
@@ -411,7 +414,7 @@ export default function MemorySubmissionModal({
                     fontWeight: "500",
                   }}
                 >
-                  Bride
+                  {wedding?.bride ? getBrideDisplayName(wedding) : "Bride"}
                 </button>
                 <button
                   type="button"
@@ -433,7 +436,7 @@ export default function MemorySubmissionModal({
                     fontWeight: "500",
                   }}
                 >
-                  Groom
+                  {wedding?.groom ? getGroomDisplayName(wedding) : "Groom"}
                 </button>
                 <button
                   type="button"

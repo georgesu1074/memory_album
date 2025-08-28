@@ -9,6 +9,8 @@ export type Database = {
           wedding_date: string | null
           theme_color: string
           is_active: boolean
+          groom_id: string | null
+          bride_id: string | null
           created_at: string
           updated_at: string
           metadata: Record<string, any>
@@ -20,6 +22,8 @@ export type Database = {
           wedding_date?: string | null
           theme_color?: string
           is_active?: boolean
+          groom_id?: string | null
+          bride_id?: string | null
           created_at?: string
           updated_at?: string
           metadata?: Record<string, any>
@@ -31,9 +35,69 @@ export type Database = {
           wedding_date?: string | null
           theme_color?: string
           is_active?: boolean
+          groom_id?: string | null
+          bride_id?: string | null
           created_at?: string
           updated_at?: string
           metadata?: Record<string, any>
+        }
+      }
+      groom_details: {
+        Row: {
+          id: string
+          wedding_id: string
+          name: string
+          display_name: string | null
+          email: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          wedding_id: string
+          name: string
+          display_name?: string | null
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          wedding_id?: string
+          name?: string
+          display_name?: string | null
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      bride_details: {
+        Row: {
+          id: string
+          wedding_id: string
+          name: string
+          display_name: string | null
+          email: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          wedding_id: string
+          name: string
+          display_name?: string | null
+          email?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          wedding_id?: string
+          name?: string
+          display_name?: string | null
+          email?: string | null
+          created_at?: string
+          updated_at?: string
         }
       }
       wedding_guests: {
@@ -225,6 +289,44 @@ export type Database = {
           qdrant_point_id?: string
           embedding_model?: string
           created_at?: string
+        }
+      }
+      categories: {
+        Row: {
+          id: string
+          wedding_id: string
+          name: string
+          summary: string | null
+          memory_count: number
+          keywords: string[] | null
+          theme: string | null
+          memory_type: 'bride' | 'groom' | 'both' | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          wedding_id: string
+          name: string
+          summary?: string | null
+          memory_count?: number
+          keywords?: string[] | null
+          theme?: string | null
+          memory_type?: 'bride' | 'groom' | 'both' | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          wedding_id?: string
+          name?: string
+          summary?: string | null
+          memory_count?: number
+          keywords?: string[] | null
+          theme?: string | null
+          memory_type?: 'bride' | 'groom' | 'both' | null
+          created_at?: string
+          updated_at?: string
         }
       }
     }

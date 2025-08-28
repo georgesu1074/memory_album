@@ -5,6 +5,7 @@ import { Plus, RefreshCw } from "lucide-react";
 import MemorySubmissionModal from "./MemorySubmissionModal";
 import CategoryCard from "./memories/CategoryCard";
 import MemoryDetailModal from "./memories/MemoryDetailModal";
+import { WeddingWithDetails, getGroomDisplayName, getBrideDisplayName, getCoupleNames } from "@/types/wedding";
 
 interface Guest {
   id: string;
@@ -24,7 +25,7 @@ interface Category {
 }
 
 interface WeddingPageClientProps {
-  wedding: any;
+  wedding: WeddingWithDetails;
   guests: Guest[];
   categories: Category[];
   weddingSlug: string;
@@ -260,7 +261,7 @@ export default function WeddingPageClient({
               <div className="flex justify-between items-center">
                 <div>
                   <h1 className="text-2xl font-semibold text-gray-900">
-                    {wedding.couple_names}
+                    {wedding.groom && wedding.bride ? getCoupleNames(wedding) : wedding.couple_names}
                   </h1>
                   <p className="text-sm text-gray-500">
                     {wedding.wedding_date
@@ -298,29 +299,40 @@ export default function WeddingPageClient({
           <div className="border-b">
             <div className="max-w-6xl mx-auto px-4">
               <div className="flex space-x-8">
-              {(["all", "bride", "groom", "together"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`
-                    py-3 px-1 border-b-2 font-medium text-sm transition-colors
-                    ${
-                      activeTab === tab
-                        ? tab === "all"
-                          ? "border-gray-600 text-gray-700"
-                          : tab === "bride"
-                          ? "border-[#e8b4c2] text-[#a85a72]"
-                          : tab === "groom"
-                          ? "border-blue-500 text-blue-600"
-                          : "border-gray-400 text-gray-600"
-                        : "border-transparent text-gray-500 hover:text-gray-700"
-                    }
-                  `}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)} (
-                  {totalCounts[tab]})
-                </button>
-              ))}
+              {(["all", "bride", "groom", "together"] as const).map((tab) => {
+                const tabLabel = tab === "bride" && wedding.bride 
+                  ? getBrideDisplayName(wedding)
+                  : tab === "groom" && wedding.groom
+                  ? getGroomDisplayName(wedding)
+                  : tab === "together"
+                  ? "Together"
+                  : tab === "all"
+                  ? "All"
+                  : tab.charAt(0).toUpperCase() + tab.slice(1);
+                  
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`
+                      py-3 px-1 border-b-2 font-medium text-sm transition-colors
+                      ${
+                        activeTab === tab
+                          ? tab === "all"
+                            ? "border-gray-600 text-gray-700"
+                            : tab === "bride"
+                            ? "border-[#e8b4c2] text-[#a85a72]"
+                            : tab === "groom"
+                            ? "border-blue-500 text-blue-600"
+                            : "border-gray-400 text-gray-600"
+                          : "border-transparent text-gray-500 hover:text-gray-700"
+                      }
+                    `}
+                  >
+                    {tabLabel} ({totalCounts[tab]})
+                  </button>
+                );
+              })}
               </div>
             </div>
           </div>
@@ -403,6 +415,7 @@ export default function WeddingPageClient({
       {/* Memory Submission Modal */}
       <MemorySubmissionModal
         weddingSlug={weddingSlug}
+        wedding={wedding}
         guests={guests}
         isOpen={isModalOpen}
         onClose={() => {

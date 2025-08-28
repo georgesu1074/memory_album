@@ -10,10 +10,14 @@ interface PageProps {
 export default async function WeddingPage({ params }: PageProps) {
   const { wedding_slug } = await params
   
-  // Fetch wedding data
+  // Fetch wedding data with bride and groom details
   const { data: wedding, error: weddingError } = await supabase
     .from('weddings')
-    .select('*')
+    .select(`
+      *,
+      groom:groom_details(*),
+      bride:bride_details(*)
+    `)
     .eq('slug', wedding_slug)
     .single()
 
