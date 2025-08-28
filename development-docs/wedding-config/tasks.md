@@ -112,26 +112,26 @@ Implement wedding configuration system for couples to set up their memory collec
 - [x] Create wedding-specific landing page
   - Dynamic route /[wedding_slug] ✓
   - Fetch wedding details with bride/groom info ✓
-  - Apply custom theme (TODO)
+  - Apply custom theme ✓
   - Show activation status ✓
 
-- [ ] Build welcome message with couple names
-  - Use display_name from bride/groom details
-  - Fallback to regular names
-  - Format as "Bride & Groom"
-  - Support custom welcome text
+- [x] Build welcome message with couple names
+  - Use display_name from bride/groom details ✓
+  - Fallback to regular names ✓
+  - Format as "Bride & Groom" ✓
+  - Support custom welcome text ✓
 
-- [ ] Add wedding date display
-  - Show formatted wedding date
-  - Calculate countdown if future
-  - Show "Celebrated on" if past
-  - Support different date formats
+- [x] Add wedding date display
+  - Show formatted wedding date ✓
+  - Calculate countdown if future ✓
+  - Show "Celebrated on" if past ✓
+  - Support different date formats ✓
 
-- [ ] Apply custom theme colors
-  - Use theme_color from wedding settings
-  - Apply to buttons and accents
-  - Support gradient backgrounds
-  - Ensure accessibility
+- [x] Apply custom theme colors
+  - Use theme_color from wedding settings ✓
+  - Apply to buttons and accents ✓
+  - Support gradient backgrounds ✓
+  - Ensure accessibility ✓
 
 - [ ] Create mobile-optimized layout
   - Touch-friendly buttons

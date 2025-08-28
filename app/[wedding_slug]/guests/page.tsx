@@ -308,7 +308,7 @@ export default function GuestsPage() {
                 placeholder="Search guests by name, email, or party..."
                 value={searchQuery}
                 onChange={handleSearch}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-gray-900 bg-white"
               />
             </div>
 
@@ -364,42 +364,42 @@ export default function GuestsPage() {
                   placeholder="Full Name *"
                   value={newGuest.full_name}
                   onChange={(e) => setNewGuest({ ...newGuest, full_name: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg"
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={newGuest.email}
                   onChange={(e) => setNewGuest({ ...newGuest, email: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg"
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
                 <input
                   type="tel"
                   placeholder="Phone"
                   value={newGuest.phone}
                   onChange={(e) => setNewGuest({ ...newGuest, phone: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg"
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
                 <input
                   type="text"
                   placeholder="Table Number"
                   value={newGuest.table_number}
                   onChange={(e) => setNewGuest({ ...newGuest, table_number: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg"
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
                 <input
                   type="text"
                   placeholder="Party Name"
                   value={newGuest.party_name}
                   onChange={(e) => setNewGuest({ ...newGuest, party_name: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg"
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
                 <input
                   type="text"
                   placeholder="Dietary Restrictions"
                   value={newGuest.dietary_restrictions}
                   onChange={(e) => setNewGuest({ ...newGuest, dietary_restrictions: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg"
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-gray-900 bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
                 <textarea
                   placeholder="Notes"

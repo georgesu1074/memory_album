@@ -8,17 +8,10 @@
     --background: rgb(255, 255, 255);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --foreground: rgb(248, 250, 252);
-      --background: rgb(15, 23, 42);
-    }
-  }
-
   /* Global border color - removed invalid utility */
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-white text-gray-900 font-body;
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -49,7 +42,6 @@
   /* Card component */
   .card {
     @apply bg-white rounded-xl shadow-sm;
-    @apply dark:bg-gray-800;
     @apply p-4 sm:p-6;
   }
 }

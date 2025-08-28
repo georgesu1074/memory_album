@@ -135,7 +135,8 @@ export default function GuestSearchInput({
           fontSize: '14px',
           outline: 'none',
           boxSizing: 'border-box',
-          backgroundColor: guestId ? '#f3f4f6' : 'white'
+          backgroundColor: guestId ? '#f3f4f6' : 'white',
+          color: '#111827'
         }}
         onFocusCapture={(e) => e.target.style.borderColor = '#8b5cf6'}
         onBlurCapture={(e) => e.target.style.borderColor = '#d1d5db'}
