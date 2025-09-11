@@ -155,10 +155,20 @@ export async function POST(
         .single();
 
       if (wedding) {
+        // First fetch current count
+        const { data: currentDrive } = await supabase
+          .from('wedding_google_drive')
+          .select('total_photos_uploaded')
+          .eq('wedding_id', wedding.id)
+          .single();
+
+        const currentCount = currentDrive?.total_photos_uploaded || 0;
+
+        // Update with incremented count
         await supabase
           .from('wedding_google_drive')
           .update({
-            total_photos_uploaded: supabase.raw('total_photos_uploaded + ?', [successCount]),
+            total_photos_uploaded: currentCount + successCount,
             last_sync_at: new Date().toISOString(),
           })
           .eq('wedding_id', wedding.id);

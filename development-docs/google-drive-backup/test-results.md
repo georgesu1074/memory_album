@@ -7,10 +7,11 @@
 
 ## Test Summary
 - **Total Tests**: 9 scenarios
-- **Passed**: 0
+- **Passed**: 2
 - **Failed**: 0
 - **Blocked**: 0
-- **Not Started**: 9
+- **Not Started**: 6
+- **In Progress**: 1
 
 ---
 
@@ -59,23 +60,27 @@
 ---
 
 ### 3. Photo Upload Flow
-**Status**: ⏳ Not Started  
-**Time**: --:--  
+**Status**: ✅ Partial Pass  
+**Time**: 12:12  
 
 **Test A - Bride Memory**:
 - [ ] Photos uploaded to Bride folder
 
 **Test B - Groom Memory**:
-- [ ] Photos uploaded to Groom folder
+- [x] Photos uploaded to Groom folder (1 photo completed)
 
 **Test C - Both Memory**:
 - [ ] Photos uploaded to Together folder
 
 **Issues Found**:
-- None yet
+- **Bug #3**: Buffer to stream conversion error (FIXED)
+- **Bug #4**: Qdrant vector database connection down (separate issue)
 
 **Notes**:
-- 
+- Initial upload failed with "pipe is not a function" error
+- Fixed by converting Buffer to Readable stream
+- Upload successful after fix (status shows 1 completed)
+- Qdrant embedding storage failing but doesn't affect Drive uploads 
 
 ---
 
@@ -180,6 +185,28 @@
 
 ## Bugs/Issues Tracker
 
+### Bug #3
+**Severity**: 🔴 High  
+**Description**: Google Drive upload fails with "part.body.pipe is not a function"  
+**Steps to Reproduce**:
+1. Submit memory with photo
+2. Check Drive upload status
+**Expected**: Photo uploads to Google Drive
+**Actual**: Upload fails with stream error
+**Fix Applied**: Convert Buffer to Readable stream in drive-service.ts:352
+**Status**: ✅ Fixed
+
+### Bug #4
+**Severity**: 🟡 Medium  
+**Description**: Qdrant vector database connection returns 404
+**Steps to Reproduce**:
+1. Submit any memory
+2. Check console for embedding errors
+**Expected**: Embeddings stored in Qdrant
+**Actual**: 404 Not Found error from Qdrant
+**Fix Applied**: None - appears to be service issue
+**Status**: ⏳ Open (doesn't affect Drive functionality)
+
 ### Bug #1
 **Severity**: 🟡 Medium  
 **Description**: OAuth connection saved to wrong wedding (helen-and-george instead of sarah-john-wedding)
@@ -241,7 +268,7 @@
 
 ## Overall Assessment
 
-**Test Completion**: 0%  
+**Test Completion**: 25%  
 **Quality Status**: ⏳ Not Assessed  
 **Ready for Production**: ❌ No  
 
