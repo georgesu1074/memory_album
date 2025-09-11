@@ -171,44 +171,44 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 **Goal**: Complete Google Drive integration for automatic photo backups
 
 ### Epic: Folder Management
-- [ ] Create wedding folder structure on OAuth connection
+- [ ] ~~Create wedding folder structure on OAuth connection~~
   - Main folder: "Memory Album - {wedding-slug}"
   - Subfolders: All Photos, Bride Memories, Groom Memories, Together Memories
-- [ ] Store folder IDs in database
-- [ ] Handle existing folder detection
-- [ ] Add folder creation retry logic
+- [ ] ~~Store folder IDs in database~~
+- [ ] ~~Handle existing folder detection~~
+- [ ] ~~Add folder creation retry logic~~
 
 ### Epic: Photo Upload Integration
-- [ ] Implement Google Drive service class
-- [ ] Add photo upload functionality
+- [ ] ~~Implement Google Drive service class~~
+- [ ] ~~Add photo upload functionality~~
   - Upload to correct category subfolder
   - Handle large files with resumable uploads
   - Add retry logic for failed uploads
-- [ ] Create background job for async uploads
-- [ ] Queue photos for upload after guest submission
-- [ ] Track upload status in database
+- [ ] ~~Create background job for async uploads~~
+- [ ] ~~Queue photos for upload after guest submission~~
+- [ ] ~~Track upload status in database~~
 
 ### Epic: Token Management
-- [ ] Implement access token refresh logic
-- [ ] Handle expired tokens gracefully
-- [ ] Add token encryption for security
-- [ ] Create token validation endpoint
-- [ ] Add automatic token refresh before expiry
+- [ ] ~~Implement access token refresh logic~~
+- [ ] ~~Handle expired tokens gracefully~~
+- [ ] ~~Add token encryption for security~~
+- [ ] ~~Create token validation endpoint~~
+- [ ] ~~Add automatic token refresh before expiry~~
 
 ### Epic: UI/UX Improvements
-- [ ] Show Google Drive connection status
-- [ ] Display connected Google account email
-- [ ] Add disconnect/reconnect functionality
-- [ ] Show upload progress/status
-- [ ] Add manual sync button
-- [ ] Create upload history log
+- [ ] ~~Show Google Drive connection status~~
+- [ ] ~~Display connected Google account email~~
+- [ ] ~~Add disconnect/reconnect functionality~~
+- [ ] ~~Show upload progress/status~~
+- [ ] ~~Add manual sync button~~
+- [ ] ~~Create upload history log~~
 
 ### Epic: Error Handling & Recovery
-- [ ] Handle Google Drive API quota limits
-- [ ] Implement exponential backoff for retries
-- [ ] Add fallback for failed uploads
-- [ ] Create admin notification for failures
-- [ ] Add manual retry mechanism
+- [ ] ~~Handle Google Drive API quota limits~~
+- [ ] ~~Implement exponential backoff for retries~~
+- [ ] ~~Add fallback for failed uploads~~
+- [ ] ~~Create admin notification for failures~~
+- [ ] ~~Add manual retry mechanism~~
 
 ## Sprint 7: Polish & Production Readiness
 
