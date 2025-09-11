@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { GoogleDriveService } from '@/lib/google/drive-service'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -98,6 +99,24 @@ export async function GET(request: NextRequest) {
       await supabase
         .from('wedding_google_drive')
         .insert(driveData)
+    }
+
+    // Create folder structure in Google Drive
+    try {
+      const driveService = new GoogleDriveService(
+        access_token,
+        refresh_token,
+        wedding.id
+      );
+      
+      const folders = await driveService.createWeddingFolders(weddingSlug);
+      
+      if (!folders) {
+        console.error('Failed to create Drive folders, but connection saved');
+      }
+    } catch (folderError) {
+      console.error('Error creating Drive folders:', folderError);
+      // Continue anyway - folders can be created later
     }
 
     // Redirect back to config with success

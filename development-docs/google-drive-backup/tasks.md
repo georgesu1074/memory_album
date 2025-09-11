@@ -8,15 +8,15 @@
 ## Task Checklist
 
 ### Epic: Folder Management
-- [ ] Create wedding folder structure on OAuth connection
+- [x] Create wedding folder structure on OAuth connection
   - Main folder: "Memory Album - {wedding-slug}"
   - Subfolders: All Photos, Bride Memories, Groom Memories, Together Memories
-- [ ] Store folder IDs in database
-- [ ] Handle existing folder detection
-- [ ] Add folder creation retry logic
+- [x] Store folder IDs in database
+- [x] Handle existing folder detection
+- [x] Add folder creation retry logic
 
 ### Epic: Photo Upload Integration
-- [ ] Implement Google Drive service class
+- [x] Implement Google Drive service class
 - [ ] Add photo upload functionality
   - Upload to correct category subfolder
   - Handle large files with resumable uploads
