@@ -31,7 +31,7 @@ export default function QRCodeGenerator({
         width: size,
         margin: 2,
         color: {
-          dark: theme?.primary || '#000000',
+          dark: '#000000', // Always use black for better scanning
           light: '#FFFFFF',
         },
         errorCorrectionLevel: 'H',
@@ -80,36 +80,33 @@ export default function QRCodeGenerator({
               }
               
               body {
-                width: 8.5in;
-                height: 11in;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                width: 5in;
+                min-height: 7in;
+                margin: 20px auto;
                 background: white;
                 position: relative;
-                overflow: hidden;
+                overflow-y: auto;
               }
               
               .page-wrapper {
                 width: 100%;
-                height: 100%;
-                padding: 0.75in;
+                min-height: 7in;
+                padding: 0.4in;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-start;
                 position: relative;
               }
               
               /* Decorative border */
               .border-frame {
                 position: absolute;
-                top: 0.5in;
-                left: 0.5in;
-                right: 0.5in;
-                bottom: 0.5in;
-                border: 2px solid ${primaryColor}20;
+                top: 0.3in;
+                left: 0.3in;
+                right: 0.3in;
+                bottom: 0.3in;
+                border: 1px solid ${primaryColor}20;
                 border-radius: 8px;
                 pointer-events: none;
               }
@@ -117,76 +114,76 @@ export default function QRCodeGenerator({
               /* Corner flourishes */
               .corner-decoration {
                 position: absolute;
-                width: 60px;
-                height: 60px;
-                border: 2px solid ${primaryColor}40;
+                width: 40px;
+                height: 40px;
+                border: 2px solid ${primaryColor}30;
               }
               
               .corner-decoration.top-left {
-                top: 0.4in;
-                left: 0.4in;
+                top: 0.25in;
+                left: 0.25in;
                 border-right: none;
                 border-bottom: none;
-                border-top-left-radius: 12px;
+                border-top-left-radius: 8px;
               }
               
               .corner-decoration.top-right {
-                top: 0.4in;
-                right: 0.4in;
+                top: 0.25in;
+                right: 0.25in;
                 border-left: none;
                 border-bottom: none;
-                border-top-right-radius: 12px;
+                border-top-right-radius: 8px;
               }
               
               .corner-decoration.bottom-left {
-                bottom: 0.4in;
-                left: 0.4in;
+                bottom: 0.25in;
+                left: 0.25in;
                 border-right: none;
                 border-top: none;
-                border-bottom-left-radius: 12px;
+                border-bottom-left-radius: 8px;
               }
               
               .corner-decoration.bottom-right {
-                bottom: 0.4in;
-                right: 0.4in;
+                bottom: 0.25in;
+                right: 0.25in;
                 border-left: none;
                 border-top: none;
-                border-bottom-right-radius: 12px;
+                border-bottom-right-radius: 8px;
               }
               
               /* Main content container */
               .content {
                 text-align: center;
-                max-width: 6in;
+                max-width: 4in;
                 z-index: 1;
               }
               
               /* Title styling */
               .title {
                 font-family: 'Playfair Display', serif;
-                font-size: 36px;
+                font-size: 24px;
                 font-weight: 700;
                 color: #1a1a1a;
-                margin-bottom: 16px;
+                margin-bottom: 8px;
                 letter-spacing: 0.5px;
               }
               
               .subtitle {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 20px;
+                font-size: 14px;
                 font-weight: 300;
                 color: ${primaryColor};
-                margin-bottom: 32px;
+                margin-bottom: 16px;
                 font-style: italic;
               }
               
               /* QR Code container */
               .qr-container {
                 background: white;
-                padding: 24px;
-                border-radius: 12px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-                margin: 32px auto;
+                padding: 16px;
+                border-radius: 8px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+                margin: 16px auto;
                 display: inline-block;
                 position: relative;
               }
@@ -211,16 +208,16 @@ export default function QRCodeGenerator({
               
               /* Message section */
               .message {
-                margin-top: 36px;
-                padding: 0 20px;
+                margin-top: 20px;
+                padding: 0 10px;
               }
               
               .message-text {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 18px;
-                line-height: 1.8;
+                font-size: 13px;
+                line-height: 1.6;
                 color: #444;
-                margin-bottom: 20px;
+                margin-bottom: 12px;
               }
               
               .message-text strong {
@@ -231,39 +228,39 @@ export default function QRCodeGenerator({
               /* Instructions */
               .instructions {
                 background: linear-gradient(135deg, ${primaryColor}08, ${secondaryColor}08);
-                border-radius: 8px;
-                padding: 20px;
-                margin-top: 24px;
+                border-radius: 6px;
+                padding: 12px;
+                margin-top: 16px;
               }
               
               .instructions-title {
                 font-family: 'Playfair Display', serif;
-                font-size: 16px;
+                font-size: 12px;
                 color: ${primaryColor};
-                margin-bottom: 12px;
+                margin-bottom: 8px;
                 font-weight: 700;
               }
               
               .instructions-text {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 15px;
-                line-height: 1.6;
+                font-size: 11px;
+                line-height: 1.5;
                 color: #666;
               }
               
               /* Decorative elements */
               .heart-divider {
-                margin: 24px auto;
-                font-size: 20px;
+                margin: 12px auto;
+                font-size: 14px;
                 color: ${secondaryColor};
                 opacity: 0.5;
               }
               
               /* Website URL */
               .website-url {
-                margin-top: 20px;
+                margin-top: 12px;
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 14px;
+                font-size: 10px;
                 color: #999;
                 font-style: italic;
               }
@@ -273,14 +270,17 @@ export default function QRCodeGenerator({
                 body {
                   margin: 0;
                   padding: 0;
+                  width: 5in;
+                  height: 7in;
                 }
                 
                 .page-wrapper {
                   page-break-inside: avoid;
+                  height: 7in;
                 }
                 
                 @page {
-                  size: letter;
+                  size: 5in 7in;
                   margin: 0;
                 }
               }
@@ -303,22 +303,22 @@ export default function QRCodeGenerator({
                 <p class="subtitle">A Digital Wedding Memory Album</p>
                 
                 <div class="qr-container">
-                  <img src="${qrCodeUrl}" alt="Wedding Memory QR Code" width="${size}" height="${size}" class="qr-code" />
+                  <img src="${qrCodeUrl}" alt="Wedding Memory QR Code" width="180" height="180" class="qr-code" />
                 </div>
                 
                 <div class="message">
                   <p class="message-text">
                     Dear friends and family, you are not just witnesses to our love story – 
-                    <strong>you are part of it</strong>. Each moment you've shared with us, 
-                    every laugh, every tear of joy, has woven the beautiful tapestry of our journey together.
+                    <strong>you are part of it</strong>. Each moment we've shared, 
+                    every celebration and quiet conversation, has shaped who we are today.
                   </p>
                   
                   <div class="heart-divider">♥ ♥ ♥</div>
                   
                   <p class="message-text">
                     We invite you to contribute to our <strong>Digital Wedding Album</strong> – 
-                    a living collection of memories where your photos, stories, and well-wishes 
-                    will create a shared consciousness of love that we'll treasure forever.
+                    a living collection where your photos, stories, and well-wishes 
+                    will help us relive this special day through your eyes for years to come.
                   </p>
                 </div>
                 
