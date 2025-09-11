@@ -145,7 +145,7 @@ Implement wedding configuration system for couples to set up their memory collec
   - Custom description
   - Canonical URL
 
-- [ ] Implement Open Graph images
+- [x] Implement Open Graph images
   - Generate OG image with couple names
   - Include wedding date
   - Apply theme colors
