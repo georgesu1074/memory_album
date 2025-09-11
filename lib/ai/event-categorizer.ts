@@ -170,10 +170,11 @@ After analysis, respond with a JSON object:
     let retries = 3;
     let delay = 1000; // Start with 1 second
     let result;
+    let chat;
     
     while (retries > 0) {
       try {
-        const chat = model.startChat()
+        chat = model.startChat()
         result = await chat.sendMessage(prompt)
         break; // Success, exit retry loop
       } catch (error: any) {
@@ -188,7 +189,7 @@ After analysis, respond with a JSON object:
       }
     }
     
-    if (!result) {
+    if (!result || !chat) {
       throw new Error('Failed to get response from Gemini after retries');
     }
     
@@ -203,7 +204,8 @@ After analysis, respond with a JSON object:
         if (call.name === 'get_existing_categories') {
           response = await getExistingCategories(weddingId)
         } else if (call.name === 'get_memories_in_category') {
-          const category = call.args?.category as string
+          const args = call.args as any
+          const category = args?.category as string
           response = await getMemoriesInCategory(weddingId, category)
         }
         
