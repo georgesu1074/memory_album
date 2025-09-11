@@ -110,7 +110,10 @@ export default function WeddingSuccessPage() {
               <QRCodeGenerator 
                 url={weddingUrl} 
                 size={256}
-                theme={{ primary: wedding.theme_color }}
+                theme={{ 
+                  primary: wedding.theme_color || '#8B5CF6',
+                  secondary: wedding.secondary_color || '#EC4899'
+                }}
               />
             </div>
 

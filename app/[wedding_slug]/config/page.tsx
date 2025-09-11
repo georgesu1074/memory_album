@@ -377,7 +377,11 @@ export default function WeddingConfigPage() {
               </p>
               <QRCodeGenerator
                 url={weddingUrl}
-                weddingName={`${wedding.bride.display_name || wedding.bride.name} & ${wedding.groom.display_name || wedding.groom.name}`}
+                size={256}
+                theme={{
+                  primary: wedding.theme_color || '#8B5CF6',
+                  secondary: wedding.secondary_color || '#EC4899'
+                }}
               />
             </div>
 
