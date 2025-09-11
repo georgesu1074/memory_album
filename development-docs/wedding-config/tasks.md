@@ -153,15 +153,15 @@ Implement wedding configuration system for couples to set up their memory collec
 
 ## Success Criteria
 
-- [ ] Wedding setup flow works end-to-end
-- [ ] Bride/groom details properly stored and displayed
-- [ ] Slug validation prevents duplicates
-- [ ] Theme colors apply throughout the site
-- [ ] QR codes generate correctly
-- [ ] Guest import handles Zola format
-- [ ] Landing page looks beautiful on mobile
-- [ ] All forms have proper validation
-- [ ] Error handling for all edge cases
+- [x] Wedding setup flow works end-to-end
+- [x] Bride/groom details properly stored and displayed
+- [x] Slug validation prevents duplicates
+- [x] Theme colors apply throughout the site
+- [x] QR codes generate correctly
+- [x] Guest import handles Zola format
+- [x] Landing page looks beautiful on mobile
+- [x] All forms have proper validation
+- [x] Error handling for all edge cases
 
 ## Notes
 
