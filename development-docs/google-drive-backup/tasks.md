@@ -33,12 +33,12 @@
 - [x] Add automatic token refresh before expiry
 
 ### Epic: UI/UX Improvements
-- [ ] Show Google Drive connection status
-- [ ] Display connected Google account email
-- [ ] Add disconnect/reconnect functionality
-- [ ] Show upload progress/status
-- [ ] Add manual sync button
-- [ ] Create upload history log
+- [x] Show Google Drive connection status
+- [x] Display connected Google account email
+- [x] Add disconnect/reconnect functionality
+- [x] Show upload progress/status
+- [x] Add manual sync button
+- [x] Create upload history log
 
 ### Epic: Error Handling & Recovery
 - [ ] Handle Google Drive API quota limits

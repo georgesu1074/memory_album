@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import QRCodeGenerator from '@/components/wedding-config/QRCodeGenerator';
+import UploadProgress from '@/components/drive/UploadProgress';
 
 interface WeddingConfig {
   id: string;
@@ -439,7 +440,7 @@ export default function WeddingConfigPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Status</span>
                     <span className={`text-sm font-medium ${driveStatus.configured ? 'text-green-600' : 'text-yellow-600'}`}>
-                      {driveStatus.configured ? 'Active' : 'Setup Required'}
+                      {driveStatus.configured ? '✓ Active' : '⚠ Setup Required'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -462,8 +463,68 @@ export default function WeddingConfigPage() {
                       )}
                     </>
                   )}
+                  
+                  {/* Action Buttons */}
+                  <div className="pt-3 border-t border-gray-200 space-y-2">
+                    <button
+                      onClick={async () => {
+                        setSaving(true);
+                        try {
+                          const response = await fetch(`/api/weddings/${weddingSlug}/drive/sync`, { 
+                            method: 'POST' 
+                          });
+                          if (response.ok) {
+                            setSuccessMessage('Manual sync triggered successfully');
+                            fetchDriveStatus();
+                          } else {
+                            setError('Failed to trigger sync');
+                          }
+                        } catch (err) {
+                          setError('Failed to trigger sync');
+                        } finally {
+                          setSaving(false);
+                        }
+                      }}
+                      disabled={saving || !driveStatus.configured}
+                      className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                      {saving ? 'Syncing...' : 'Manual Sync'}
+                    </button>
+                    
+                    <button
+                      onClick={async () => {
+                        if (confirm('Are you sure you want to disconnect Google Drive? Your photos will remain backed up.')) {
+                          setSaving(true);
+                          try {
+                            const response = await fetch(`/api/weddings/${weddingSlug}/drive/disconnect`, { 
+                              method: 'DELETE' 
+                            });
+                            if (response.ok) {
+                              setSuccessMessage('Google Drive disconnected');
+                              setDriveStatus(null);
+                            } else {
+                              setError('Failed to disconnect');
+                            }
+                          } catch (err) {
+                            setError('Failed to disconnect');
+                          } finally {
+                            setSaving(false);
+                          }
+                        }
+                      }}
+                      disabled={saving}
+                      className="w-full px-3 py-2 bg-red-100 text-red-700 text-sm rounded-lg hover:bg-red-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                      Disconnect Drive
+                    </button>
+                  </div>
                 </div>
               </div>
+            )}
+
+            {/* Upload Progress - Show if Drive is connected */}
+            {driveStatus && driveStatus.connected && driveStatus.configured && (
+              <UploadProgress weddingSlug={weddingSlug} />
             )}
 
             {/* Stats */}
