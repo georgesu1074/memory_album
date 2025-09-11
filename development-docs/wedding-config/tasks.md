@@ -38,7 +38,7 @@ Implement wedding configuration system for couples to set up their memory collec
   - Add QR code to confirmation page
   - Support different sizes/formats
 
-- [ ] Build Google Drive connection flow (manual OAuth)
+- [x] Build Google Drive connection flow (manual OAuth)
   - Create instructions for manual OAuth setup
   - Add Drive credentials input
   - Test Drive connection

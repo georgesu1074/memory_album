@@ -379,6 +379,12 @@ export default function WeddingConfigPage() {
                 >
                   View Memories (Coming Soon)
                 </button>
+                <a
+                  href={`/api/auth/google?wedding=${weddingSlug}`}
+                  className="block w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700"
+                >
+                  Connect Google Drive
+                </a>
               </div>
             </div>
 
