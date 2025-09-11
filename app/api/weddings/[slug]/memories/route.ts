@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase/client'
 import { uploadPhoto, STORAGE_BUCKETS } from '@/lib/supabase/storage'
 import { processMemory } from '@/lib/ai/event-categorizer'
 import { updateCategoryMemoryType } from '@/lib/categories/update-memory-type'
+import { queueDriveUpload } from '@/lib/services/drive-upload-queue'
 
 export async function POST(
   request: NextRequest,
@@ -121,6 +122,20 @@ export async function POST(
           photoUrls.push(result.publicUrl)
         }
       }
+    }
+
+    // Queue Google Drive upload if photos were uploaded
+    if (photoUrls.length > 0) {
+      console.log(`[DRIVE] Queuing ${photoUrls.length} photos for Drive upload`)
+      queueDriveUpload({
+        memoryId: memory.id,
+        weddingSlug: slug,
+        photoUrls,
+        memoryType: memoryType as 'bride' | 'groom' | 'both',
+      }).catch(error => {
+        console.error('[DRIVE] Failed to queue upload:', error)
+        // Don't fail the request if Drive queue fails
+      })
     }
 
     // Trigger async categorization (don't wait for it)

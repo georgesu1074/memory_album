@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import QRCodeGenerator from '@/components/wedding-config/QRCodeGenerator';
+import UploadProgress from '@/components/drive/UploadProgress';
 
 interface WeddingConfig {
   id: string;
@@ -25,6 +26,18 @@ interface WeddingConfig {
   created_at: string;
 }
 
+interface DriveStatus {
+  connected: boolean;
+  configured: boolean;
+  tokenValid?: boolean;
+  email?: string;
+  name?: string;
+  statistics?: {
+    totalUploaded: number;
+    lastSyncAt?: string;
+  };
+}
+
 export default function WeddingConfigPage() {
   const params = useParams();
   const router = useRouter();
@@ -35,6 +48,7 @@ export default function WeddingConfigPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [driveStatus, setDriveStatus] = useState<DriveStatus | null>(null);
   
   // Form state
   const [isActive, setIsActive] = useState(false);
@@ -43,6 +57,7 @@ export default function WeddingConfigPage() {
 
   useEffect(() => {
     fetchWeddingConfig();
+    fetchDriveStatus();
   }, [weddingSlug]);
 
   const fetchWeddingConfig = async () => {
@@ -68,6 +83,18 @@ export default function WeddingConfigPage() {
     } catch (err) {
       setError('Failed to load wedding configuration');
       setLoading(false);
+    }
+  };
+
+  const fetchDriveStatus = async () => {
+    try {
+      const response = await fetch(`/api/weddings/${weddingSlug}/drive/status`);
+      if (response.ok) {
+        const status = await response.json();
+        setDriveStatus(status);
+      }
+    } catch (err) {
+      console.error('Failed to fetch Drive status:', err);
     }
   };
 
@@ -379,14 +406,126 @@ export default function WeddingConfigPage() {
                 >
                   View Memories (Coming Soon)
                 </button>
-                <a
-                  href={`/api/auth/google?wedding=${weddingSlug}`}
-                  className="block w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700"
-                >
-                  Connect Google Drive
-                </a>
+                {!driveStatus?.connected ? (
+                  <a
+                    href={`/api/auth/google?wedding=${weddingSlug}`}
+                    className="block w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700"
+                  >
+                    Connect Google Drive
+                  </a>
+                ) : (
+                  <button
+                    onClick={async () => {
+                      if (!driveStatus.configured) {
+                        const response = await fetch(`/api/weddings/${weddingSlug}/drive/setup`, { method: 'POST' });
+                        if (response.ok) {
+                          setSuccessMessage('Google Drive folders created!');
+                          fetchDriveStatus();
+                        }
+                      }
+                    }}
+                    className="block w-full px-4 py-2 bg-green-600 text-white rounded-lg text-center font-medium hover:bg-green-700"
+                  >
+                    {driveStatus.configured ? '✓ Google Drive Connected' : 'Setup Google Drive Folders'}
+                  </button>
+                )}
               </div>
             </div>
+
+            {/* Google Drive Status */}
+            {driveStatus && driveStatus.connected && (
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900">Google Drive Backup</h2>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Status</span>
+                    <span className={`text-sm font-medium ${driveStatus.configured ? 'text-green-600' : 'text-yellow-600'}`}>
+                      {driveStatus.configured ? '✓ Active' : '⚠ Setup Required'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Account</span>
+                    <span className="text-sm text-gray-900">{driveStatus.email}</span>
+                  </div>
+                  {driveStatus.statistics && (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Photos Backed Up</span>
+                        <span className="text-sm font-medium text-gray-900">{driveStatus.statistics.totalUploaded}</span>
+                      </div>
+                      {driveStatus.statistics.lastSyncAt && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">Last Sync</span>
+                          <span className="text-sm text-gray-900">
+                            {new Date(driveStatus.statistics.lastSyncAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Action Buttons */}
+                  <div className="pt-3 border-t border-gray-200 space-y-2">
+                    <button
+                      onClick={async () => {
+                        setSaving(true);
+                        try {
+                          const response = await fetch(`/api/weddings/${weddingSlug}/drive/sync`, { 
+                            method: 'POST' 
+                          });
+                          if (response.ok) {
+                            setSuccessMessage('Manual sync triggered successfully');
+                            fetchDriveStatus();
+                          } else {
+                            setError('Failed to trigger sync');
+                          }
+                        } catch (err) {
+                          setError('Failed to trigger sync');
+                        } finally {
+                          setSaving(false);
+                        }
+                      }}
+                      disabled={saving || !driveStatus.configured}
+                      className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                      {saving ? 'Syncing...' : 'Manual Sync'}
+                    </button>
+                    
+                    <button
+                      onClick={async () => {
+                        if (confirm('Are you sure you want to disconnect Google Drive? Your photos will remain backed up.')) {
+                          setSaving(true);
+                          try {
+                            const response = await fetch(`/api/weddings/${weddingSlug}/drive/disconnect`, { 
+                              method: 'DELETE' 
+                            });
+                            if (response.ok) {
+                              setSuccessMessage('Google Drive disconnected');
+                              setDriveStatus(null);
+                            } else {
+                              setError('Failed to disconnect');
+                            }
+                          } catch (err) {
+                            setError('Failed to disconnect');
+                          } finally {
+                            setSaving(false);
+                          }
+                        }
+                      }}
+                      disabled={saving}
+                      className="w-full px-3 py-2 bg-red-100 text-red-700 text-sm rounded-lg hover:bg-red-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                      Disconnect Drive
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Upload Progress - Show if Drive is connected */}
+            {driveStatus && driveStatus.connected && driveStatus.configured && (
+              <UploadProgress weddingSlug={weddingSlug} />
+            )}
 
             {/* Stats */}
             <div className="bg-white rounded-lg shadow-md p-6">

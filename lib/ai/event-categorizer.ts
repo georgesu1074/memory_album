@@ -166,8 +166,32 @@ After analysis, respond with a JSON object:
 }
 `
     
-    const chat = model.startChat()
-    const result = await chat.sendMessage(prompt)
+    // Retry logic for handling overloaded model
+    let retries = 3;
+    let delay = 1000; // Start with 1 second
+    let result;
+    let chat;
+    
+    while (retries > 0) {
+      try {
+        chat = model.startChat()
+        result = await chat.sendMessage(prompt)
+        break; // Success, exit retry loop
+      } catch (error: any) {
+        if (error?.status === 503 && retries > 1) {
+          console.log(`[CATEGORIZATION] Model overloaded, retrying in ${delay}ms... (${retries - 1} retries left)`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          delay *= 2; // Exponential backoff
+          retries--;
+        } else {
+          throw error; // Re-throw if not 503 or no retries left
+        }
+      }
+    }
+    
+    if (!result || !chat) {
+      throw new Error('Failed to get response from Gemini after retries');
+    }
     
     // Handle tool calls if the model wants to explore categories
     let functionCalls = result.response.functionCalls()
@@ -180,7 +204,8 @@ After analysis, respond with a JSON object:
         if (call.name === 'get_existing_categories') {
           response = await getExistingCategories(weddingId)
         } else if (call.name === 'get_memories_in_category') {
-          const category = call.args?.category as string
+          const args = call.args as any
+          const category = args?.category as string
           response = await getMemoriesInCategory(weddingId, category)
         }
         
