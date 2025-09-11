@@ -470,3 +470,162 @@ The LLM should assess these dynamically, not follow rigid rules.
 ---
 
 Note: This project was renamed from `wedding_site` to `memory_album` to better reflect its purpose as a platform for multiple weddings, not just a single site.
+
+## Supabase Migration Workflow
+
+### Initial Setup (Already Completed)
+- Linked local Supabase CLI to remote project using `supabase link`
+- Created baseline migration (`20250911090258_remote_schema.sql`) capturing current production schema
+- This baseline serves as the starting point for all future migrations
+
+### Creating New Migrations
+
+#### Basic Workflow
+```bash
+# 1. Generate a new migration file
+supabase migration new feature_name
+
+# 2. Edit the generated file in supabase/migrations/
+# Write your SQL changes
+
+# 3. Push to remote database
+supabase db push
+```
+
+#### Complete Migration Example
+```bash
+# 1. Create migration for new feature
+supabase migration new add_user_preferences
+
+# 2. Write SQL in the generated file (supabase/migrations/[timestamp]_add_user_preferences.sql)
+# Example:
+# CREATE TABLE user_preferences (
+#   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+#   user_id UUID REFERENCES auth.users(id),
+#   theme VARCHAR(50),
+#   notifications_enabled BOOLEAN DEFAULT true,
+#   created_at TIMESTAMPTZ DEFAULT NOW()
+# );
+
+# 3. Test locally (optional but recommended)
+supabase start          # Start local Supabase
+supabase db reset       # Apply all migrations to local DB
+
+# 4. Push to production
+supabase db push        # Applies pending migrations to remote
+```
+
+### Migration Best Practices
+
+#### Naming Conventions
+- Use descriptive names: `add_wedding_analytics`, `update_guest_schema`, `fix_memory_indexes`
+- Keep names concise but clear about what the migration does
+- Use present tense verbs: `add_`, `create_`, `update_`, `fix_`, `remove_`
+
+#### Migration Content
+- Each migration should be atomic - one logical change per migration
+- Always include both UP and DOWN logic (create/drop, add/remove)
+- Add comments explaining complex changes
+- Test migrations locally before pushing to production
+
+#### Safety Checks
+```bash
+# View pending migrations before pushing
+supabase migration list
+
+# Check current migration status
+supabase db remote status
+
+# If something goes wrong, you can reset local DB
+supabase db reset
+```
+
+### Common Migration Scenarios
+
+#### Adding a New Table
+```sql
+-- Create table
+CREATE TABLE wedding_analytics (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  wedding_id UUID REFERENCES weddings(id) ON DELETE CASCADE,
+  page_views INTEGER DEFAULT 0,
+  unique_visitors INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Add indexes
+CREATE INDEX idx_wedding_analytics_wedding_id ON wedding_analytics(wedding_id);
+
+-- Enable RLS
+ALTER TABLE wedding_analytics ENABLE ROW LEVEL SECURITY;
+```
+
+#### Modifying Existing Tables
+```sql
+-- Add column
+ALTER TABLE weddings 
+ADD COLUMN IF NOT EXISTS analytics_enabled BOOLEAN DEFAULT true;
+
+-- Modify column
+ALTER TABLE guests 
+ALTER COLUMN email TYPE VARCHAR(255);
+
+-- Add constraint
+ALTER TABLE memories 
+ADD CONSTRAINT check_positive_photo_count 
+CHECK (photo_count >= 0);
+```
+
+#### Creating Functions and Triggers
+```sql
+-- Create function
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger
+CREATE TRIGGER set_updated_at
+BEFORE UPDATE ON weddings
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at();
+```
+
+### Troubleshooting Migrations
+
+#### Common Issues
+1. **Migration already applied**: Check with `supabase migration list`
+2. **Connection issues**: Verify `supabase status` and re-link if needed
+3. **SQL errors**: Test locally first with `supabase db reset`
+4. **Out of sync**: Pull latest with `supabase db pull` if needed
+
+#### Recovery Commands
+```bash
+# Check connection and project status
+supabase status
+
+# Re-link to project if connection lost
+supabase link --project-ref [your-project-ref]
+
+# Pull current schema from remote (creates new baseline)
+supabase db pull
+
+# View migration history
+supabase migration list
+```
+
+### Environment Variables for Migrations
+Ensure these are set in `.env.local`:
+```
+SUPABASE_DB_PASSWORD=your_db_password  # From Supabase dashboard
+```
+
+### Important Notes
+- Never edit migrations that have already been applied to production
+- Always commit migration files to git before pushing to production
+- Coordinate with team members to avoid conflicting migrations
+- Keep migrations small and focused for easier rollback if needed
+- The baseline migration (`20250911090258_remote_schema.sql`) should never be modified

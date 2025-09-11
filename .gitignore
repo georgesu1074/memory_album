@@ -73,3 +73,6 @@ temp/
 # /development-docs/
 
 .workflow-state.json
+
+# Supabase temp files
+supabase/.temp/
