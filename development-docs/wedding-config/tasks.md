@@ -139,7 +139,7 @@ Implement wedding configuration system for couples to set up their memory collec
   - Optimized images
   - Fast loading
 
-- [ ] Add meta tags for sharing
+- [x] Add meta tags for sharing
   - Open Graph tags
   - Twitter Card tags
   - Custom description

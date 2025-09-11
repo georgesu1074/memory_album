@@ -1,9 +1,75 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import WeddingPageClient from '@/components/WeddingPageClient'
+import { Metadata } from 'next'
+import { getCoupleNames } from '@/types/wedding'
 
 interface PageProps {
   params: {
     wedding_slug: string
+  }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { wedding_slug } = await params
+  const supabaseAdmin = createAdminClient()
+  
+  const { data: wedding } = await supabaseAdmin
+    .from('weddings')
+    .select(`
+      *,
+      bride:bride_details!weddings_bride_id_fkey(*),
+      groom:groom_details!weddings_groom_id_fkey(*)
+    `)
+    .eq('slug', wedding_slug)
+    .single()
+
+  if (!wedding) {
+    return {
+      title: 'Wedding Not Found',
+    }
+  }
+
+  const coupleNames = getCoupleNames(wedding)
+  const title = `${coupleNames}'s Wedding Memories`
+  const description = wedding.wedding_date 
+    ? `Share your favorite memories from ${coupleNames}'s wedding on ${new Date(wedding.wedding_date + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`
+    : `Share your favorite memories from ${coupleNames}'s special day`
+  
+  const url = `${process.env.NEXT_PUBLIC_APP_URL || 'https://memoryalbum.ai'}/${wedding_slug}`
+  const themeColor = wedding.theme_color || '#8B5CF6'
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'Memory Album',
+      type: 'website',
+      locale: 'en_US',
+      images: [
+        {
+          url: `/api/og?wedding=${wedding_slug}`,
+          width: 1200,
+          height: 630,
+          alt: `${coupleNames}'s Wedding`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`/api/og?wedding=${wedding_slug}`],
+    },
+    metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://memoryalbum.ai'),
+    alternates: {
+      canonical: url,
+    },
+    other: {
+      'theme-color': themeColor,
+    },
   }
 }
 

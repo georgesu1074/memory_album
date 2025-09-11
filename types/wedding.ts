@@ -21,15 +21,19 @@ export interface WeddingWithDetails extends Wedding {
 
 // Helper functions for getting display names
 export function getGroomDisplayName(wedding: WeddingWithDetails): string {
-  return wedding.groom?.display_name || wedding.groom?.name || 'Groom'
+  const displayName = wedding.groom?.display_name || wedding.groom?.name || 'Groom'
+  // Return only the first name
+  return displayName.split(' ')[0]
 }
 
 export function getBrideDisplayName(wedding: WeddingWithDetails): string {
-  return wedding.bride?.display_name || wedding.bride?.name || 'Bride'
+  const displayName = wedding.bride?.display_name || wedding.bride?.name || 'Bride'
+  // Return only the first name
+  return displayName.split(' ')[0]
 }
 
 export function getCoupleNames(wedding: WeddingWithDetails): string {
-  const groomName = getGroomDisplayName(wedding)
-  const brideName = getBrideDisplayName(wedding)
-  return `${groomName} & ${brideName}`
+  const groomFirstName = getGroomDisplayName(wedding)
+  const brideFirstName = getBrideDisplayName(wedding)
+  return `${groomFirstName} & ${brideFirstName}`
 }

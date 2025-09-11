@@ -85,7 +85,7 @@ export default function SlugValidator({
     }
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://memories.love';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://memoryalbum.ai';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

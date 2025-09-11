@@ -17,7 +17,7 @@ export default function SetupConfirmation({
   onSubmit,
   isSubmitting 
 }: SetupConfirmationProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://memories.love';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://memoryalbum.ai';
 
   const formatDate = (dateString: string | undefined) => {
     if (!dateString) return 'Not specified';
