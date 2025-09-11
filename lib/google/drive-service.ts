@@ -1,6 +1,7 @@
 import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { decrypt, encrypt, isEncrypted } from '@/lib/utils/encryption';
 
 export interface DriveFolder {
   id: string;
@@ -77,14 +78,37 @@ export class GoogleDriveService {
       return null;
     }
 
-    // Check if token needs refresh
+    // Decrypt tokens if encrypted
+    let accessToken = driveConfig.access_token;
+    let refreshToken = driveConfig.refresh_token;
+    
+    if (isEncrypted(accessToken)) {
+      try {
+        accessToken = decrypt(accessToken);
+      } catch (error) {
+        console.error('Failed to decrypt access token:', error);
+        return null;
+      }
+    }
+    
+    if (isEncrypted(refreshToken)) {
+      try {
+        refreshToken = decrypt(refreshToken);
+      } catch (error) {
+        console.error('Failed to decrypt refresh token:', error);
+        return null;
+      }
+    }
+
+    // Check if token needs refresh (with 5 minute buffer)
     const tokenExpiresAt = new Date(driveConfig.token_expires_at);
     const now = new Date();
+    const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60 * 1000);
     
-    if (tokenExpiresAt <= now) {
-      // Token expired, needs refresh
+    if (tokenExpiresAt <= fiveMinutesFromNow) {
+      // Token expired or expiring soon, needs refresh
       const refreshedService = await GoogleDriveService.refreshAccessToken(
-        driveConfig.refresh_token,
+        refreshToken,
         wedding.id
       );
       
@@ -97,8 +121,8 @@ export class GoogleDriveService {
     }
 
     return new GoogleDriveService(
-      driveConfig.access_token,
-      driveConfig.refresh_token,
+      accessToken,
+      refreshToken,
       wedding.id
     );
   }
@@ -122,34 +146,64 @@ export class GoogleDriveService {
       });
 
       // Get new access token
-      const { credentials } = await oauth2Client.refreshAccessToken();
+      let credentials;
+      try {
+        const response = await oauth2Client.refreshAccessToken();
+        credentials = response.credentials;
+      } catch (refreshError: any) {
+        console.error('Token refresh failed:', refreshError);
+        
+        // Check if refresh token is invalid
+        if (refreshError.message?.includes('invalid_grant') || 
+            refreshError.code === 400) {
+          // Mark the connection as inactive
+          const supabase = createAdminClient();
+          await supabase
+            .from('wedding_google_drive')
+            .update({ is_active: false })
+            .eq('wedding_id', weddingId);
+          
+          console.error('Refresh token is invalid, marked connection as inactive');
+        }
+        
+        return null;
+      }
       
       if (!credentials.access_token) {
         console.error('No access token received from refresh');
         return null;
       }
 
-      // Update database with new token
+      // Encrypt and update database with new token
       const supabase = createAdminClient();
       const tokenExpiresAt = credentials.expiry_date
         ? new Date(credentials.expiry_date)
         : new Date(Date.now() + 3600 * 1000); // Default 1 hour
 
-      await supabase
+      const encryptedAccessToken = encrypt(credentials.access_token);
+      
+      const { error: updateError } = await supabase
         .from('wedding_google_drive')
         .update({
-          access_token: credentials.access_token,
+          access_token: encryptedAccessToken,
           token_expires_at: tokenExpiresAt.toISOString(),
         })
         .eq('wedding_id', weddingId);
 
+      if (updateError) {
+        console.error('Failed to update token in database:', updateError);
+        return null;
+      }
+
+      console.log('Token refreshed successfully for wedding:', weddingId);
+      
       return new GoogleDriveService(
         credentials.access_token,
         refreshToken,
         weddingId
       );
     } catch (error) {
-      console.error('Error refreshing access token:', error);
+      console.error('Unexpected error refreshing access token:', error);
       return null;
     }
   }

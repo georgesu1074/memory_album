@@ -26,11 +26,11 @@
 - [x] Track upload status in database
 
 ### Epic: Token Management
-- [ ] Implement access token refresh logic
-- [ ] Handle expired tokens gracefully
-- [ ] Add token encryption for security
-- [ ] Create token validation endpoint
-- [ ] Add automatic token refresh before expiry
+- [x] Implement access token refresh logic
+- [x] Handle expired tokens gracefully
+- [x] Add token encryption for security
+- [x] Create token validation endpoint
+- [x] Add automatic token refresh before expiry
 
 ### Epic: UI/UX Improvements
 - [ ] Show Google Drive connection status
