@@ -17,13 +17,13 @@
 
 ### Epic: Photo Upload Integration
 - [x] Implement Google Drive service class
-- [ ] Add photo upload functionality
+- [x] Add photo upload functionality
   - Upload to correct category subfolder
   - Handle large files with resumable uploads
   - Add retry logic for failed uploads
-- [ ] Create background job for async uploads
-- [ ] Queue photos for upload after guest submission
-- [ ] Track upload status in database
+- [x] Create background job for async uploads
+- [x] Queue photos for upload after guest submission
+- [x] Track upload status in database
 
 ### Epic: Token Management
 - [ ] Implement access token refresh logic
