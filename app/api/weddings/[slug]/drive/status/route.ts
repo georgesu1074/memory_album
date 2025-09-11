@@ -53,18 +53,25 @@ export async function GET(
     );
 
     // Get upload statistics
-    const { data: uploadStats } = await supabase
-      .from('memory_drive_uploads')
-      .select('upload_status')
-      .eq('upload_status', 'completed')
-      .in('memory_id', 
-        supabase
-          .from('memories')
-          .select('id')
-          .eq('wedding_id', wedding.id)
-      );
-
-    const totalUploaded = uploadStats?.length || 0;
+    // First get memory IDs for this wedding
+    const { data: memories } = await supabase
+      .from('memories')
+      .select('id')
+      .eq('wedding_id', wedding.id);
+    
+    const memoryIds = memories?.map(m => m.id) || [];
+    
+    // Then get upload stats for those memories
+    let totalUploaded = 0;
+    if (memoryIds.length > 0) {
+      const { data: uploadStats } = await supabase
+        .from('memory_drive_uploads')
+        .select('upload_status')
+        .eq('upload_status', 'completed')
+        .in('memory_id', memoryIds);
+      
+      totalUploaded = uploadStats?.length || 0;
+    }
 
     // Check token expiry
     const tokenExpiresAt = new Date(driveConfig.token_expires_at);

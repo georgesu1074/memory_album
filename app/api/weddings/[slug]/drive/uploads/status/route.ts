@@ -28,16 +28,24 @@ export async function GET(
       );
     }
 
+    // Get memory IDs for this wedding
+    const { data: memories } = await supabase
+      .from('memories')
+      .select('id')
+      .eq('wedding_id', wedding.id);
+    
+    const memoryIds = memories?.map(m => m.id) || [];
+    
     // Get upload counts by status
-    const { data: statusCounts } = await supabase
-      .from('memory_drive_uploads')
-      .select('upload_status')
-      .in('memory_id', 
-        supabase
-          .from('memories')
-          .select('id')
-          .eq('wedding_id', wedding.id)
-      );
+    let statusCounts: any[] = [];
+    if (memoryIds.length > 0) {
+      const { data } = await supabase
+        .from('memory_drive_uploads')
+        .select('upload_status')
+        .in('memory_id', memoryIds);
+      
+      statusCounts = data || [];
+    }
 
     const counts = {
       pending: 0,
