@@ -23,11 +23,11 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - [ ] ~~Set up error boundary and 404 page~~
 - [ ] ~~Create loading states and skeleton components~~
 
-## Sprint 1: Database & External Services Setup
+## Sprint 1: Database & External Services Setup ✅ COMPLETE
 
 **Goal**: Connect to Supabase, Qdrant, and Gemini
 
-### Epic: Supabase Setup (IN PROGRESS - see /development-docs/supabase-setup/)
+### Epic: Supabase Setup ✅ COMPLETE
 
 - [ ] ~~Create Supabase project (manual)~~
 - [ ] ~~Run database migrations from schema~~
@@ -47,11 +47,11 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[x] Add environment variable validation~~ → external-services
 - ~~[x] Create service health check endpoint~~ → external-services
 
-## Sprint 2: Core Memory Submission Flow
+## Sprint 2: Core Memory Submission Flow ✅ COMPLETE
 
 **Goal**: Guests can submit memories with photos
 
-### Epic: Memory Submission UI
+### Epic: Memory Submission UI ✅ COMPLETE
 
 - ~~[ ] Create mobile-first submission form component~~ → memory-submission
 - ~~[ ] Add memory type selector (Bride/Groom/Both)~~ → memory-submission
@@ -64,7 +64,7 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add "Share Another" flow~~ → memory-submission
 - ~~[ ] Implement error handling UI~~ → memory-submission
 
-### Epic: Memory Submission API
+### Epic: Memory Submission API ✅ COMPLETE
 
 - ~~[ ] Create GET /api/weddings/[slug]/guests/search endpoint~~ → memory-submission
 - ~~[ ] Create POST /api/weddings/[slug]/memories endpoint~~ → memory-submission
@@ -77,11 +77,11 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Implement error logging~~ → memory-submission
 - ~~[ ] Add success response with memory ID~~ → memory-submission
 
-## Sprint 3: AI Categorization & Embeddings
+## Sprint 3: AI Categorization & Embeddings ✅ COMPLETE
 
 **Goal**: AI organizes memories and stores embeddings
 
-### Epic: Event-Based AI Categorization
+### Epic: Event-Based AI Categorization ✅ COMPLETE
 
 - ~~[ ] Add category, confidence, and metadata fields to memories table~~ → ai-categorization
 - ~~[ ] Create event-categorizer with Gemini tool calls~~ → ai-categorization
@@ -90,14 +90,14 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add immediate async categorization to submission~~ → ai-categorization
 - ~~[ ] Store categorization metadata and confidence~~ → ai-categorization
 
-### Epic: Embedding Pipeline
+### Epic: Embedding Pipeline ✅ COMPLETE
 
 - ~~[ ] Generate embeddings after categorization~~ → ai-categorization
 - ~~[ ] Store in Qdrant with wedding namespace~~ → ai-categorization
 - ~~[ ] Include category in embedding metadata~~ → ai-categorization
 - ~~[ ] Handle embedding failures gracefully~~ → ai-categorization
 
-### Epic: Retry System
+### Epic: Retry System ✅ COMPLETE
 
 - ~~[ ] Create `/api/cron/retry-categorization` endpoint~~ → ai-categorization
 - ~~[ ] Implement exponential backoff (1, 2, 4 min)~~ → ai-categorization
@@ -105,11 +105,11 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Monitor failure rates~~ → ai-categorization
 - ~~[ ] Auto-stop when no failures~~ → ai-categorization
 
-## Sprint 4: Memory Album Display
+## Sprint 4: Memory Album Display ✅ COMPLETE
 
 **Goal**: Beautiful display of collected memories
 
-### Epic: Memory Album UI
+### Epic: Memory Album UI ✅ COMPLETE
 
 - ~~[ ] Create album page with responsive grid~~ → memory-album
 - ~~[ ] Build memory card component~~ → memory-album
@@ -120,7 +120,7 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add pull-to-refresh on mobile~~ → memory-album
 - ~~[ ] Implement loading skeletons~~ → memory-album
 
-### Epic: Memory Detail View
+### Epic: Memory Detail View ✅ COMPLETE
 
 - ~~[ ] Create memory detail page/modal~~ → memory-album
 - ~~[ ] Build photo carousel component~~ → memory-album
@@ -131,11 +131,11 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add sharing functionality~~ → memory-album
 - ~~[ ] Create back navigation~~ → memory-album
 
-## Sprint 5: Wedding Configuration
+## Sprint 5: Wedding Configuration ✅ COMPLETE
 
 **Goal**: Simple setup for wedding couples
 
-### Epic: Wedding Setup Flow (IN PROGRESS - see /development-docs/wedding-config/)
+### Epic: Wedding Setup Flow ✅ COMPLETE
 
 - ~~[ ] Create wedding configuration API endpoints~~ → wedding-config
 - ~~[ ] Build wedding setup form~~ → wedding-config
@@ -146,7 +146,7 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add wedding activation toggle~~ → wedding-config
 - ~~[ ] Create setup confirmation page~~ → wedding-config
 
-### Epic: Guest List Management
+### Epic: Guest List Management ✅ COMPLETE
 
 - ~~[ ] Create guest list upload endpoint~~ → wedding-config
 - ~~[ ] Build CSV parser for Zola format~~ → wedding-config
@@ -156,7 +156,7 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add manual guest entry form~~ → wedding-config
 - ~~[ ] Build guest list export functionality~~ → wedding-config
 
-### Epic: Landing Pages
+### Epic: Landing Pages ✅ COMPLETE
 
 - ~~[ ] Create wedding-specific landing page~~ → wedding-config
 - ~~[ ] Build welcome message with couple names~~ → wedding-config
@@ -166,27 +166,49 @@ This is the master development plan for Memory Album MVP. Each epic represents a
 - ~~[ ] Add meta tags for sharing~~ → wedding-config
 - ~~[ ] Implement Open Graph images~~ → wedding-config
 
-## Sprint 6: Background Jobs & Data Export
+## Sprint 6: Google Drive Backup Implementation
 
-**Goal**: Automated backups and data management
+**Goal**: Complete Google Drive integration for automatic photo backups
 
-### Epic: Background Processing
+### Epic: Folder Management
+- [ ] Create wedding folder structure on OAuth connection
+  - Main folder: "Memory Album - {wedding-slug}"
+  - Subfolders: All Photos, Bride Memories, Groom Memories, Together Memories
+- [ ] Store folder IDs in database
+- [ ] Handle existing folder detection
+- [ ] Add folder creation retry logic
 
-- [ ] Set up Vercel Cron configuration
-- [ ] Create embedding generation cron job
-- [ ] Implement Google Drive backup job
-- [ ] Add job monitoring and logging
-- [ ] Create retry mechanism for failed jobs
-- [ ] Add job status tracking
+### Epic: Photo Upload Integration
+- [ ] Implement Google Drive service class
+- [ ] Add photo upload functionality
+  - Upload to correct category subfolder
+  - Handle large files with resumable uploads
+  - Add retry logic for failed uploads
+- [ ] Create background job for async uploads
+- [ ] Queue photos for upload after guest submission
+- [ ] Track upload status in database
 
-### Epic: Data Export
+### Epic: Token Management
+- [ ] Implement access token refresh logic
+- [ ] Handle expired tokens gracefully
+- [ ] Add token encryption for security
+- [ ] Create token validation endpoint
+- [ ] Add automatic token refresh before expiry
 
-- [ ] Create Google Drive integration
-- [ ] Implement photo backup to Drive
-- [ ] Generate JSON export of memories
-- [ ] Create organized folder structure
-- [ ] Add export status notifications
-- [ ] Implement manual export trigger
+### Epic: UI/UX Improvements
+- [ ] Show Google Drive connection status
+- [ ] Display connected Google account email
+- [ ] Add disconnect/reconnect functionality
+- [ ] Show upload progress/status
+- [ ] Add manual sync button
+- [ ] Create upload history log
+
+### Epic: Error Handling & Recovery
+- [ ] Handle Google Drive API quota limits
+- [ ] Implement exponential backoff for retries
+- [ ] Add fallback for failed uploads
+- [ ] Create admin notification for failures
+- [ ] Add manual retry mechanism
 
 ## Sprint 7: Polish & Production Readiness
 
@@ -256,47 +278,24 @@ Each epic is complete when:
 - Payment processing
 - Custom themes beyond color
 
-## Sprint 8: Google Drive Backup Implementation
+## Sprint 8: Background Jobs & Data Export
 
-### Epic: Folder Management
-- [ ] Create wedding folder structure on OAuth connection
-  - Main folder: "Memory Album - {wedding-slug}"
-  - Subfolders: All Photos, Bride Memories, Groom Memories, Together Memories
-- [ ] Store folder IDs in database
-- [ ] Handle existing folder detection
-- [ ] Add folder creation retry logic
+**Goal**: Automated processing and data management
 
-### Epic: Photo Upload Integration
-- [ ] Implement Google Drive service class
-- [ ] Add photo upload functionality
-  - Upload to correct category subfolder
-  - Handle large files with resumable uploads
-  - Add retry logic for failed uploads
-- [ ] Create background job for async uploads
-- [ ] Queue photos for upload after guest submission
-- [ ] Track upload status in database
+### Epic: Background Processing
 
-### Epic: Token Management
-- [ ] Implement access token refresh logic
-- [ ] Handle expired tokens gracefully
-- [ ] Add token encryption for security
-- [ ] Create token validation endpoint
-- [ ] Add automatic token refresh before expiry
+- [ ] Set up Vercel Cron configuration
+- [ ] Create embedding generation cron job
+- [ ] Add job monitoring and logging
+- [ ] Create retry mechanism for failed jobs
+- [ ] Add job status tracking
 
-### Epic: UI/UX Improvements
-- [ ] Show Google Drive connection status
-- [ ] Display connected Google account email
-- [ ] Add disconnect/reconnect functionality
-- [ ] Show upload progress/status
-- [ ] Add manual sync button
-- [ ] Create upload history log
+### Epic: Data Export
 
-### Epic: Error Handling & Recovery
-- [ ] Handle Google Drive API quota limits
-- [ ] Implement exponential backoff for retries
-- [ ] Add fallback for failed uploads
-- [ ] Create admin notification for failures
-- [ ] Add manual retry mechanism
+- [ ] Generate JSON export of memories
+- [ ] Add export status notifications
+- [ ] Implement manual export trigger
+- [ ] Create downloadable memory book (PDF/ZIP)
 
 ## Sprint 9: Security & Authentication (Future)
 
