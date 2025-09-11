@@ -268,8 +268,8 @@ export default function WeddingPageClient({
 
           {/* Tabs */}
           <div className="border-b">
-            <div className="max-w-6xl mx-auto px-4">
-              <div className="flex space-x-8">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+              <div className="flex space-x-2 sm:space-x-8 overflow-x-auto scrollbar-hide">
               {(["all", "bride", "groom", "together"] as const).map((tab) => {
                 const tabLabel = tab === "bride" && wedding.bride 
                   ? getBrideDisplayName(wedding)
@@ -285,7 +285,7 @@ export default function WeddingPageClient({
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className="py-3 px-1 border-b-2 font-medium text-sm transition-colors"
+                    className="py-3 px-2 sm:px-3 border-b-2 font-medium text-sm sm:text-base transition-colors whitespace-nowrap min-w-fit flex-shrink-0"
                     style={{
                       borderColor: activeTab === tab ? themeColor : 'transparent',
                       color: activeTab === tab ? themeColor : '#6B7280',
@@ -301,7 +301,10 @@ export default function WeddingPageClient({
                       }
                     }}
                   >
-                    {tabLabel} ({totalCounts[tab]})
+                    <span className="inline-block">
+                      {tabLabel}
+                      <span className="ml-1 text-xs sm:text-sm opacity-75">({totalCounts[tab]})</span>
+                    </span>
                   </button>
                 );
               })}
@@ -311,7 +314,7 @@ export default function WeddingPageClient({
         </div>
 
         {/* Category Grid */}
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {isLoadingCategories && filteredCategories.length === 0 ? (
             // Simple, elegant loading state
             <div className="flex flex-col items-center justify-center py-20">
@@ -323,7 +326,7 @@ export default function WeddingPageClient({
               <p className="mt-4 text-gray-500 text-sm">Loading memories...</p>
             </div>
           ) : filteredCategories.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredCategories.map((category) => (
                 <CategoryCard
                   key={`${category.id}-${category.memory_count}-${category.memories?.[0]?.memory_photos?.[0]?.id || ''}`}
@@ -372,16 +375,20 @@ export default function WeddingPageClient({
         </div>
       </div>
 
-      {/* Floating Action Button on Mobile */}
+      {/* Floating Action Button on Mobile - Larger touch target */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all hover:scale-110 md:hidden"
-        style={{ backgroundColor: themeColor }}
+        className="fixed bottom-6 right-6 text-white p-5 rounded-full shadow-xl transition-all active:scale-95 hover:scale-110 md:hidden z-40"
+        style={{ 
+          backgroundColor: themeColor,
+          minWidth: '64px',
+          minHeight: '64px'
+        }}
         onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
         onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
         aria-label="Share Memory"
       >
-        <Plus className="h-6 w-6" />
+        <Plus className="h-7 w-7" />
       </button>
 
       {/* Memory Submission Modal */}

@@ -92,17 +92,17 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
       </div>
 
       {/* Content */}
-      <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24 text-center">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 text-center">
         {/* Couple Names */}
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
           {getCoupleNames(wedding)}
         </h1>
         
         {/* Wedding Date */}
         {wedding.wedding_date && (
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Calendar className="w-5 h-5" style={accentStyle} />
-            <p className="text-lg md:text-xl text-gray-700">
+          <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6">
+            <Calendar className="w-4 sm:w-5 h-4 sm:h-5" style={accentStyle} />
+            <p className="text-base sm:text-lg md:text-xl text-gray-700">
               {new Date(wedding.wedding_date + 'T00:00:00').toLocaleDateString('en-US', {
                 weekday: 'long',
                 year: 'numeric',
@@ -115,16 +115,16 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
 
         {/* Countdown or Time Since */}
         {timeUntil && (
-          <div className="flex items-center justify-center gap-2 mb-8">
-            <Clock className="w-5 h-5" style={accentStyle} />
-            <p className="text-2xl md:text-3xl font-semibold" style={accentStyle}>
+          <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
+            <Clock className="w-4 sm:w-5 h-4 sm:h-5" style={accentStyle} />
+            <p className="text-xl sm:text-2xl md:text-3xl font-semibold" style={accentStyle}>
               {timeUntil}
             </p>
           </div>
         )}
 
         {/* Welcome Message */}
-        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
           {isPast 
             ? "Thank you for celebrating with us! Share your favorite memories from our special day."
             : "We can't wait to celebrate with you! Share your favorite memories with us."}
@@ -134,7 +134,7 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button
             onClick={onShareMemory}
-            className="px-8 py-4 text-white font-semibold rounded-full shadow-lg transform transition-all hover:scale-105 hover:shadow-xl"
+            className="px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold rounded-full shadow-lg transform transition-all active:scale-95 hover:scale-105 hover:shadow-xl text-base sm:text-lg min-h-[48px] min-w-[160px]"
             style={buttonStyle}
             onMouseEnter={(e) => {
               e.currentTarget.style.opacity = '0.9';
@@ -143,7 +143,7 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
               e.currentTarget.style.opacity = '1';
             }}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-center">
               <Heart className="w-5 h-5" />
               <span>Share a Memory</span>
             </div>
