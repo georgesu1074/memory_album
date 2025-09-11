@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import QRCode from 'qrcode';
+import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 
 interface QRCodeGeneratorProps {
   url: string;
@@ -14,14 +14,14 @@ interface QRCodeGeneratorProps {
   groomFirstName?: string;
 }
 
-export default function QRCodeGenerator({ 
-  url, 
+export default function QRCodeGenerator({
+  url,
   size = 256,
   theme,
-  brideFirstName = 'Bride',
-  groomFirstName = 'Groom'
+  brideFirstName = "Bride",
+  groomFirstName = "Groom",
 }: QRCodeGeneratorProps) {
-  const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
@@ -35,14 +35,14 @@ export default function QRCodeGenerator({
         width: size,
         margin: 2,
         color: {
-          dark: '#000000', // Always use black for better scanning
-          light: '#FFFFFF',
+          dark: "#000000", // Always use black for better scanning
+          light: "#FFFFFF",
         },
-        errorCorrectionLevel: 'H',
+        errorCorrectionLevel: "H",
       });
       setQrCodeUrl(qrDataUrl);
     } catch (error) {
-      console.error('Failed to generate QR code:', error);
+      console.error("Failed to generate QR code:", error);
     } finally {
       setIsGenerating(false);
     }
@@ -51,7 +51,7 @@ export default function QRCodeGenerator({
   const downloadQRCode = () => {
     if (!qrCodeUrl) return;
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = qrCodeUrl;
     link.download = `wedding-qr-code-${Date.now()}.png`;
     document.body.appendChild(link);
@@ -62,12 +62,12 @@ export default function QRCodeGenerator({
   const printQRCode = () => {
     if (!qrCodeUrl) return;
 
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open("", "_blank");
     if (printWindow) {
       // Extract primary and secondary colors, with fallbacks
-      const primaryColor = theme?.primary || '#8B5CF6';
-      const secondaryColor = theme?.secondary || '#EC4899';
-      
+      const primaryColor = theme?.primary || "#8B5CF6";
+      const secondaryColor = theme?.secondary || "#EC4899";
+
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -304,10 +304,10 @@ export default function QRCodeGenerator({
               <!-- Main content -->
               <div class="content">
                 <h1 class="title">Join Our Love Story</h1>
-                <p class="subtitle">${brideFirstName} & ${groomFirstName}'s Wedding Album</p>
+                <p class="subtitle">${brideFirstName} & ${groomFirstName}'s Memory Album</p>
                 
                 <div class="qr-container">
-                  <img src="${qrCodeUrl}" alt="Wedding Memory QR Code" width="180" height="180" class="qr-code" />
+                  <img src="${qrCodeUrl}" alt="Memory Album QR Code" width="180" height="180" class="qr-code" />
                 </div>
                 
                 <div class="message">
@@ -320,9 +320,10 @@ export default function QRCodeGenerator({
                   <div class="heart-divider">♥ ♥ ♥</div>
                   
                   <p class="message-text">
-                    We invite you to contribute to our <strong>Digital Wedding Album</strong> – 
-                    a living collection where your photos, stories, and well-wishes 
-                    will help us relive this special day through your eyes for years to come.
+                    We'd love for you to contribute to our <strong>Digital Memory Album</strong>. 
+                    Each of us carries unique views of the moments we've shared together — like stars scattered across 
+                    the night sky. When your stars meet ours, they weave constellations of memories that illuminate 
+                    the tapestry of our lives. Add your star to our sky, and help us draw the constellations we’ll cherish forever.
                   </p>
                 </div>
                 
@@ -368,7 +369,7 @@ export default function QRCodeGenerator({
             className="rounded-lg"
           />
         )}
-        
+
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600 mb-1">Scan to visit:</p>
           <p className="text-sm font-mono text-purple-600 break-all">{url}</p>
@@ -391,7 +392,9 @@ export default function QRCodeGenerator({
       </div>
 
       <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-        <h4 className="font-semibold text-blue-900 mb-2">How to use this QR code:</h4>
+        <h4 className="font-semibold text-blue-900 mb-2">
+          How to use this QR code:
+        </h4>
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• Print and display at your wedding venue</li>
           <li>• Add to your wedding invitations</li>
