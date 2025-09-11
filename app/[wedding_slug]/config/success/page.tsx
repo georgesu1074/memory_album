@@ -114,6 +114,8 @@ export default function WeddingSuccessPage() {
                   primary: wedding.theme_color || '#8B5CF6',
                   secondary: wedding.secondary_color || '#EC4899'
                 }}
+                brideFirstName={brideName.split(' ')[0]}
+                groomFirstName={groomName.split(' ')[0]}
               />
             </div>
 

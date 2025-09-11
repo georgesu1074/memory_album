@@ -382,6 +382,8 @@ export default function WeddingConfigPage() {
                   primary: wedding.theme_color || '#8B5CF6',
                   secondary: wedding.secondary_color || '#EC4899'
                 }}
+                brideFirstName={(wedding.bride.display_name || wedding.bride.name).split(' ')[0]}
+                groomFirstName={(wedding.groom.display_name || wedding.groom.name).split(' ')[0]}
               />
             </div>
 

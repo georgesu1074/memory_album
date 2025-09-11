@@ -10,12 +10,16 @@ interface QRCodeGeneratorProps {
     primary: string;
     secondary?: string;
   };
+  brideFirstName?: string;
+  groomFirstName?: string;
 }
 
 export default function QRCodeGenerator({ 
   url, 
   size = 256,
-  theme 
+  theme,
+  brideFirstName = 'Bride',
+  groomFirstName = 'Groom'
 }: QRCodeGeneratorProps) {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -300,7 +304,7 @@ export default function QRCodeGenerator({
               <!-- Main content -->
               <div class="content">
                 <h1 class="title">Join Our Love Story</h1>
-                <p class="subtitle">A Digital Wedding Memory Album</p>
+                <p class="subtitle">${brideFirstName} & ${groomFirstName}'s Wedding Album</p>
                 
                 <div class="qr-container">
                   <img src="${qrCodeUrl}" alt="Wedding Memory QR Code" width="180" height="180" class="qr-code" />
