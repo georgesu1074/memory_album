@@ -31,7 +31,7 @@ export default function QRCodeGenerator({
         width: size,
         margin: 2,
         color: {
-          dark: theme?.primary || '#000000',
+          dark: '#000000', // Always use black for better scanning
           light: '#FFFFFF',
         },
         errorCorrectionLevel: 'H',
@@ -60,61 +60,279 @@ export default function QRCodeGenerator({
 
     const printWindow = window.open('', '_blank');
     if (printWindow) {
+      // Extract primary and secondary colors, with fallbacks
+      const primaryColor = theme?.primary || '#8B5CF6';
+      const secondaryColor = theme?.secondary || '#EC4899';
+      
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Wedding QR Code</title>
+            <title>Wedding Memory Collection</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
             <style>
+              * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+              }
+              
               body {
+                width: 5in;
+                min-height: 7in;
+                margin: 20px auto;
+                background: white;
+                position: relative;
+                overflow-y: auto;
+              }
+              
+              .page-wrapper {
+                width: 100%;
+                min-height: 7in;
+                padding: 0.4in;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                font-family: system-ui, -apple-system, sans-serif;
-                margin: 0;
-                padding: 20px;
+                justify-content: flex-start;
+                position: relative;
               }
-              .container {
+              
+              /* Decorative border */
+              .border-frame {
+                position: absolute;
+                top: 0.3in;
+                left: 0.3in;
+                right: 0.3in;
+                bottom: 0.3in;
+                border: 1px solid ${primaryColor}20;
+                border-radius: 8px;
+                pointer-events: none;
+              }
+              
+              /* Corner flourishes */
+              .corner-decoration {
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                border: 2px solid ${primaryColor}30;
+              }
+              
+              .corner-decoration.top-left {
+                top: 0.25in;
+                left: 0.25in;
+                border-right: none;
+                border-bottom: none;
+                border-top-left-radius: 8px;
+              }
+              
+              .corner-decoration.top-right {
+                top: 0.25in;
+                right: 0.25in;
+                border-left: none;
+                border-bottom: none;
+                border-top-right-radius: 8px;
+              }
+              
+              .corner-decoration.bottom-left {
+                bottom: 0.25in;
+                left: 0.25in;
+                border-right: none;
+                border-top: none;
+                border-bottom-left-radius: 8px;
+              }
+              
+              .corner-decoration.bottom-right {
+                bottom: 0.25in;
+                right: 0.25in;
+                border-left: none;
+                border-top: none;
+                border-bottom-right-radius: 8px;
+              }
+              
+              /* Main content container */
+              .content {
                 text-align: center;
+                max-width: 4in;
+                z-index: 1;
               }
-              img {
-                border: 2px solid #e5e7eb;
-                border-radius: 12px;
-                padding: 16px;
-                background: white;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-              }
-              h1 {
-                margin-top: 20px;
-                color: #111827;
+              
+              /* Title styling */
+              .title {
+                font-family: 'Playfair Display', serif;
                 font-size: 24px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin-bottom: 8px;
+                letter-spacing: 0.5px;
               }
-              p {
-                color: #6b7280;
+              
+              .subtitle {
+                font-family: 'Cormorant Garamond', serif;
                 font-size: 14px;
-                margin-top: 8px;
+                font-weight: 300;
+                color: ${primaryColor};
+                margin-bottom: 16px;
+                font-style: italic;
               }
-              .url {
-                font-family: monospace;
-                color: #8b5cf6;
-                font-size: 16px;
+              
+              /* QR Code container */
+              .qr-container {
+                background: white;
+                padding: 16px;
+                border-radius: 8px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+                margin: 16px auto;
+                display: inline-block;
+                position: relative;
+              }
+              
+              .qr-container::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                right: -2px;
+                bottom: -2px;
+                background: linear-gradient(135deg, ${primaryColor}, ${secondaryColor});
+                border-radius: 12px;
+                z-index: -1;
+                opacity: 0.15;
+              }
+              
+              .qr-code {
+                display: block;
+                border-radius: 8px;
+              }
+              
+              /* Message section */
+              .message {
+                margin-top: 20px;
+                padding: 0 10px;
+              }
+              
+              .message-text {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 13px;
+                line-height: 1.6;
+                color: #444;
+                margin-bottom: 12px;
+              }
+              
+              .message-text strong {
+                font-weight: 400;
+                color: ${primaryColor};
+              }
+              
+              /* Instructions */
+              .instructions {
+                background: linear-gradient(135deg, ${primaryColor}08, ${secondaryColor}08);
+                border-radius: 6px;
+                padding: 12px;
+                margin-top: 16px;
+              }
+              
+              .instructions-title {
+                font-family: 'Playfair Display', serif;
+                font-size: 12px;
+                color: ${primaryColor};
+                margin-bottom: 8px;
+                font-weight: 700;
+              }
+              
+              .instructions-text {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 11px;
+                line-height: 1.5;
+                color: #666;
+              }
+              
+              /* Decorative elements */
+              .heart-divider {
+                margin: 12px auto;
+                font-size: 14px;
+                color: ${secondaryColor};
+                opacity: 0.5;
+              }
+              
+              /* Website URL */
+              .website-url {
                 margin-top: 12px;
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 10px;
+                color: #999;
+                font-style: italic;
               }
+              
+              /* Print-specific styles */
               @media print {
                 body {
-                  min-height: auto;
+                  margin: 0;
+                  padding: 0;
+                  width: 5in;
+                  height: 7in;
+                }
+                
+                .page-wrapper {
+                  page-break-inside: avoid;
+                  height: 7in;
+                }
+                
+                @page {
+                  size: 5in 7in;
+                  margin: 0;
                 }
               }
             </style>
           </head>
           <body>
-            <div class="container">
-              <img src="${qrCodeUrl}" alt="QR Code" width="${size}" height="${size}" />
-              <h1>Scan to Share a Memory</h1>
-              <p class="url">${url}</p>
-              <p>Point your phone camera at this code to visit our wedding memory page</p>
+            <div class="page-wrapper">
+              <!-- Decorative corners -->
+              <div class="corner-decoration top-left"></div>
+              <div class="corner-decoration top-right"></div>
+              <div class="corner-decoration bottom-left"></div>
+              <div class="corner-decoration bottom-right"></div>
+              
+              <!-- Border frame -->
+              <div class="border-frame"></div>
+              
+              <!-- Main content -->
+              <div class="content">
+                <h1 class="title">Join Our Love Story</h1>
+                <p class="subtitle">A Digital Wedding Memory Album</p>
+                
+                <div class="qr-container">
+                  <img src="${qrCodeUrl}" alt="Wedding Memory QR Code" width="180" height="180" class="qr-code" />
+                </div>
+                
+                <div class="message">
+                  <p class="message-text">
+                    Dear friends and family, you are not just witnesses to our love story – 
+                    <strong>you are part of it</strong>. Each moment we've shared, 
+                    every celebration and quiet conversation, has shaped who we are today.
+                  </p>
+                  
+                  <div class="heart-divider">♥ ♥ ♥</div>
+                  
+                  <p class="message-text">
+                    We invite you to contribute to our <strong>Digital Wedding Album</strong> – 
+                    a living collection where your photos, stories, and well-wishes 
+                    will help us relive this special day through your eyes for years to come.
+                  </p>
+                </div>
+                
+                <div class="instructions">
+                  <h3 class="instructions-title">How to Share Your Memories</h3>
+                  <p class="instructions-text">
+                    Simply point your phone's camera at the QR code above. You'll be taken to our 
+                    special memory collection page where you can upload photos, share stories, 
+                    and leave heartfelt messages. Every contribution becomes part of our eternal celebration.
+                  </p>
+                </div>
+                
+                <p class="website-url">${url}</p>
+              </div>
             </div>
           </body>
         </html>
