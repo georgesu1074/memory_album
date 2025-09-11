@@ -313,8 +313,8 @@ export default function QRCodeGenerator({
                 <div class="message">
                   <p class="message-text">
                     Dear friends and family, you are not just witnesses to our love story – 
-                    <strong>you are part of it</strong>. Each moment we've shared, 
-                    every celebration and quiet conversation, has shaped who we are today.
+                    <strong>you are part of it</strong>. Your presence, laughter, and wisdom have shaped the 
+                    people we've become.
                   </p>
                   
                   <div class="heart-divider">♥ ♥ ♥</div>
