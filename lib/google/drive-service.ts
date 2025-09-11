@@ -2,6 +2,7 @@ import { google, drive_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { decrypt, encrypt, isEncrypted } from '@/lib/utils/encryption';
+import { Readable } from 'stream';
 
 export interface DriveFolder {
   id: string;
@@ -347,9 +348,12 @@ export class GoogleDriveService {
         parents: [folderId],
       };
 
+      // Convert buffer to stream for Google Drive API
+      const stream = Readable.from(fileBuffer);
+      
       const media = {
         mimeType,
-        body: fileBuffer,
+        body: stream,
       };
 
       const response = await this.drive.files.create({
