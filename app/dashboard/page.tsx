@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Plus, Settings, Users, Calendar, LogOut } from 'lucide-react'
 import type { WeddingWithDetails } from '@/types/wedding'
 import UserAvatar from '@/components/UserAvatar'
+import ErrorAlert from '@/components/ErrorAlert'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -71,6 +72,9 @@ export default async function DashboardPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Error Alert */}
+        <ErrorAlert />
+        
         {/* Admin Panel Link */}
         {profile?.is_admin && (
           <div className="mb-6">

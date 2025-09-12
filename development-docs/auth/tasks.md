@@ -71,10 +71,11 @@
 
 ### Route Protection
 - [x] Create auth middleware
-- [ ] Protect /config routes (partial - middleware ready)
-- [ ] Protect /guests routes (partial - middleware ready)
+- [x] Protect /config routes (fully implemented with ownership checks)
+- [x] Protect /guests routes (fully implemented with ownership checks)
 - [x] Handle unauthorized access
 - [x] Add redirect logic
+- [x] Show error messages for unauthorized access attempts
 
 ### Co-owner Management UI
 - [ ] Add "Share Ownership" button to dashboard

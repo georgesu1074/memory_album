@@ -34,8 +34,8 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] `/admin/weddings` - Wedding overview (admin only)
 
 ### Protected Routes
-- [ ] `/[wedding-slug]/config` - Now requires owner or admin access
-- [ ] `/[wedding-slug]/guests` - Now requires owner or admin access
+- [x] `/[wedding-slug]/config` - Now requires owner or admin access
+- [x] `/[wedding-slug]/guests` - Now requires owner or admin access
 
 ### Components Added
 - [x] Login page with Google OAuth and Magic Links
@@ -44,6 +44,8 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] Sign out handler
 - [x] `UserAvatar` - Reusable avatar component with initials fallback
 - [x] `AdminStats` - Statistics overview for admin dashboard
+- [x] `ErrorAlert` - Display unauthorized access errors
+- [x] Layout wrappers for protected routes (config/guests)
 - [ ] `AuthButton` - Sign in/out button for header
 - [ ] `OwnerManager` - Co-owner management interface
 
@@ -75,9 +77,10 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - Fixed Next.js 15 compatibility issues (async params, viewport metadata)
 
 ### Migration Notes
-- Existing weddings can be claimed by users
+- Existing weddings can be claimed by users using SQL script
 - Cookie-based ownership still supported for backwards compatibility
 - Admin privileges must be manually granted in database
+- Use `/scripts/assign-wedding-owner.sql` to assign ownership to existing weddings
 
 ## Testing Checklist
 - [x] Google OAuth login flow works
@@ -85,7 +88,8 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] Dashboard shows user's weddings
 - [ ] Can create new wedding when logged in (pending implementation)
 - [ ] Can add co-owners to weddings (pending UI implementation)
-- [ ] Config/guests pages properly protected (middleware ready, integration pending)
+- [x] Config/guests pages properly protected with ownership checks
+- [x] Unauthorized users redirected with error message
 - [x] Admin can access all weddings
 - [x] Admin can manage users
 - [x] Logout works correctly
