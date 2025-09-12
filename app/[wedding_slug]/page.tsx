@@ -67,9 +67,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: url,
     },
-    other: {
-      'theme-color': themeColor,
-    },
+  }
+}
+
+export async function generateViewport({ params }: PageProps) {
+  const { wedding_slug } = await params
+  const supabaseAdmin = createAdminClient()
+  
+  const { data: wedding } = await supabaseAdmin
+    .from('weddings')
+    .select('theme_color')
+    .eq('slug', wedding_slug)
+    .single()
+  
+  return {
+    themeColor: wedding?.theme_color || '#8B5CF6',
+    width: 'device-width',
+    initialScale: 1,
   }
 }
 

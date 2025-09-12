@@ -3,12 +3,12 @@ import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const body = await request.json();
     const { slug: newSlug } = body;
-    const currentSlug = params.slug;
+    const { slug: currentSlug } = await params;
     const supabaseAdmin = createAdminClient();
 
     if (!newSlug) {
