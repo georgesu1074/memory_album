@@ -1,0 +1,185 @@
+Subject: Security Verification Required - Memory Album
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9fafb;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+    h1 {
+      color: #1f2937;
+      font-size: 24px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #6b7280;
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+    .button {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+      color: white !important;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      margin: 24px 0;
+    }
+    .security-alert {
+      background: #fee2e2;
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 24px 0;
+      color: #991b1b;
+    }
+    .info-box {
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+    .device-info {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .device-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+    .device-value {
+      font-size: 14px;
+      color: #1f2937;
+      font-weight: 500;
+    }
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .divider {
+      text-align: center;
+      margin: 32px 0;
+      color: #9ca3af;
+    }
+    .link-text {
+      color: #8B5CF6;
+      word-break: break-all;
+      font-size: 12px;
+    }
+    .shield-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Memory Album</div>
+      <div class="shield-icon">🛡️</div>
+      <h1>Security Verification Required</h1>
+      <p class="subtitle">Please confirm your identity to continue</p>
+    </div>
+
+    <p>Hi {{ .Email }}!</p>
+    
+    <p>You're trying to perform a sensitive action that requires additional verification. This is a security measure to protect your account.</p>
+    
+    <div class="info-box">
+      <strong>Action Requested:</strong>
+      <p style="margin: 8px 0;">{{ .Data.action_description | default "Access sensitive account settings" }}</p>
+    </div>
+    
+    <div class="device-info">
+      <div style="margin-bottom: 12px;">
+        <div class="device-label">Time</div>
+        <div class="device-value">{{ .Data.timestamp | default "Just now" }}</div>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <div class="device-label">IP Address</div>
+        <div class="device-value">{{ .Data.ip_address | default "Unknown" }}</div>
+      </div>
+      <div>
+        <div class="device-label">Browser</div>
+        <div class="device-value">{{ .Data.user_agent | default "Unknown" }}</div>
+      </div>
+    </div>
+    
+    <p>To continue, please verify your identity:</p>
+    
+    <div style="text-align: center;">
+      <a href="{{ .ConfirmationURL }}" class="button">Verify My Identity</a>
+    </div>
+    
+    <div class="divider">
+      <p>Or copy and paste this link:</p>
+      <p class="link-text">{{ .ConfirmationURL }}</p>
+    </div>
+    
+    <div class="security-alert">
+      <strong>⚠️ Security Alert:</strong>
+      <p style="margin: 8px 0;">If you didn't attempt this action, your account may be compromised. Please:</p>
+      <ul style="margin: 8px 0;">
+        <li>Do NOT click the verification link</li>
+        <li>Change your password immediately</li>
+        <li>Review your recent account activity</li>
+        <li>Contact support if you need assistance</li>
+      </ul>
+    </div>
+    
+    <p><strong>Why am I seeing this?</strong><br>
+    We require reauthentication for:
+    <ul>
+      <li>Changing account email or password</li>
+      <li>Deleting weddings or data</li>
+      <li>Modifying security settings</li>
+      <li>Accessing after a long period of inactivity</li>
+    </ul>
+    </p>
+    
+    <div class="footer">
+      <p>This link expires in 10 minutes for security reasons.</p>
+      <p><strong>Need help?</strong> Contact us at support@memoryalbum.com</p>
+      <p style="margin-top: 16px;">Made with 💜 by Memory Album</p>
+    </div>
+  </div>
+</body>
+</html>

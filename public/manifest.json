@@ -1,0 +1,11 @@
+{
+  "name": "Memory Album",
+  "short_name": "Memory Album",
+  "description": "Create beautiful digital memory albums for your wedding",
+  "theme_color": "#8B5CF6",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}
