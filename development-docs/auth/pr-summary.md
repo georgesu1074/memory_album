@@ -13,6 +13,7 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] Admin dashboard and capabilities
 - [x] Protected routes with middleware
 - [x] Ownership check utilities
+- [x] User avatar system with fallbacks
 
 ### Database Changes
 - [x] Created `users` table extending Supabase auth
@@ -21,15 +22,16 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] Implemented Row Level Security policies
 - [x] Added triggers for automatic ownership assignment
 - [x] Added indexes for performance
+- [x] Added user sync trigger for auth.users → public.users
 
 ### New Pages/Routes
 - [x] `/auth/login` - Login page with OAuth and magic links
 - [x] `/auth/callback` - OAuth callback handler
 - [x] `/auth/signout` - Sign out handler
 - [x] `/dashboard` - User dashboard for wedding management
-- [ ] `/admin` - Admin dashboard (admin only)
-- [ ] `/admin/users` - User management (admin only)
-- [ ] `/admin/weddings` - Wedding overview (admin only)
+- [x] `/admin` - Admin dashboard (admin only)
+- [x] `/admin/users` - User management (admin only)
+- [x] `/admin/weddings` - Wedding overview (admin only)
 
 ### Protected Routes
 - [ ] `/[wedding-slug]/config` - Now requires owner or admin access
@@ -40,9 +42,10 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] Dashboard page with wedding management
 - [x] Auth callback handler
 - [x] Sign out handler
+- [x] `UserAvatar` - Reusable avatar component with initials fallback
+- [x] `AdminStats` - Statistics overview for admin dashboard
 - [ ] `AuthButton` - Sign in/out button for header
 - [ ] `OwnerManager` - Co-owner management interface
-- [ ] `AdminStats` - Statistics overview for admin
 
 ### API Endpoints
 - [ ] `/api/auth/magic-link` - Magic link handler
@@ -51,9 +54,9 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [ ] `/api/weddings/[slug]/owners` - Co-owner management
 
 ### Security Improvements
-- [ ] Implemented middleware for route protection
-- [ ] Added RLS policies for data protection
-- [ ] Session management with httpOnly cookies
+- [x] Implemented middleware for route protection
+- [x] Added RLS policies for data protection
+- [x] Session management with httpOnly cookies
 - [ ] CSRF protection on state-changing operations
 - [ ] Rate limiting on authentication endpoints
 
@@ -65,9 +68,11 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - `@supabase/auth-ui-shared` - Shared auth UI utilities
 
 ### Configuration Changes
-- Updated Supabase client for auth support
+- Updated Supabase client for auth support (SSR)
 - Added auth middleware configuration
 - Environment variables for OAuth providers
+- Created web app manifest for PWA support
+- Fixed Next.js 15 compatibility issues (async params, viewport metadata)
 
 ### Migration Notes
 - Existing weddings can be claimed by users
@@ -75,16 +80,17 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - Admin privileges must be manually granted in database
 
 ## Testing Checklist
-- [ ] Google OAuth login flow works
-- [ ] Magic link emails are sent and work
-- [ ] Dashboard shows user's weddings
-- [ ] Can create new wedding when logged in
-- [ ] Can add co-owners to weddings
-- [ ] Config/guests pages properly protected
-- [ ] Admin can access all weddings
-- [ ] Admin can manage users
-- [ ] Logout works correctly
-- [ ] Sessions persist across page refreshes
+- [x] Google OAuth login flow works
+- [ ] Magic link emails are sent and work (requires Supabase email config)
+- [x] Dashboard shows user's weddings
+- [ ] Can create new wedding when logged in (pending implementation)
+- [ ] Can add co-owners to weddings (pending UI implementation)
+- [ ] Config/guests pages properly protected (middleware ready, integration pending)
+- [x] Admin can access all weddings
+- [x] Admin can manage users
+- [x] Logout works correctly
+- [x] Sessions persist across page refreshes
+- [x] User avatars display correctly with fallbacks
 
 ## Deployment Considerations
 - Set up Google OAuth credentials in production
@@ -98,8 +104,12 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - Wedding creation now requires login
 
 ## Follow-up Tasks
+- [ ] Implement wedding creation for logged-in users
+- [ ] Complete route protection for config/guests pages
+- [ ] Create co-owner management UI
 - [ ] Add email verification requirement
 - [ ] Implement two-factor authentication
 - [ ] Add social sharing from dashboard
 - [ ] Create onboarding flow for new users
 - [ ] Add analytics tracking
+- [ ] Create proper PWA icons for manifest
