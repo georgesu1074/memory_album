@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Users, Calendar, Heart, Settings, ArrowLeft, TrendingUp } from 'lucide-react'
+import UserAvatar from '@/components/UserAvatar'
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient()
@@ -196,13 +197,12 @@ export default async function AdminDashboardPage() {
                   {recentUsers.map((user) => (
                     <div key={user.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        {user.avatar_url && (
-                          <img 
-                            src={user.avatar_url} 
-                            alt={user.full_name || 'User'} 
-                            className="w-8 h-8 rounded-full"
-                          />
-                        )}
+                        <UserAvatar 
+                          avatarUrl={user.avatar_url}
+                          name={user.full_name}
+                          email={user.email}
+                          size="sm"
+                        />
                         <div>
                           <p className="font-medium text-gray-900">{user.full_name || 'Unknown'}</p>
                           <p className="text-sm text-gray-600">{user.email}</p>

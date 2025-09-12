@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Search, Shield, ShieldOff, Loader2 } from 'lucide-react'
+import UserAvatar from '@/components/UserAvatar'
 
 interface User {
   id: string
@@ -164,19 +165,13 @@ export default function AdminUsersPage() {
                     <tr key={user.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          {user.avatar_url ? (
-                            <img 
-                              src={user.avatar_url} 
-                              alt={user.full_name || 'User'} 
-                              className="w-10 h-10 rounded-full mr-3"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-gray-200 mr-3 flex items-center justify-center">
-                              <span className="text-gray-500 text-sm">
-                                {(user.full_name || user.email)[0].toUpperCase()}
-                              </span>
-                            </div>
-                          )}
+                          <UserAvatar 
+                            avatarUrl={user.avatar_url}
+                            name={user.full_name}
+                            email={user.email}
+                            size="md"
+                            className="mr-3"
+                          />
                           <div>
                             <div className="text-sm font-medium text-gray-900">
                               {user.full_name || 'No name'}

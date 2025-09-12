@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus, Settings, Users, Calendar, LogOut } from 'lucide-react'
 import type { WeddingWithDetails } from '@/types/wedding'
+import UserAvatar from '@/components/UserAvatar'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -46,13 +47,12 @@ export default async function DashboardPage() {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                {profile?.avatar_url && (
-                  <img 
-                    src={profile.avatar_url} 
-                    alt={profile.full_name || 'User'} 
-                    className="w-8 h-8 rounded-full"
-                  />
-                )}
+                <UserAvatar 
+                  avatarUrl={profile?.avatar_url}
+                  name={profile?.full_name}
+                  email={user.email}
+                  size="sm"
+                />
                 <span className="text-sm text-gray-700">{profile?.full_name || user.email}</span>
                 {profile?.is_admin && (
                   <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">Admin</span>
