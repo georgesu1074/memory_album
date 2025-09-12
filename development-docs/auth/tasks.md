@@ -10,17 +10,19 @@
 - [x] Update environment variables
 
 ### Google OAuth Setup
-- [ ] Enable Google provider in Supabase dashboard (manual step)
-- [ ] Configure redirect URLs for dev and production (manual step)
-- [ ] Add Google client ID to env variables (manual step)
+- [x] Enable Google provider in Supabase dashboard (completed)
+- [x] Configure redirect URLs for dev (completed)
+- [ ] Configure redirect URLs for production (when deploying)
+- [x] Add Google client ID to env variables (completed)
 - [x] Test OAuth flow end-to-end
 
 ### Magic Links Implementation
-- [ ] Configure email templates in Supabase (manual step)
+- [x] Configure email templates in Supabase (completed with Resend)
 - [x] Set up magic link endpoint
 - [x] Create email input component
 - [x] Handle magic link callbacks
-- [ ] Add rate limiting
+- [x] SMTP configuration with Resend (100 emails/day)
+- [ ] Add rate limiting (optional - Resend handles this)
 
 ### Login/Signup Page
 - [x] Create /auth/login page layout

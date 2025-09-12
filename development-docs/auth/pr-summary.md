@@ -81,7 +81,7 @@ Implementing comprehensive authentication and authorization system for Memory Al
 
 ## Testing Checklist
 - [x] Google OAuth login flow works
-- [ ] Magic link emails are sent and work (requires Supabase email config)
+- [x] Magic link emails are sent and work (configured with Resend SMTP)
 - [x] Dashboard shows user's weddings
 - [ ] Can create new wedding when logged in (pending implementation)
 - [ ] Can add co-owners to weddings (pending UI implementation)
@@ -94,9 +94,10 @@ Implementing comprehensive authentication and authorization system for Memory Al
 
 ## Deployment Considerations
 - Set up Google OAuth credentials in production
-- Configure email settings in Supabase
+- Configure Resend SMTP in production Supabase (or keep existing Resend config)
 - Update redirect URLs for production domain
 - Set initial admin user after deployment
+- Copy email templates from `/supabase/email-templates/` to Supabase dashboard
 
 ## Breaking Changes
 - `/[wedding-slug]/config` now requires authentication
