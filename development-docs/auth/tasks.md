@@ -62,17 +62,17 @@
 
 ### Ownership Logic
 - [ ] Update wedding creation to assign owner
-- [ ] Create ownership check utilities
-- [ ] Add co-owner grant functionality
-- [ ] Implement ownership revoke
+- [x] Create ownership check utilities
+- [x] Add co-owner grant functionality
+- [x] Implement ownership revoke
 - [ ] Build ownership transfer
 
 ### Route Protection
-- [ ] Create auth middleware
-- [ ] Protect /config routes
-- [ ] Protect /guests routes
-- [ ] Handle unauthorized access
-- [ ] Add redirect logic
+- [x] Create auth middleware
+- [ ] Protect /config routes (partial - middleware ready)
+- [ ] Protect /guests routes (partial - middleware ready)
+- [x] Handle unauthorized access
+- [x] Add redirect logic
 
 ### Co-owner Management UI
 - [ ] Add "Share Ownership" button to dashboard
@@ -84,29 +84,29 @@
 ## Phase 4: Admin System
 
 ### Admin Infrastructure
-- [ ] Add is_admin field to users
-- [ ] Create admin check utilities
-- [ ] Set up admin middleware
+- [x] Add is_admin field to users
+- [x] Create admin check utilities
+- [x] Set up admin middleware
 - [ ] Build admin API routes
 
 ### Admin Dashboard
-- [ ] Create /admin route group
-- [ ] Build admin layout
-- [ ] Add statistics overview
-- [ ] Create navigation menu
+- [x] Create /admin route group
+- [x] Build admin layout
+- [x] Add statistics overview
+- [x] Create navigation menu
 
 ### User Management
-- [ ] Build users list table
-- [ ] Add search functionality
+- [x] Build users list table
+- [x] Add search functionality
 - [ ] Create user detail view
-- [ ] Add admin toggle
+- [x] Add admin toggle
 - [ ] Implement user impersonation
 
 ### Wedding Management
-- [ ] Create weddings overview
-- [ ] Add filtering options
-- [ ] Build quick actions menu
-- [ ] Add ownership management
+- [x] Create weddings overview
+- [x] Add filtering options
+- [x] Build quick actions menu
+- [ ] Add ownership management UI
 - [ ] Create bulk operations
 
 ## Phase 5: Polish & Security

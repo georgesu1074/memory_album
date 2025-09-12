@@ -10,8 +10,9 @@ Implementing comprehensive authentication and authorization system for Memory Al
 - [x] Magic link (passwordless) authentication
 - [x] User dashboard for wedding management
 - [x] Multi-owner support for weddings (database ready)
-- [ ] Admin dashboard and capabilities
+- [x] Admin dashboard and capabilities
 - [x] Protected routes with middleware
+- [x] Ownership check utilities
 
 ### Database Changes
 - [x] Created `users` table extending Supabase auth
