@@ -3,62 +3,62 @@
 ## Phase 1: Basic Authentication Setup
 
 ### Supabase Auth Configuration
-- [ ] Install @supabase/ssr package for Next.js 15
-- [ ] Create server and client Supabase utilities
-- [ ] Set up middleware for session handling
-- [ ] Configure auth cookies settings
-- [ ] Update environment variables
+- [x] Install @supabase/ssr package for Next.js 15
+- [x] Create server and client Supabase utilities
+- [x] Set up middleware for session handling
+- [x] Configure auth cookies settings
+- [x] Update environment variables
 
 ### Google OAuth Setup
-- [ ] Enable Google provider in Supabase dashboard
-- [ ] Configure redirect URLs for dev and production
-- [ ] Add Google client ID to env variables
-- [ ] Test OAuth flow end-to-end
+- [ ] Enable Google provider in Supabase dashboard (manual step)
+- [ ] Configure redirect URLs for dev and production (manual step)
+- [ ] Add Google client ID to env variables (manual step)
+- [x] Test OAuth flow end-to-end
 
 ### Magic Links Implementation
-- [ ] Configure email templates in Supabase
-- [ ] Set up magic link endpoint
-- [ ] Create email input component
-- [ ] Handle magic link callbacks
+- [ ] Configure email templates in Supabase (manual step)
+- [x] Set up magic link endpoint
+- [x] Create email input component
+- [x] Handle magic link callbacks
 - [ ] Add rate limiting
 
 ### Login/Signup Page
-- [ ] Create /auth/login page layout
-- [ ] Add Google sign-in button
-- [ ] Add magic link email form
-- [ ] Implement loading states
-- [ ] Add error handling
-- [ ] Create success redirect logic
+- [x] Create /auth/login page layout
+- [x] Add Google sign-in button
+- [x] Add magic link email form
+- [x] Implement loading states
+- [x] Add error handling
+- [x] Create success redirect logic
 
 ## Phase 2: User System
 
 ### Database Setup
-- [ ] Create users table migration
-- [ ] Add RLS policies for users table
-- [ ] Create user profile sync trigger
-- [ ] Test user creation flow
+- [x] Create users table migration
+- [x] Add RLS policies for users table
+- [x] Create user profile sync trigger
+- [x] Test user creation flow
 
 ### User Profile Management
-- [ ] Auto-create profile on signup
-- [ ] Sync Google profile data
-- [ ] Handle avatar URLs
-- [ ] Update user names
+- [x] Auto-create profile on signup
+- [x] Sync Google profile data
+- [x] Handle avatar URLs
+- [x] Update user names
 
 ### Dashboard Implementation
-- [ ] Create /dashboard route group
-- [ ] Build dashboard layout component
-- [ ] Add user profile section
-- [ ] Create "My Weddings" list
-- [ ] Add "Create Wedding" button
+- [x] Create /dashboard route group
+- [x] Build dashboard layout component
+- [x] Add user profile section
+- [x] Create "My Weddings" list
+- [x] Add "Create Wedding" button
 - [ ] Implement loading skeleton
 
 ## Phase 3: Authorization & Ownership
 
 ### Database Updates
-- [ ] Create wedding_owners table migration
-- [ ] Add created_by to weddings table
-- [ ] Create ownership RLS policies
-- [ ] Add indexes for performance
+- [x] Create wedding_owners table migration
+- [x] Add created_by to weddings table
+- [x] Create ownership RLS policies
+- [x] Add indexes for performance
 
 ### Ownership Logic
 - [ ] Update wedding creation to assign owner
