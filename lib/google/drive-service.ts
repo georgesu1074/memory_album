@@ -3,6 +3,12 @@ import { OAuth2Client } from 'google-auth-library';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { decrypt, encrypt, isEncrypted } from '@/lib/utils/encryption';
 import { Readable } from 'stream';
+import {
+  withRetry,
+  globalQuotaTracker,
+  parseGoogleDriveError,
+  sleep
+} from './drive-error-handler';
 
 export interface DriveFolder {
   id: string;
@@ -273,28 +279,53 @@ export class GoogleDriveService {
         return existingFolder;
       }
 
-      // Create new folder
-      const fileMetadata: drive_v3.Schema$File = {
-        name,
-        mimeType: 'application/vnd.google-apps.folder',
-        ...(parentId && { parents: [parentId] }),
+      // Create new folder with retry logic
+      const createFolderOperation = async () => {
+        // Track quota usage
+        globalQuotaTracker.recordRequest(this.weddingId);
+
+        // Check if we should delay
+        const recommendedDelay = globalQuotaTracker.getRecommendedDelay(this.weddingId);
+        if (recommendedDelay > 0) {
+          console.log(`[Drive API] Approaching quota limit, delaying ${recommendedDelay}ms`);
+          await sleep(recommendedDelay);
+        }
+
+        const fileMetadata: drive_v3.Schema$File = {
+          name,
+          mimeType: 'application/vnd.google-apps.folder',
+          ...(parentId && { parents: [parentId] }),
+        };
+
+        const response = await this.drive.files.create({
+          requestBody: fileMetadata,
+          fields: 'id, name',
+        });
+
+        if (response.data.id) {
+          return {
+            id: response.data.id,
+            name: response.data.name || name,
+          };
+        }
+
+        return null;
       };
 
-      const response = await this.drive.files.create({
-        requestBody: fileMetadata,
-        fields: 'id, name',
+      // Execute with retry logic
+      return await withRetry(createFolderOperation, {
+        maxRetries: 3,
+        initialDelayMs: 1000,
       });
+    } catch (error) {
+      const quotaError = parseGoogleDriveError(error);
 
-      if (response.data.id) {
-        return {
-          id: response.data.id,
-          name: response.data.name || name,
-        };
+      if (quotaError.isQuotaError) {
+        console.error(`[Drive API] Quota error creating folder: ${quotaError.message}`);
+      } else {
+        console.error('Error creating folder:', error);
       }
 
-      return null;
-    } catch (error) {
-      console.error('Error creating folder:', error);
       return null;
     }
   }
@@ -304,31 +335,55 @@ export class GoogleDriveService {
    */
   async findFolder(name: string, parentId?: string): Promise<DriveFolder | null> {
     try {
-      let query = `name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
-      
-      if (parentId) {
-        query += ` and '${parentId}' in parents`;
-      }
+      const findOperation = async () => {
+        // Track quota usage
+        globalQuotaTracker.recordRequest(this.weddingId);
 
-      const response = await this.drive.files.list({
-        q: query,
-        fields: 'files(id, name)',
-        spaces: 'drive',
-      });
-
-      if (response.data.files && response.data.files.length > 0) {
-        const file = response.data.files[0];
-        if (file.id) {
-          return {
-            id: file.id,
-            name: file.name || name,
-          };
+        // Check if we should delay
+        const recommendedDelay = globalQuotaTracker.getRecommendedDelay(this.weddingId);
+        if (recommendedDelay > 0) {
+          await sleep(recommendedDelay);
         }
+
+        let query = `name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+
+        if (parentId) {
+          query += ` and '${parentId}' in parents`;
+        }
+
+        const response = await this.drive.files.list({
+          q: query,
+          fields: 'files(id, name)',
+          spaces: 'drive',
+        });
+
+        if (response.data.files && response.data.files.length > 0) {
+          const file = response.data.files[0];
+          if (file.id) {
+            return {
+              id: file.id,
+              name: file.name || name,
+            };
+          }
+        }
+
+        return null;
+      };
+
+      // Execute with retry logic (fewer retries for read operations)
+      return await withRetry(findOperation, {
+        maxRetries: 3,
+        initialDelayMs: 1000,
+      });
+    } catch (error) {
+      const quotaError = parseGoogleDriveError(error);
+
+      if (quotaError.isQuotaError) {
+        console.error(`[Drive API] Quota error finding folder: ${quotaError.message}`);
+      } else {
+        console.error('Error finding folder:', error);
       }
 
-      return null;
-    } catch (error) {
-      console.error('Error finding folder:', error);
       return null;
     }
   }
@@ -343,37 +398,70 @@ export class GoogleDriveService {
     folderId: string
   ): Promise<DriveUploadResult> {
     try {
-      const fileMetadata: drive_v3.Schema$File = {
-        name: fileName,
-        parents: [folderId],
-      };
+      const uploadOperation = async () => {
+        // Track quota usage
+        globalQuotaTracker.recordRequest(this.weddingId);
 
-      // Convert buffer to stream for Google Drive API
-      const stream = Readable.from(fileBuffer);
-      
-      const media = {
-        mimeType,
-        body: stream,
-      };
+        // Check if we should delay
+        const recommendedDelay = globalQuotaTracker.getRecommendedDelay(this.weddingId);
+        if (recommendedDelay > 0) {
+          console.log(`[Drive API] Approaching quota limit, delaying ${recommendedDelay}ms`);
+          await sleep(recommendedDelay);
+        }
 
-      const response = await this.drive.files.create({
-        requestBody: fileMetadata,
-        media,
-        fields: 'id',
-      });
-
-      if (response.data.id) {
-        return {
-          success: true,
-          fileId: response.data.id,
+        const fileMetadata: drive_v3.Schema$File = {
+          name: fileName,
+          parents: [folderId],
         };
+
+        // Convert buffer to stream for Google Drive API
+        const stream = Readable.from(fileBuffer);
+
+        const media = {
+          mimeType,
+          body: stream,
+        };
+
+        const response = await this.drive.files.create({
+          requestBody: fileMetadata,
+          media,
+          fields: 'id',
+        });
+
+        if (response.data.id) {
+          return {
+            success: true,
+            fileId: response.data.id,
+          };
+        }
+
+        return {
+          success: false,
+          error: 'No file ID returned',
+        };
+      };
+
+      // Execute with retry logic
+      return await withRetry(uploadOperation, {
+        maxRetries: 5,  // More retries for uploads
+        initialDelayMs: 2000,  // Start with 2 second delay
+        maxDelayMs: 60000,  // Max 1 minute delay
+      });
+    } catch (error) {
+      const quotaError = parseGoogleDriveError(error);
+
+      if (quotaError.isQuotaError) {
+        console.error(`[Drive API] Quota error uploading file: ${quotaError.message}`);
+
+        // Store error details for potential fallback handling
+        return {
+          success: false,
+          error: `Quota limit exceeded: ${quotaError.message}`,
+          isQuotaError: true,
+          retryAfterMs: quotaError.retryAfterMs,
+        } as DriveUploadResult & { isQuotaError?: boolean; retryAfterMs?: number };
       }
 
-      return {
-        success: false,
-        error: 'No file ID returned',
-      };
-    } catch (error) {
       console.error('Error uploading file:', error);
       return {
         success: false,
