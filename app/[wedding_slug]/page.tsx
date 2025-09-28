@@ -4,9 +4,9 @@ import { Metadata } from 'next'
 import { getCoupleNames } from '@/types/wedding'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     wedding_slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
