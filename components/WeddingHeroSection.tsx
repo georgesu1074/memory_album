@@ -63,15 +63,15 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
   }, [wedding.wedding_date]);
 
   const themeColor = wedding.theme_color || '#8B5CF6';
-  const secondaryColor = (wedding as any).secondary_color || '#EC4899';
+  const secondaryColor = (wedding as any).secondary_color || '#4B5563'; // Default to dark grey
 
-  // Generate gradient based on theme colors
+  // Generate gradient based on theme colors - using a pink gradient
   const gradientStyle = {
-    background: `linear-gradient(135deg, ${themeColor}20 0%, ${secondaryColor}20 100%)`,
+    background: `linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%)`, // Light pink gradient
   };
 
   const buttonStyle = {
-    backgroundColor: themeColor,
+    backgroundColor: secondaryColor, // Use secondary color for button
   };
 
   const accentStyle = {
@@ -83,25 +83,18 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
       {/* Background with gradient */}
       <div className="absolute inset-0" style={gradientStyle} />
       
-      {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-10">
-        <Heart className="w-full h-full" style={accentStyle} />
-      </div>
-      <div className="absolute bottom-0 left-0 w-48 h-48 opacity-10">
-        <Heart className="w-full h-full" style={accentStyle} />
-      </div>
 
       {/* Content */}
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24 text-center">
         {/* Couple Names */}
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-600 mb-3 sm:mb-4 leading-tight">
           {getCoupleNames(wedding)}
         </h1>
         
         {/* Wedding Date */}
         {wedding.wedding_date && (
           <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6">
-            <Calendar className="w-4 sm:w-5 h-4 sm:h-5" style={accentStyle} />
+            <Calendar className="w-4 sm:w-5 h-4 sm:h-5" style={{ color: secondaryColor }} />
             <p className="text-base sm:text-lg md:text-xl text-gray-700">
               {new Date(wedding.wedding_date + 'T00:00:00').toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -116,8 +109,8 @@ export default function WeddingHeroSection({ wedding, onShareMemory }: WeddingHe
         {/* Countdown or Time Since */}
         {timeUntil && (
           <div className="flex items-center justify-center gap-2 mb-6 sm:mb-8">
-            <Clock className="w-4 sm:w-5 h-4 sm:h-5" style={accentStyle} />
-            <p className="text-xl sm:text-2xl md:text-3xl font-semibold" style={accentStyle}>
+            <Clock className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400" />
+            <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-400">
               {timeUntil}
             </p>
           </div>

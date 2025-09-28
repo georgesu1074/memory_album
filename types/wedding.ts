@@ -35,5 +35,5 @@ export function getBrideDisplayName(wedding: WeddingWithDetails): string {
 export function getCoupleNames(wedding: WeddingWithDetails): string {
   const groomFirstName = getGroomDisplayName(wedding)
   const brideFirstName = getBrideDisplayName(wedding)
-  return `${groomFirstName} & ${brideFirstName}`
+  return `${brideFirstName} & ${groomFirstName}`
 }

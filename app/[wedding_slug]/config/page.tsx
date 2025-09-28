@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import QRCodeGenerator from '@/components/wedding-config/QRCodeGenerator';
-import UploadProgress from '@/components/drive/UploadProgress';
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import QRCodeGenerator from "@/components/wedding-config/QRCodeGenerator";
+import UploadProgress from "@/components/drive/UploadProgress";
 
 interface WeddingConfig {
   id: string;
@@ -42,18 +42,19 @@ export default function WeddingConfigPage() {
   const params = useParams();
   const router = useRouter();
   const weddingSlug = params.wedding_slug as string;
-  
+
   const [wedding, setWedding] = useState<WeddingConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [driveStatus, setDriveStatus] = useState<DriveStatus | null>(null);
-  
+
   // Form state
   const [isActive, setIsActive] = useState(false);
-  const [themeColor, setThemeColor] = useState('#8B5CF6');
-  const [weddingDate, setWeddingDate] = useState('');
+  const [themeColor, setThemeColor] = useState("#8B5CF6");
+  const [secondaryColor, setSecondaryColor] = useState("#4B5563");
+  const [weddingDate, setWeddingDate] = useState("");
 
   useEffect(() => {
     fetchWeddingConfig();
@@ -63,12 +64,12 @@ export default function WeddingConfigPage() {
   const fetchWeddingConfig = async () => {
     try {
       const response = await fetch(`/api/weddings/${weddingSlug}/config`);
-      
+
       if (!response.ok) {
         if (response.status === 404) {
-          setError('Wedding not found');
+          setError("Wedding not found");
         } else {
-          setError('Failed to load wedding configuration');
+          setError("Failed to load wedding configuration");
         }
         setLoading(false);
         return;
@@ -78,10 +79,11 @@ export default function WeddingConfigPage() {
       setWedding(data.wedding);
       setIsActive(data.wedding.is_active);
       setThemeColor(data.wedding.theme_color);
-      setWeddingDate(data.wedding.wedding_date || '');
+      setSecondaryColor(data.wedding.secondary_color || "#4B5563");
+      setWeddingDate(data.wedding.wedding_date || "");
       setLoading(false);
     } catch (err) {
-      setError('Failed to load wedding configuration');
+      setError("Failed to load wedding configuration");
       setLoading(false);
     }
   };
@@ -94,7 +96,7 @@ export default function WeddingConfigPage() {
         setDriveStatus(status);
       }
     } catch (err) {
-      console.error('Failed to fetch Drive status:', err);
+      console.error("Failed to fetch Drive status:", err);
     }
   };
 
@@ -104,27 +106,31 @@ export default function WeddingConfigPage() {
     setSuccessMessage(null);
 
     try {
-      const endpoint = isActive 
+      const endpoint = isActive
         ? `/api/weddings/${weddingSlug}/deactivate`
         : `/api/weddings/${weddingSlug}/activate`;
-      
+
       const response = await fetch(endpoint, {
-        method: 'POST',
+        method: "POST",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update activation status');
+        throw new Error("Failed to update activation status");
       }
 
       setIsActive(!isActive);
-      setSuccessMessage(isActive ? 'Wedding deactivated' : 'Wedding activated successfully!');
-      
+      setSuccessMessage(
+        isActive ? "Wedding deactivated" : "Wedding activated successfully!"
+      );
+
       // Update local state
       if (wedding) {
         setWedding({ ...wedding, is_active: !isActive });
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update activation');
+      setError(
+        err instanceof Error ? err.message : "Failed to update activation"
+      );
     } finally {
       setSaving(false);
     }
@@ -137,30 +143,32 @@ export default function WeddingConfigPage() {
 
     try {
       const response = await fetch(`/api/weddings/${weddingSlug}/config`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           theme_color: themeColor,
+          secondary_color: secondaryColor,
           wedding_date: weddingDate || null,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save changes');
+        throw new Error("Failed to save changes");
       }
 
-      setSuccessMessage('Changes saved successfully!');
-      
+      setSuccessMessage("Changes saved successfully!");
+
       // Update local state
       if (wedding) {
-        setWedding({ 
-          ...wedding, 
+        setWedding({
+          ...wedding,
           theme_color: themeColor,
+          secondary_color: secondaryColor,
           wedding_date: weddingDate,
         });
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save changes');
+      setError(err instanceof Error ? err.message : "Failed to save changes");
     } finally {
       setSaving(false);
     }
@@ -209,8 +217,12 @@ export default function WeddingConfigPage() {
           >
             ← Back to Wedding Page
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Wedding Configuration</h1>
-          <p className="text-gray-600 mt-2">Manage your wedding page settings</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Wedding Configuration
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage your wedding page settings
+          </p>
         </div>
 
         {/* Messages */}
@@ -231,8 +243,10 @@ export default function WeddingConfigPage() {
           <div className="space-y-6">
             {/* Basic Information */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Basic Information</h2>
-              
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                Basic Information
+              </h2>
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -248,7 +262,7 @@ export default function WeddingConfigPage() {
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(weddingUrl);
-                        setSuccessMessage('URL copied to clipboard!');
+                        setSuccessMessage("URL copied to clipboard!");
                         setTimeout(() => setSuccessMessage(null), 3000);
                       }}
                       className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
@@ -262,18 +276,25 @@ export default function WeddingConfigPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Bride
                   </label>
-                  <p className="text-gray-900">{wedding.bride.display_name || wedding.bride.name}</p>
+                  <p className="text-gray-900">
+                    {wedding.bride.display_name || wedding.bride.name}
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Groom
                   </label>
-                  <p className="text-gray-900">{wedding.groom.display_name || wedding.groom.name}</p>
+                  <p className="text-gray-900">
+                    {wedding.groom.display_name || wedding.groom.name}
+                  </p>
                 </div>
 
                 <div>
-                  <label htmlFor="wedding-date" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="wedding-date"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Wedding Date
                   </label>
                   <input
@@ -289,28 +310,32 @@ export default function WeddingConfigPage() {
 
             {/* Activation Status */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Activation Status</h2>
-              
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                Activation Status
+              </h2>
+
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-gray-900">Wedding Page Status</p>
+                    <p className="font-medium text-gray-900">
+                      Wedding Page Status
+                    </p>
                     <p className="text-sm text-gray-600">
-                      {isActive 
-                        ? 'Your wedding page is live and accepting memories' 
-                        : 'Your wedding page is in preview mode'}
+                      {isActive
+                        ? "Your wedding page is live and accepting memories"
+                        : "Your wedding page is in preview mode"}
                     </p>
                   </div>
                   <button
                     onClick={handleActivationToggle}
                     disabled={saving}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      isActive ? 'bg-green-600' : 'bg-gray-300'
-                    } ${saving ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      isActive ? "bg-green-600" : "bg-gray-300"
+                    } ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        isActive ? 'translate-x-6' : 'translate-x-1'
+                        isActive ? "translate-x-6" : "translate-x-1"
                       }`}
                     />
                   </button>
@@ -319,8 +344,9 @@ export default function WeddingConfigPage() {
                 {!isActive && (
                   <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <p className="text-sm text-yellow-800">
-                      <span className="font-semibold">Preview Mode:</span> Only you can see your wedding page. 
-                      Activate it when you're ready to share with guests.
+                      <span className="font-semibold">Preview Mode:</span> Only
+                      you can see your wedding page. Activate it when you're
+                      ready to share with guests.
                     </p>
                   </div>
                 )}
@@ -329,11 +355,16 @@ export default function WeddingConfigPage() {
 
             {/* Theme Settings */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Theme Settings</h2>
-              
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                Theme Settings
+              </h2>
+
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="theme-color" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="theme-color"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Primary Color
                   </label>
                   <div className="flex items-center gap-3">
@@ -354,14 +385,39 @@ export default function WeddingConfigPage() {
                   </div>
                 </div>
 
+                <div>
+                  <label
+                    htmlFor="secondary-color"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Secondary Color (Button Color)
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      id="secondary-color"
+                      value={secondaryColor}
+                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      className="h-10 w-20 border border-gray-300 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={secondaryColor}
+                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      className="flex-1 px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg"
+                      placeholder="#4B5563"
+                    />
+                  </div>
+                </div>
+
                 <button
                   onClick={handleSaveChanges}
                   disabled={saving}
                   className={`w-full px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 ${
-                    saving ? 'opacity-50 cursor-not-allowed' : ''
+                    saving ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  {saving ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </div>
@@ -371,25 +427,38 @@ export default function WeddingConfigPage() {
           <div className="space-y-6">
             {/* QR Code */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">QR Code</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                QR Code
+              </h2>
               <p className="text-sm text-gray-600 mb-4">
-                Share this QR code at your wedding for easy access to the memory collection page
+                Share this QR code at your wedding for easy access to the memory
+                collection page
               </p>
               <QRCodeGenerator
                 url={weddingUrl}
                 size={256}
                 theme={{
-                  primary: wedding.theme_color || '#8B5CF6',
-                  secondary: wedding.secondary_color || '#EC4899'
+                  primary: wedding.theme_color || "#8B5CF6",
+                  secondary: wedding.secondary_color || "#EC4899",
                 }}
-                brideFirstName={(wedding.bride.display_name || wedding.bride.name).split(' ')[0]}
-                groomFirstName={(wedding.groom.display_name || wedding.groom.name).split(' ')[0]}
+                brideFirstName={
+                  (wedding.bride.display_name || wedding.bride.name).split(
+                    " "
+                  )[0]
+                }
+                groomFirstName={
+                  (wedding.groom.display_name || wedding.groom.name).split(
+                    " "
+                  )[0]
+                }
               />
             </div>
 
             {/* Quick Actions */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Quick Actions</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                Quick Actions
+              </h2>
               <div className="space-y-3">
                 <a
                   href={`/${weddingSlug}`}
@@ -423,16 +492,21 @@ export default function WeddingConfigPage() {
                   <button
                     onClick={async () => {
                       if (!driveStatus.configured) {
-                        const response = await fetch(`/api/weddings/${weddingSlug}/drive/setup`, { method: 'POST' });
+                        const response = await fetch(
+                          `/api/weddings/${weddingSlug}/drive/setup`,
+                          { method: "POST" }
+                        );
                         if (response.ok) {
-                          setSuccessMessage('Google Drive folders created!');
+                          setSuccessMessage("Google Drive folders created!");
                           fetchDriveStatus();
                         }
                       }
                     }}
                     className="block w-full px-4 py-2 bg-green-600 text-white rounded-lg text-center font-medium hover:bg-green-700"
                   >
-                    {driveStatus.configured ? '✓ Google Drive Connected' : 'Setup Google Drive Folders'}
+                    {driveStatus.configured
+                      ? "✓ Google Drive Connected"
+                      : "Setup Google Drive Folders"}
                   </button>
                 )}
               </div>
@@ -441,52 +515,75 @@ export default function WeddingConfigPage() {
             {/* Google Drive Status */}
             {driveStatus && driveStatus.connected && (
               <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-semibold mb-4 text-gray-900">Google Drive Backup</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                  Google Drive Backup
+                </h2>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Status</span>
-                    <span className={`text-sm font-medium ${driveStatus.configured ? 'text-green-600' : 'text-yellow-600'}`}>
-                      {driveStatus.configured ? '✓ Active' : '⚠ Setup Required'}
+                    <span
+                      className={`text-sm font-medium ${
+                        driveStatus.configured
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {driveStatus.configured ? "✓ Active" : "⚠ Setup Required"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Account</span>
-                    <span className="text-sm text-gray-900">{driveStatus.email}</span>
+                    <span className="text-sm text-gray-900">
+                      {driveStatus.email}
+                    </span>
                   </div>
                   {driveStatus.statistics && (
                     <>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Photos Backed Up</span>
-                        <span className="text-sm font-medium text-gray-900">{driveStatus.statistics.totalUploaded}</span>
+                        <span className="text-sm text-gray-600">
+                          Photos Backed Up
+                        </span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {driveStatus.statistics.totalUploaded}
+                        </span>
                       </div>
                       {driveStatus.statistics.lastSyncAt && (
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600">Last Sync</span>
+                          <span className="text-sm text-gray-600">
+                            Last Sync
+                          </span>
                           <span className="text-sm text-gray-900">
-                            {new Date(driveStatus.statistics.lastSyncAt).toLocaleDateString()}
+                            {new Date(
+                              driveStatus.statistics.lastSyncAt
+                            ).toLocaleDateString()}
                           </span>
                         </div>
                       )}
                     </>
                   )}
-                  
+
                   {/* Action Buttons */}
                   <div className="pt-3 border-t border-gray-200 space-y-2">
                     <button
                       onClick={async () => {
                         setSaving(true);
                         try {
-                          const response = await fetch(`/api/weddings/${weddingSlug}/drive/sync`, { 
-                            method: 'POST' 
-                          });
+                          const response = await fetch(
+                            `/api/weddings/${weddingSlug}/drive/sync`,
+                            {
+                              method: "POST",
+                            }
+                          );
                           if (response.ok) {
-                            setSuccessMessage('Manual sync triggered successfully');
+                            setSuccessMessage(
+                              "Manual sync triggered successfully"
+                            );
                             fetchDriveStatus();
                           } else {
-                            setError('Failed to trigger sync');
+                            setError("Failed to trigger sync");
                           }
                         } catch (err) {
-                          setError('Failed to trigger sync');
+                          setError("Failed to trigger sync");
                         } finally {
                           setSaving(false);
                         }
@@ -494,25 +591,32 @@ export default function WeddingConfigPage() {
                       disabled={saving || !driveStatus.configured}
                       className="w-full px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                     >
-                      {saving ? 'Syncing...' : 'Manual Sync'}
+                      {saving ? "Syncing..." : "Manual Sync"}
                     </button>
-                    
+
                     <button
                       onClick={async () => {
-                        if (confirm('Are you sure you want to disconnect Google Drive? Your photos will remain backed up.')) {
+                        if (
+                          confirm(
+                            "Are you sure you want to disconnect Google Drive? Your photos will remain backed up."
+                          )
+                        ) {
                           setSaving(true);
                           try {
-                            const response = await fetch(`/api/weddings/${weddingSlug}/drive/disconnect`, { 
-                              method: 'DELETE' 
-                            });
+                            const response = await fetch(
+                              `/api/weddings/${weddingSlug}/drive/disconnect`,
+                              {
+                                method: "DELETE",
+                              }
+                            );
                             if (response.ok) {
-                              setSuccessMessage('Google Drive disconnected');
+                              setSuccessMessage("Google Drive disconnected");
                               setDriveStatus(null);
                             } else {
-                              setError('Failed to disconnect');
+                              setError("Failed to disconnect");
                             }
                           } catch (err) {
-                            setError('Failed to disconnect');
+                            setError("Failed to disconnect");
                           } finally {
                             setSaving(false);
                           }
@@ -535,7 +639,9 @@ export default function WeddingConfigPage() {
 
             {/* Stats */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-900">Statistics</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                Statistics
+              </h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-purple-600">0</p>
