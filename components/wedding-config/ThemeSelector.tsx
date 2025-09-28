@@ -11,14 +11,14 @@ interface ThemeSelectorProps {
 }
 
 const PRESET_THEMES = [
-  { name: 'Royal Purple', primary: '#8B5CF6', secondary: '#EC4899' },
-  { name: 'Ocean Blue', primary: '#0EA5E9', secondary: '#06B6D4' },
-  { name: 'Rose Garden', primary: '#F43F5E', secondary: '#FB7185' },
-  { name: 'Forest Green', primary: '#10B981', secondary: '#34D399' },
-  { name: 'Sunset Orange', primary: '#F97316', secondary: '#FB923C' },
-  { name: 'Classic Gold', primary: '#EAB308', secondary: '#FDE047' },
-  { name: 'Midnight', primary: '#4338CA', secondary: '#6366F1' },
-  { name: 'Blush Pink', primary: '#EC4899', secondary: '#F9A8D4' },
+  { name: 'Royal Purple', primary: '#8B5CF6', secondary: '#4B5563' },
+  { name: 'Ocean Blue', primary: '#0EA5E9', secondary: '#1F2937' },
+  { name: 'Rose Garden', primary: '#F43F5E', secondary: '#374151' },
+  { name: 'Forest Green', primary: '#10B981', secondary: '#1F2937' },
+  { name: 'Sunset Orange', primary: '#F97316', secondary: '#374151' },
+  { name: 'Classic Gold', primary: '#EAB308', secondary: '#1F2937' },
+  { name: 'Midnight', primary: '#4338CA', secondary: '#374151' },
+  { name: 'Blush Pink', primary: '#EC4899', secondary: '#4B5563' },
 ];
 
 export default function ThemeSelector({ 
@@ -122,7 +122,7 @@ export default function ThemeSelector({
                 <input
                   id="secondary-color"
                   type="color"
-                  value={data.secondary_color || '#EC4899'}
+                  value={data.secondary_color || '#4B5563'}
                   onChange={(e) => updateData({ secondary_color: e.target.value })}
                   className="h-10 w-20"
                 />
@@ -132,7 +132,7 @@ export default function ThemeSelector({
                   onChange={(e) => updateData({ secondary_color: e.target.value })}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
                   pattern="^#[0-9A-Fa-f]{6}$"
-                  placeholder="#EC4899"
+                  placeholder="#4B5563"
                 />
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function ThemeSelector({
         <button
           type="button"
           className="px-4 py-2 text-white rounded-lg font-medium"
-          style={{ backgroundColor: data.theme_color }}
+          style={{ backgroundColor: data.secondary_color || '#4B5563' }}
         >
           Share a Memory
         </button>
