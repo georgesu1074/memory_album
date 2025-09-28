@@ -7,13 +7,13 @@ import { findOrCreateCategory, updateCategorySummary } from '@/lib/db/categories
 import { updateCategoryMemoryType } from '@/lib/categories/update-memory-type'
 
 // Tool function declarations for Gemini
-const tools = [{
+const tools: any = [{
   functionDeclarations: [
     {
       name: 'get_existing_categories',
       description: 'Get all existing memory categories and their counts',
       parameters: {
-        type: 'object',
+        type: 'object' as const,
         properties: {},
         required: []
       }
@@ -22,7 +22,7 @@ const tools = [{
       name: 'get_memories_in_category',
       description: 'Get example memories from a specific category to understand context',
       parameters: {
-        type: 'object',
+        type: 'object' as const,
         properties: {
           category: {
             type: 'string',

@@ -232,7 +232,7 @@ export default function WeddingPageClient({
   };
 
   const themeColor = wedding.theme_color || '#8B5CF6';
-  const secondaryColor = wedding.secondary_color || '#EC4899';
+  const secondaryColor = (wedding as any).secondary_color || '#EC4899';
 
   return (
     <>

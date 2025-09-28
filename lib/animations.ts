@@ -107,14 +107,14 @@ export const cardVariants: Variants = {
 
 // Mobile-optimized spring configs
 export const springConfig = {
-  stiff: { type: 'spring', stiffness: 300, damping: 30 },
-  gentle: { type: 'spring', stiffness: 100, damping: 20 },
-  wobbly: { type: 'spring', stiffness: 180, damping: 12 },
+  stiff: { type: 'spring' as const, stiffness: 300, damping: 30 },
+  gentle: { type: 'spring' as const, stiffness: 100, damping: 20 },
+  wobbly: { type: 'spring' as const, stiffness: 180, damping: 12 },
 };
 
 // Page transition config
 export const pageTransition = {
-  type: 'tween',
-  ease: 'anticipate',
+  type: 'tween' as const,
+  ease: 'anticipate' as const,
   duration: 0.5,
 };

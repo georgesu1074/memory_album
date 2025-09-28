@@ -35,7 +35,7 @@ export default async function DashboardPage() {
     `)
     .eq('user_id', user.id)
 
-  const weddings = ownedWeddings?.map(ow => ow.weddings).filter(Boolean) as WeddingWithDetails[] || []
+  const weddings = (ownedWeddings?.map(ow => ow.weddings).filter(Boolean) || []) as unknown as WeddingWithDetails[]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
@@ -124,7 +124,7 @@ export default async function DashboardPage() {
                   className="h-32 bg-gradient-to-br from-purple-400 to-pink-400"
                   style={{
                     background: wedding.theme_color 
-                      ? `linear-gradient(135deg, ${wedding.theme_color}, ${wedding.secondary_color || wedding.theme_color})`
+                      ? `linear-gradient(135deg, ${wedding.theme_color}, ${(wedding as any).secondary_color || wedding.theme_color})`
                       : undefined
                   }}
                 />

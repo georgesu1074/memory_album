@@ -11,7 +11,7 @@ export async function checkWeddingOwner(weddingSlug: string): Promise<{
 }> {
   try {
     // Get the owner token from cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const ownerToken = cookieStore.get(`wedding-owner-${weddingSlug}`);
     
     if (!ownerToken) {

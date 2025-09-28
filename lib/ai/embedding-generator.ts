@@ -72,7 +72,7 @@ export async function storeEmbedding(
         {
           id: memoryId, // Use memory ID as point ID
           vector: embedding,
-          payload: metadata
+          payload: metadata as unknown as Record<string, unknown>
         }
       ]
     })
@@ -143,7 +143,7 @@ export async function searchSimilarMemories(
     return searchResult.map(result => ({
       id: result.id as string,
       score: result.score,
-      metadata: result.payload as EmbeddingMetadata
+      metadata: result.payload as unknown as EmbeddingMetadata
     }))
   } catch (error) {
     console.error('Error searching memories:', error)

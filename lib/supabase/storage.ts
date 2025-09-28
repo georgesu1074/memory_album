@@ -109,7 +109,7 @@ export function getPhotoPublicUrl(
  * Upload a photo to Supabase storage
  */
 export async function uploadPhoto(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any, // Accept any Supabase client type
   file: File,
   weddingId: string,
   bucket: keyof typeof STORAGE_BUCKETS = 'MEMORY_PHOTOS'
@@ -152,7 +152,7 @@ export async function uploadPhoto(
  * Delete a photo from storage
  */
 export async function deletePhoto(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any, // Accept any Supabase client type
   bucket: keyof typeof STORAGE_BUCKETS,
   filepath: string
 ): Promise<{ success: boolean; error?: string }> {
@@ -172,7 +172,7 @@ export async function deletePhoto(
  * List photos in a wedding folder
  */
 export async function listWeddingPhotos(
-  supabase: ReturnType<typeof createClient<Database>>,
+  supabase: any, // Accept any Supabase client type
   weddingId: string,
   bucket: keyof typeof STORAGE_BUCKETS = 'MEMORY_PHOTOS'
 ): Promise<{ files: Array<{ name: string; url: string }>; error?: string }> {
@@ -188,7 +188,7 @@ export async function listWeddingPhotos(
     return { files: [], error: error.message }
   }
 
-  const files = (data || []).map(file => ({
+  const files = (data || []).map((file: any) => ({
     name: file.name,
     url: getPhotoPublicUrl(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,

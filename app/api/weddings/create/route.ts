@@ -15,6 +15,7 @@ interface CreateWeddingRequest {
   wedding_date?: string;
   slug?: string;
   theme_color: string;
+  secondary_color?: string;
 }
 
 function generateSlug(brideName: string, groomName: string): string {

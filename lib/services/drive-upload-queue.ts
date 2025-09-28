@@ -86,7 +86,7 @@ export async function processPendingUploads(): Promise<void> {
     const uploadsByWedding = new Map<string, typeof pendingUploads>();
     
     for (const upload of pendingUploads) {
-      const weddingSlug = upload.memories.weddings.slug;
+      const weddingSlug = (upload.memories as any).weddings.slug;
       if (!uploadsByWedding.has(weddingSlug)) {
         uploadsByWedding.set(weddingSlug, []);
       }
@@ -109,7 +109,7 @@ export async function processPendingUploads(): Promise<void> {
       // Process each memory's photos
       for (const [memoryId, memoryUploads] of uploadsByMemory) {
         const photoUrls = memoryUploads.map(u => u.photo_url);
-        const memoryType = memoryUploads[0].memories.memory_type;
+        const memoryType = (memoryUploads[0].memories as any).memory_type;
         
         await queueDriveUpload({
           memoryId,
@@ -144,14 +144,15 @@ export async function retryFailedUploads(): Promise<void> {
     }
 
     // Mark as pending to retry
-    const uploadIds = failedUploads.map(u => u.id);
-    await supabase
-      .from('memory_drive_uploads')
-      .update({
-        upload_status: 'pending',
-        retry_count: supabase.raw('retry_count + 1'),
-      })
-      .in('id', uploadIds);
+    for (const upload of failedUploads) {
+      await supabase
+        .from('memory_drive_uploads')
+        .update({
+          upload_status: 'pending',
+          retry_count: (upload.retry_count || 0) + 1,
+        })
+        .eq('id', upload.id);
+    }
 
     // Process will pick them up in next run
   } catch (error) {

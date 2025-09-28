@@ -44,9 +44,8 @@ export default function MemoryFilters({
         className="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide"
         style={{
           scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitScrollbar: { display: 'none' }
-        }}
+          msOverflowStyle: 'none'
+        } as React.CSSProperties}
       >
         {filters.map((item) => (
           <button

@@ -37,7 +37,7 @@ export async function POST(
         memory_id,
         photo_url,
         retry_count,
-        memories!inner(
+        memories(
           wedding_id,
           memory_type
         )
@@ -54,10 +54,24 @@ export async function POST(
       });
     }
 
+    // Type the upload data properly
+    type UploadWithMemory = {
+      id: string;
+      memory_id: string;
+      photo_url: string;
+      retry_count: number | null;
+      memories: {
+        wedding_id: string;
+        memory_type: string;
+      } | null;
+    };
+
     // Group by memory for efficient retry
-    const uploadsByMemory = new Map<string, typeof failedUploads>();
+    const uploadsByMemory = new Map<string, UploadWithMemory[]>();
     
-    for (const upload of failedUploads) {
+    const typedUploads = failedUploads as unknown as UploadWithMemory[];
+    
+    for (const upload of typedUploads) {
       const memoryId = upload.memory_id;
       if (!uploadsByMemory.has(memoryId)) {
         uploadsByMemory.set(memoryId, []);
@@ -66,22 +80,29 @@ export async function POST(
     }
 
     // Reset status to pending and increment retry count
-    const uploadIds = failedUploads.map(u => u.id);
-    await supabase
-      .from('memory_drive_uploads')
-      .update({
-        upload_status: 'pending',
-        retry_count: supabase.raw('retry_count + 1'),
-        error_message: null,
-      })
-      .in('id', uploadIds);
+    // Update each upload individually to increment retry count
+    for (const upload of typedUploads) {
+      await supabase
+        .from('memory_drive_uploads')
+        .update({
+          upload_status: 'pending',
+          retry_count: (upload.retry_count || 0) + 1,
+          error_message: null,
+        })
+        .eq('id', upload.id);
+    }
 
     // Queue retries
     let retriedCount = 0;
     
     for (const [memoryId, uploads] of uploadsByMemory) {
       const photoUrls = uploads.map(u => u.photo_url);
-      const memoryType = uploads[0].memories.memory_type;
+      // Access memories as a single object, not array
+      const memoryTypeRaw = uploads[0].memories?.memory_type || 'both';
+      
+      // Ensure memoryType is valid
+      const memoryType: 'bride' | 'groom' | 'both' = 
+        memoryTypeRaw === 'bride' || memoryTypeRaw === 'groom' ? memoryTypeRaw : 'both';
       
       await queueDriveUpload({
         memoryId,

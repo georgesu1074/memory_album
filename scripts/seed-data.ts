@@ -51,7 +51,7 @@ const seedData = async () => {
     console.log('✅ Created bride details:', brideDetails.name)
 
     // Update wedding with detail IDs
-    const { error: updateError } = await supabase
+    const { error: updateWeddingError } = await supabase
       .from('weddings')
       .update({
         groom_id: groomDetails.id,
@@ -59,7 +59,7 @@ const seedData = async () => {
       })
       .eq('id', wedding.id)
 
-    if (updateError) throw updateError
+    if (updateWeddingError) throw updateWeddingError
     console.log('✅ Linked wedding to bride and groom details')
 
     // Create test guests
@@ -146,12 +146,12 @@ const seedData = async () => {
     console.log('✅ Created test memory group')
 
     // Update some memories to belong to the group
-    const { error: updateError } = await supabase
+    const { error: updateMemoryError } = await supabase
       .from('memories')
       .update({ group_id: group.id })
       .in('id', [memoryData[0].id, memoryData[1].id])
 
-    if (updateError) throw updateError
+    if (updateMemoryError) throw updateMemoryError
     console.log('✅ Linked memories to group')
 
     console.log('\n🎉 Seed data created successfully!')
