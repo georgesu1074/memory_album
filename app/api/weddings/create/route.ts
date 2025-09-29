@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
       success: true,
       wedding: {
         ...updatedWedding,
-        url: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/${weddingSlug}`
+        url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.memoryalbum.ai'}/${weddingSlug}`
       }
     });
   } catch (error) {

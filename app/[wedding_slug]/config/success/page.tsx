@@ -54,7 +54,7 @@ export default function WeddingSuccessPage() {
     );
   }
 
-  const weddingUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://memoryalbum.ai'}/${wedding.slug}`;
+  const weddingUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://www.memoryalbum.ai'}/${wedding.slug}`;
   const brideName = wedding.bride?.display_name || wedding.bride?.name || 'Bride';
   const groomName = wedding.groom?.display_name || wedding.groom?.name || 'Groom';
 
