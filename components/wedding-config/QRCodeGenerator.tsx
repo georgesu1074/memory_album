@@ -64,9 +64,7 @@ export default function QRCodeGenerator({
 
     const printWindow = window.open("", "_blank");
     if (printWindow) {
-      // Extract primary and secondary colors, with fallbacks
-      const primaryColor = theme?.primary || "#8B5CF6";
-      const secondaryColor = theme?.secondary || "#EC4899";
+      // Note: Colors removed for black & white printing
 
       printWindow.document.write(`
         <!DOCTYPE html>
@@ -110,7 +108,7 @@ export default function QRCodeGenerator({
                 left: 0.3in;
                 right: 0.3in;
                 bottom: 0.3in;
-                border: 1px solid ${primaryColor}20;
+                border: 1px solid #00000020;
                 border-radius: 8px;
                 pointer-events: none;
               }
@@ -120,7 +118,7 @@ export default function QRCodeGenerator({
                 position: absolute;
                 width: 40px;
                 height: 40px;
-                border: 2px solid ${primaryColor}30;
+                border: 2px solid #00000030;
               }
               
               .corner-decoration.top-left {
@@ -176,7 +174,7 @@ export default function QRCodeGenerator({
                 font-family: 'Cormorant Garamond', serif;
                 font-size: 14px;
                 font-weight: 300;
-                color: ${primaryColor};
+                color: #000000;
                 margin-bottom: 16px;
                 font-style: italic;
               }
@@ -186,24 +184,12 @@ export default function QRCodeGenerator({
                 background: white;
                 padding: 16px;
                 border-radius: 8px;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
                 margin: 16px auto;
                 display: inline-block;
                 position: relative;
               }
               
-              .qr-container::before {
-                content: '';
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                right: -2px;
-                bottom: -2px;
-                background: linear-gradient(135deg, ${primaryColor}, ${secondaryColor});
-                border-radius: 12px;
-                z-index: -1;
-                opacity: 0.15;
-              }
+              /* Removed gradient background for pure B&W printing */
               
               .qr-code {
                 display: block;
@@ -225,13 +211,14 @@ export default function QRCodeGenerator({
               }
               
               .message-text strong {
-                font-weight: 400;
-                color: ${primaryColor};
+                font-weight: 600;
+                color: #000000;
               }
               
               /* Instructions */
               .instructions {
-                background: linear-gradient(135deg, ${primaryColor}08, ${secondaryColor}08);
+                background: white;
+                border: 1px solid #000000;
                 border-radius: 6px;
                 padding: 12px;
                 margin-top: 16px;
@@ -240,7 +227,7 @@ export default function QRCodeGenerator({
               .instructions-title {
                 font-family: 'Playfair Display', serif;
                 font-size: 12px;
-                color: ${primaryColor};
+                color: #000000;
                 margin-bottom: 8px;
                 font-weight: 700;
               }
@@ -249,7 +236,7 @@ export default function QRCodeGenerator({
                 font-family: 'Cormorant Garamond', serif;
                 font-size: 11px;
                 line-height: 1.5;
-                color: #666;
+                color: #000000;
               }
               
               /* Decorative elements */
@@ -265,7 +252,7 @@ export default function QRCodeGenerator({
                 margin-top: 12px;
                 font-family: 'Cormorant Garamond', serif;
                 font-size: 10px;
-                color: #999;
+                color: #000000;
                 font-style: italic;
               }
               
@@ -316,8 +303,6 @@ export default function QRCodeGenerator({
                     each of you carries unique memories. When your stars meet ours, 
                     they weave constellations that illuminate the tapestry of our lives.
                   </p>
-                  
-                  <div class="heart-divider">♥ ♥ ♥</div>
                 </div>
                 
                 <div class="qr-container">
