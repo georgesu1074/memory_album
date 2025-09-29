@@ -296,10 +296,8 @@ export default function QRCodeGenerator({
                 <div class="message">
                   <p class="message-text">
                     Dear friends and family,
-                  </p>
-                  
-                  <p class="message-text">
-                    <strong>You are part of our love story.</strong> Like stars across the night sky, 
+                    <br />
+                    You are part of our love story. Like stars across the night sky, 
                     each of you carries unique memories. When your stars meet ours, 
                     they weave constellations that illuminate the tapestry of our lives.
                   </p>
