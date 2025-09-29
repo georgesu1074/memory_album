@@ -305,11 +305,7 @@ export default function QRCodeGenerator({
               <div class="content">
                 <h1 class="title">Join Our Love Story</h1>
                 <p class="subtitle">${brideFirstName} & ${groomFirstName}'s Memory Album</p>
-                
-                <div class="qr-container">
-                  <img src="${qrCodeUrl}" alt="Memory Album QR Code" width="180" height="180" class="qr-code" />
-                </div>
-                
+
                 <div class="message">
                   <p class="message-text">
                     Dear friends and family,
@@ -324,11 +320,18 @@ export default function QRCodeGenerator({
                   <div class="heart-divider">♥ ♥ ♥</div>
                 </div>
                 
+                <div class="qr-container">
+                  <img src="${qrCodeUrl}" alt="Memory Album QR Code" width="180" height="180" class="qr-code" />
+                </div>
+                
                 <div class="instructions">
                   <h3 class="instructions-title">How to Share Your Memories</h3>
                   <p class="instructions-text">
                     Point your phone's camera at the QR code above to visit our memory collection page. 
-                    Upload photos, share stories, and leave messages. AI technology will help organize 
+                    <br />
+                    Upload photos, share stories, and leave messages. 
+                    <br />
+                    AI technology will help organize 
                     and compile your contributions into beautiful memory collections.
                   </p>
                 </div>
