@@ -312,27 +312,24 @@ export default function QRCodeGenerator({
                 
                 <div class="message">
                   <p class="message-text">
-                    Dear friends and family, you are not just witnesses to our love story – 
-                    <strong>you are part of it</strong>. Your presence, laughter, and wisdom have shaped the 
-                    people we've become.
+                    Dear friends and family,
+                  </p>
+                  
+                  <p class="message-text">
+                    <strong>You are part of our love story.</strong> Like stars across the night sky, 
+                    each of you carries unique memories. When your stars meet ours, 
+                    they weave constellations that illuminate the tapestry of our lives.
                   </p>
                   
                   <div class="heart-divider">♥ ♥ ♥</div>
-                  
-                  <p class="message-text">
-                    We'd love for you to contribute to our <strong>Digital Memory Album</strong>. 
-                    Each of us carries unique views of the moments we've shared together — like stars scattered across 
-                    the night sky. When your stars meet ours, they weave constellations of memories that illuminate 
-                    the tapestry of our lives. Add your star to our sky, and help us draw the constellations we’ll cherish forever.
-                  </p>
                 </div>
                 
                 <div class="instructions">
                   <h3 class="instructions-title">How to Share Your Memories</h3>
                   <p class="instructions-text">
-                    Simply point your phone's camera at the QR code above. You'll be taken to our 
-                    special memory collection page where you can upload photos, share stories, 
-                    and leave heartfelt messages. Every contribution becomes part of our eternal celebration.
+                    Point your phone's camera at the QR code above to visit our memory collection page. 
+                    Upload photos, share stories, and leave messages. AI technology will help organize 
+                    and compile your contributions into beautiful memory collections.
                   </p>
                 </div>
                 
