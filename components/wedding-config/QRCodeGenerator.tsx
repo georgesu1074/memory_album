@@ -243,7 +243,7 @@ export default function QRCodeGenerator({
               .heart-divider {
                 margin: 12px auto;
                 font-size: 14px;
-                color: ${secondaryColor};
+                color: #000000;
                 opacity: 0.5;
               }
               
