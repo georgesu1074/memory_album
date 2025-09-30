@@ -82,8 +82,8 @@ export default function QRCodeGenerator({
               }
               
               body {
-                width: 5in;
-                min-height: 7in;
+                width: 4in;
+                min-height: 6in;
                 margin: 20px auto;
                 background: white;
                 position: relative;
@@ -92,8 +92,8 @@ export default function QRCodeGenerator({
               
               .page-wrapper {
                 width: 100%;
-                min-height: 7in;
-                padding: 0.4in;
+                min-height: 6in;
+                padding: 0.3in;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -104,10 +104,10 @@ export default function QRCodeGenerator({
               /* Decorative border */
               .border-frame {
                 position: absolute;
-                top: 0.3in;
-                left: 0.3in;
-                right: 0.3in;
-                bottom: 0.3in;
+                top: 0.25in;
+                left: 0.25in;
+                right: 0.25in;
+                bottom: 0.25in;
                 border: 1px solid #00000020;
                 border-radius: 8px;
                 pointer-events: none;
@@ -156,14 +156,14 @@ export default function QRCodeGenerator({
               /* Main content container */
               .content {
                 text-align: center;
-                max-width: 4in;
+                max-width: 3.5in;
                 z-index: 1;
               }
               
               /* Title styling */
               .title {
                 font-family: 'Dancing Script', cursive;
-                font-size: 32px;
+                font-size: 28px;
                 font-weight: 600;
                 color: #1a1a1a;
                 margin-bottom: 8px;
@@ -263,17 +263,17 @@ export default function QRCodeGenerator({
                 body {
                   margin: 0;
                   padding: 0;
-                  width: 5in;
-                  height: 7in;
+                  width: 4in;
+                  height: 6in;
                 }
                 
                 .page-wrapper {
                   page-break-inside: avoid;
-                  height: 7in;
+                  height: 6in;
                 }
                 
                 @page {
-                  size: 5in 7in;
+                  size: 4in 6in;
                   margin: 0;
                 }
               }
