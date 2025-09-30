@@ -73,7 +73,7 @@ export default function QRCodeGenerator({
             <title>Wedding Memory Collection</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;500&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;500&family=Satisfy&display=swap" rel="stylesheet">
             <style>
               * {
                 margin: 0;
@@ -162,9 +162,9 @@ export default function QRCodeGenerator({
               
               /* Title styling */
               .title {
-                font-family: 'Dancing Script', cursive;
-                font-size: 28px;
-                font-weight: 600;
+                font-family: 'Satisfy', cursive;
+                font-size: 32px;
+                font-weight: 400;
                 color: #1a1a1a;
                 margin-bottom: 8px;
                 letter-spacing: 0.5px;
