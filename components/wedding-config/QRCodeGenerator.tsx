@@ -290,8 +290,7 @@ export default function QRCodeGenerator({
               
               <!-- Main content -->
               <div class="content">
-                <h1 class="title">Join Our Love Story</h1>
-                <p class="subtitle">${brideFirstName} & ${groomFirstName}'s Memory Album</p>
+                <h6 class="title">${brideFirstName} & ${groomFirstName}'s Wedding Album</h1>
 
                 <div class="message">
                   <p class="message-text">
