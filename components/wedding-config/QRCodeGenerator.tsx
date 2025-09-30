@@ -93,7 +93,7 @@ export default function QRCodeGenerator({
               .page-wrapper {
                 width: 100%;
                 min-height: 6in;
-                padding: 0.25in;
+                padding: 0.4in 0.25in 0.3in 0.25in;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -293,7 +293,7 @@ export default function QRCodeGenerator({
               
               <!-- Main content -->
               <div class="content">
-                <p class="title">${brideFirstName} & ${groomFirstName}</p>
+                <p class="title">${brideFirstName} & ${groomFirstName} • Our Story</p>
 
                 <div class="message">
                   <p class="message-text">
