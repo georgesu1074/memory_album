@@ -73,7 +73,7 @@ export default function QRCodeGenerator({
             <title>Wedding Memory Collection</title>
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;500&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
             <style>
               * {
                 margin: 0;
@@ -162,9 +162,9 @@ export default function QRCodeGenerator({
               
               /* Title styling */
               .title {
-                font-family: 'Playfair Display', serif;
-                font-size: 24px;
-                font-weight: 700;
+                font-family: 'Dancing Script', cursive;
+                font-size: 32px;
+                font-weight: 600;
                 color: #1a1a1a;
                 margin-bottom: 8px;
                 letter-spacing: 0.5px;
@@ -204,9 +204,10 @@ export default function QRCodeGenerator({
               
               .message-text {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 13px;
-                line-height: 1.6;
-                color: #444;
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 1.7;
+                color: #000;
                 margin-bottom: 12px;
               }
               
@@ -234,8 +235,9 @@ export default function QRCodeGenerator({
               
               .instructions-text {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 11px;
-                line-height: 1.5;
+                font-size: 13px;
+                font-weight: 400;
+                line-height: 1.6;
                 color: #000000;
               }
               
@@ -290,7 +292,7 @@ export default function QRCodeGenerator({
               
               <!-- Main content -->
               <div class="content">
-                <h6 class="title">${brideFirstName} & ${groomFirstName}'s Wedding Album</h1>
+                <h1 class="title">${brideFirstName} & ${groomFirstName}'s Wedding Album</h1>
 
                 <div class="message">
                   <p class="message-text">
@@ -309,9 +311,7 @@ export default function QRCodeGenerator({
                 <div class="instructions">
                   <h3 class="instructions-title">How to Share Your Memories</h3>
                   <p class="instructions-text">
-                    Point your phone's camera at the QR code above to visit our memory collection page. 
-                    <br />
-                    Upload photos, share stories, and leave messages. 
+                    Scan the QR Code, share your memories, and upload photos.
                     <br />
                     AI technology will help organize 
                     and compile your contributions into beautiful memory collections.
