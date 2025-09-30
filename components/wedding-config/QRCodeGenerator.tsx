@@ -93,7 +93,7 @@ export default function QRCodeGenerator({
               .page-wrapper {
                 width: 100%;
                 min-height: 6in;
-                padding: 0.3in;
+                padding: 0.25in;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -163,10 +163,11 @@ export default function QRCodeGenerator({
               /* Title styling */
               .title {
                 font-family: 'Satisfy', cursive;
-                font-size: 32px;
+                font-size: 28px;
                 font-weight: 400;
                 color: #1a1a1a;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
+                margin-top: 0;
                 letter-spacing: 0.5px;
               }
               
@@ -182,9 +183,9 @@ export default function QRCodeGenerator({
               /* QR Code container */
               .qr-container {
                 background: white;
-                padding: 16px;
+                padding: 8px;
                 border-radius: 8px;
-                margin: 16px auto;
+                margin: 10px auto;
                 display: inline-block;
                 position: relative;
               }
@@ -198,17 +199,17 @@ export default function QRCodeGenerator({
               
               /* Message section */
               .message {
-                margin-top: 20px;
-                padding: 0 10px;
+                margin-top: 10px;
+                padding: 0 8px;
               }
               
               .message-text {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 14px;
+                font-size: 12px;
                 font-weight: 400;
-                line-height: 1.7;
+                line-height: 1.5;
                 color: #000;
-                margin-bottom: 12px;
+                margin-bottom: 8px;
               }
               
               .message-text strong {
@@ -221,23 +222,23 @@ export default function QRCodeGenerator({
                 background: white;
                 border: 1px solid #000000;
                 border-radius: 6px;
-                padding: 12px;
-                margin-top: 16px;
+                padding: 8px;
+                margin-top: 10px;
               }
               
               .instructions-title {
                 font-family: 'Playfair Display', serif;
-                font-size: 12px;
+                font-size: 11px;
                 color: #000000;
-                margin-bottom: 8px;
+                margin-bottom: 4px;
                 font-weight: 700;
               }
               
               .instructions-text {
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 13px;
+                font-size: 11px;
                 font-weight: 400;
-                line-height: 1.6;
+                line-height: 1.4;
                 color: #000000;
               }
               
@@ -251,9 +252,9 @@ export default function QRCodeGenerator({
               
               /* Website URL */
               .website-url {
-                margin-top: 12px;
+                margin-top: 8px;
                 font-family: 'Cormorant Garamond', serif;
-                font-size: 10px;
+                font-size: 9px;
                 color: #000000;
                 font-style: italic;
               }
@@ -292,11 +293,11 @@ export default function QRCodeGenerator({
               
               <!-- Main content -->
               <div class="content">
-                <h1 class="title">${brideFirstName} & ${groomFirstName}'s Wedding Album</h1>
+                <p class="title">${brideFirstName} & ${groomFirstName}</p>
 
                 <div class="message">
                   <p class="message-text">
-                    Dear friends and family,
+                    Family and friends,
                     <br />
                     You are part of our love story. Like stars across the night sky, 
                     each of you carries unique memories. When your stars meet ours, 
@@ -305,7 +306,7 @@ export default function QRCodeGenerator({
                 </div>
                 
                 <div class="qr-container">
-                  <img src="${qrCodeUrl}" alt="Memory Album QR Code" width="180" height="180" class="qr-code" />
+                  <img src="${qrCodeUrl}" alt="Memory Album QR Code" width="160" height="160" class="qr-code" />
                 </div>
                 
                 <div class="instructions">
